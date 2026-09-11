@@ -43,12 +43,31 @@ export const getIncidentPoll = createServerFn({ method: "GET" })
       .from("incident_votes")
       .select("choice")
       .eq("incident_id", data.incidentId);
-    if (error) throw new Error("Poll totals are temporarily unavailable.");
+    if (error) {
+      console.error("[poll] totals failed", error);
+      throw new Error("Poll totals are temporarily unavailable.");
+    }
     return {
       nothingHappened: rows.filter((row) => row.choice === "nothing_happened").length,
       definitelyHappened: rows.filter((row) => row.choice === "definitely_happened").length,
     };
   });
+
+export const getAllIncidentPolls = createServerFn({ method: "GET" }).handler(async () => {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: rows, error } = await supabaseAdmin.from("incident_votes").select("incident_id, choice");
+  if (error) {
+    console.error("[poll] bulk totals failed", error);
+    throw new Error("Poll totals are temporarily unavailable.");
+  }
+  const totals: Record<string, { nothingHappened: number; definitelyHappened: number }> = {};
+  for (const row of rows) {
+    const entry = (totals[row.incident_id] ??= { nothingHappened: 0, definitelyHappened: 0 });
+    if (row.choice === "nothing_happened") entry.nothingHappened += 1;
+    else if (row.choice === "definitely_happened") entry.definitelyHappened += 1;
+  }
+  return totals;
+});
 
 export const castIncidentVote = createServerFn({ method: "POST" })
   .inputValidator((input) => voteSchema.parse(input))

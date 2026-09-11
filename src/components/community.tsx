@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   castIncidentVote,
-  getIncidentPoll,
+  getAllIncidentPolls,
   submitIncidentReport,
 } from "@/lib/incident-community.functions";
 import { incidentSubmissionSchema, type VoteChoice } from "@/lib/incident-community.schemas";
@@ -23,8 +23,10 @@ function getVoterToken() {
   return token;
 }
 
+let allPollsPromise: Promise<Record<string, Totals>> | null = null;
+
 export function IncidentPoll({ incidentId }: { incidentId: string }) {
-  const getPoll = useServerFn(getIncidentPoll);
+  const getAllPolls = useServerFn(getAllIncidentPolls);
   const castVote = useServerFn(castIncidentVote);
   const [totals, setTotals] = useState<Totals>({ nothingHappened: 0, definitelyHappened: 0 });
   const [choice, setChoice] = useState<VoteChoice | null>(null);
@@ -34,10 +36,14 @@ export function IncidentPoll({ incidentId }: { incidentId: string }) {
   useEffect(() => {
     const saved = window.localStorage.getItem(`incident-vote-${incidentId}`);
     if (saved === "nothing_happened" || saved === "definitely_happened") setChoice(saved);
-    getPoll({ data: { incidentId } })
-      .then(setTotals)
+    allPollsPromise ??= getAllPolls().catch((err: unknown) => {
+      allPollsPromise = null;
+      throw err;
+    });
+    allPollsPromise
+      .then((all) => setTotals(all[incidentId] ?? { nothingHappened: 0, definitelyHappened: 0 }))
       .catch(() => setError("Totals unavailable."));
-  }, [getPoll, incidentId]);
+  }, [getAllPolls, incidentId]);
 
   const vote = async (nextChoice: VoteChoice) => {
     setPending(true);
