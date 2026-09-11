@@ -124,6 +124,9 @@ export const incidents: Incident[] = [
       label: "Contemporary report and video",
       url: "https://www.hindustantimes.com/world-news/us-news/did-trump-poop-his-pants-viral-video-of-potus-after-walter-reed-visit-sparks-concern-101779912356060.html",
     },
+    imageUrl:
+      "https://www.hindustantimes.com/ht-img/img/2026/05/27/1600x900/logo/trump_poops_his_pants_1779912352350_1779912352484_66921c11-0ac5-4fcf-9d53-e139d21d44bd.jpg",
+    imageCredit: "Hindustan Times",
   },
   {
     id: "health-care-hot-mic",
