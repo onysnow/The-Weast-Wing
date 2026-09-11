@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   castIncidentVote,
-  getIncidentPoll,
+  getAllIncidentPolls,
   submitIncidentReport,
 } from "@/lib/incident-community.functions";
 import { incidentSubmissionSchema, type VoteChoice } from "@/lib/incident-community.schemas";
