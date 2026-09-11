@@ -225,4 +225,18 @@ export const incidents: Incident[] = [
       url: "https://politifact.com/factchecks/2024/apr/26/threads-posts/no-cnn-didnt-report-that-donald-trump-soiled-himse/",
     },
   },
+  {
+    id: "apprentice-recurring-allegation",
+    date: "2019-01-01",
+    headline: "Former Production Staffer Makes Recurring Apprentice-Era Allegation",
+    description:
+      "Noel Casler has repeatedly said he personally witnessed incidents during production of The Apprentice and Celebrity Apprentice. The allegation became public from 2019 onward, but no independently corroborated incident date or count was located; this card represents the recurring claim, not a specific event.",
+    status: "UNCONFIRMED",
+    rating: 1,
+    location: "The Apprentice production",
+    source: {
+      label: "Recorded public statement by Noel Casler",
+      url: "https://www.youtube.com/watch?v=4-jAtkb2hUI",
+    },
+  },
 ];
