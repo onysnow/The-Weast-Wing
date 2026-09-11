@@ -35,6 +35,8 @@ export type IncidentStatus = "UNCONFIRMED" | "DISPUTED" | "UNDER REVIEW" | "SATI
 export type Incident = {
   id: string;
   date: string; // YYYY-MM-DD
+  dateLabel?: string;
+  countInStats?: boolean;
   headline: string;
   description: string;
   status: IncidentStatus;
@@ -228,6 +230,8 @@ export const incidents: Incident[] = [
   {
     id: "apprentice-recurring-allegation",
     date: "2019-01-01",
+    dateLabel: "2000s; claims public from 2019 onward",
+    countInStats: false,
     headline: "Former Production Staffer Makes Recurring Apprentice-Era Allegation",
     description:
       "Noel Casler has repeatedly said he personally witnessed incidents during production of The Apprentice and Celebrity Apprentice. The allegation became public from 2019 onward, but no independently corroborated incident date or count was located; this card represents the recurring claim, not a specific event.",

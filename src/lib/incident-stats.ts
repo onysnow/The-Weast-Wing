@@ -19,6 +19,8 @@ export const sortedIncidents: Incident[] = [...incidents].sort(
 
 export const latestIncident: Incident | undefined = sortedIncidents[0];
 
+const countedIncidents = sortedIncidents.filter((incident) => incident.countInStats !== false);
+
 export function formatDate(d: string): string {
   return new Date(parseDate(d)).toLocaleDateString("en-US", {
     year: "numeric",
@@ -39,7 +41,7 @@ export type Stats = {
 
 /** All gaps (in days) between consecutive incidents, oldest -> newest. */
 function gaps(): number[] {
-  const asc = [...sortedIncidents].reverse();
+  const asc = [...countedIncidents].reverse();
   const out: number[] = [];
   for (let i = 1; i < asc.length; i++) {
     const prev = asc[i - 1]!;
@@ -56,12 +58,12 @@ export function computeStats(now: number = Date.now()): Stats {
   const year = new Date(now).getUTCFullYear();
 
   return {
-    total: sortedIncidents.length,
+    total: countedIncidents.length,
     currentStreak,
     longestStreak: Math.max(previousRecord, currentStreak),
     previousRecord,
     averageGap: g.length ? Math.round(g.reduce((a, b) => a + b, 0) / g.length) : 0,
-    thisYear: sortedIncidents.filter((i) => new Date(parseDate(i.date)).getUTCFullYear() === year)
+    thisYear: countedIncidents.filter((i) => new Date(parseDate(i.date)).getUTCFullYear() === year)
       .length,
   };
 }

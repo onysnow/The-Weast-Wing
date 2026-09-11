@@ -223,7 +223,7 @@ function Index() {
                         dateTime={inc.date}
                         className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground"
                       >
-                        {formatDate(inc.date)}
+                        {inc.dateLabel ?? formatDate(inc.date)}
                       </time>
                     </div>
                     <h3 className="mt-3 font-display text-lg font-bold leading-snug">
