@@ -1,7 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ExternalLink } from "lucide-react";
-import { AdSlot, Modal, PoopRating, Seal, ShareBar, StatusBadge } from "@/components/site";
+import {
+  AdSlot,
+  IncidentMedia,
+  Modal,
+  PoopRating,
+  Seal,
+  ShareBar,
+  StatusBadge,
+} from "@/components/site";
 import { IncidentPoll, IncidentSubmissionForm } from "@/components/community";
 import { Button } from "@/components/ui/button";
 import { RATING_LABELS } from "@/data/incidents";
@@ -123,18 +131,12 @@ function Index() {
             <SectionHeading eyebrow="Featured Report" title="What Reset the Clock?" />
             {latest ? (
               <article className="border border-border bg-card">
-                {latest.videoUrl && (
-                  <div className="aspect-video w-full bg-primary/90">
-                    <iframe
-                      src={latest.videoUrl}
-                      title={latest.headline}
-                      loading="lazy"
-                      allowFullScreen
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
-                      className="size-full"
-                    />
-                  </div>
-                )}
+                <IncidentMedia
+                  videoUrl={latest.videoUrl}
+                  imageUrl={latest.imageUrl}
+                  imageCredit={latest.imageCredit}
+                  headline={latest.headline}
+                />
                 <div className="space-y-4 p-4 sm:p-6">
                   <div className="flex flex-wrap items-center gap-3">
                     <StatusBadge status={latest.status} />
@@ -232,6 +234,15 @@ function Index() {
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                       {inc.description}
                     </p>
+                    {(inc.videoUrl || inc.imageUrl) && (
+                      <IncidentMedia
+                        className="mt-3 border border-border"
+                        videoUrl={inc.videoUrl}
+                        imageUrl={inc.imageUrl}
+                        imageCredit={inc.imageCredit}
+                        headline={inc.headline}
+                      />
+                    )}
                     <div className="mt-3">
                       <PoopRating rating={inc.rating} size="sm" />
                     </div>

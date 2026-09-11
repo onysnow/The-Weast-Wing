@@ -42,7 +42,11 @@ export type Incident = {
   status: IncidentStatus;
   rating: 1 | 2 | 3 | 4 | 5;
   source?: { label: string; url: string };
+  /** Either a YouTube embed URL or a direct .mp4/.webm file URL. */
   videoUrl?: string;
+  /** Still image pulled from the source page. */
+  imageUrl?: string;
+  imageCredit?: string;
   location?: string;
 };
 
@@ -72,6 +76,7 @@ export const incidents: Incident[] = [
       label: "Official White House event video",
       url: "https://www.whitehouse.gov/videos/president-trump-attends-the-funeral-for-senator-lindsey-graham/",
     },
+    videoUrl: "https://www.youtube-nocookie.com/embed/rENhwohTQWs",
   },
   {
     id: "world-cup-medal-ceremony",
@@ -100,6 +105,11 @@ export const incidents: Incident[] = [
       label: "Full federal-government event video",
       url: "https://commons.wikimedia.org/wiki/File:President_Trump_Participates_in_a_Cabinet_Meeting,_May_27,_2026.webm",
     },
+    videoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/transcoded/7/75/President_Trump_Participates_in_a_Cabinet_Meeting%2C_May_27%2C_2026.webm/President_Trump_Participates_in_a_Cabinet_Meeting%2C_May_27%2C_2026.webm.1080p.vp9.webm",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/President_Trump_Participates_in_a_Cabinet_Meeting%2C_May_27%2C_2026.webm/1280px--President_Trump_Participates_in_a_Cabinet_Meeting%2C_May_27%2C_2026.webm.jpg",
+    imageCredit: "Wikimedia Commons / U.S. federal government",
   },
   {
     id: "memorial-day-walter-reed-footage",
@@ -114,6 +124,9 @@ export const incidents: Incident[] = [
       label: "Contemporary report and video",
       url: "https://www.hindustantimes.com/world-news/us-news/did-trump-poop-his-pants-viral-video-of-potus-after-walter-reed-visit-sparks-concern-101779912356060.html",
     },
+    imageUrl:
+      "https://www.hindustantimes.com/ht-img/img/2026/05/27/1600x900/logo/trump_poops_his_pants_1779912352350_1779912352484_66921c11-0ac5-4fcf-9d53-e139d21d44bd.jpg",
+    imageCredit: "Hindustan Times",
   },
   {
     id: "health-care-hot-mic",
@@ -128,6 +141,7 @@ export const incidents: Incident[] = [
       label: "Official White House event video",
       url: "https://www.whitehouse.gov/videos/president-trump-participates-in-a-health-care-affordability-event/",
     },
+    videoUrl: "https://www.youtube-nocookie.com/embed/1CtxlTZzElc",
   },
   {
     id: "anti-fraud-task-force-signing",
@@ -142,6 +156,8 @@ export const incidents: Incident[] = [
       label: "Official White House event gallery",
       url: "https://www.whitehouse.gov/gallery/president-donald-j-trump-signs-an-executive-order-creating-an-anti-fraud-task-force-to-be-led-by-vice-president-jd-vance/",
     },
+    imageUrl: "https://www.whitehouse.gov/wp-content/uploads/2026/03/P20260316MR-0406.jpg",
+    imageCredit: "The White House",
   },
   {
     id: "recovery-initiative-abrupt-ending",
@@ -156,6 +172,7 @@ export const incidents: Incident[] = [
       label: "Official White House event video",
       url: "https://www.whitehouse.gov/videos/president-trump-makes-an-announcement-jan-29-2026/",
     },
+    videoUrl: "https://www.youtube-nocookie.com/embed/OE2NtBhozT4",
   },
   {
     id: "kennedy-center-ceremony",
@@ -170,6 +187,7 @@ export const incidents: Incident[] = [
       label: "Snopes review of the footage",
       url: "https://www.snopes.com/fact-check/trump-poop-white-house-kennedy/",
     },
+    videoUrl: "https://www.youtube-nocookie.com/embed/MoEAlhUTVnE",
   },
   {
     id: "notre-dame-reopening",
@@ -212,6 +230,9 @@ export const incidents: Incident[] = [
       label: "Full debate footage from PBS",
       url: "https://www.pbs.org/wnet/preserving-democracy/2024/06/27/watch-at-the-first-2024-presidential-debate-candidates-will-play-by-their-own-rules/",
     },
+    imageUrl:
+      "https://www.pbs.org/wnet/preserving-democracy/files/2024/06/2024-06-27T161314Z_1490629363_RC2XI8AQTU9X_RTRMADP_3_USA-ELECTION-DEBATE-1200x800-1.jpg",
+    imageCredit: "PBS / Reuters",
   },
   {
     id: "new-york-criminal-trial-odor",
@@ -242,5 +263,6 @@ export const incidents: Incident[] = [
       label: "Recorded public statement by Noel Casler",
       url: "https://www.youtube.com/watch?v=4-jAtkb2hUI",
     },
+    videoUrl: "https://www.youtube-nocookie.com/embed/4-jAtkb2hUI",
   },
 ];
