@@ -261,7 +261,13 @@ export function ShareBar({ title, url }: { title: string; url?: string }) {
         {copied === "link" ? "Link copied" : "Copy link"}
       </button>
       {links.map((l) => (
-        <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className={shareBtn}>
+        <a
+          key={l.label}
+          href={l.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={shareBtn}
+        >
           {l.label}
         </a>
       ))}

@@ -234,6 +234,15 @@ function Index() {
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                       {inc.description}
                     </p>
+                    {(inc.videoUrl || inc.imageUrl) && (
+                      <IncidentMedia
+                        className="mt-3 border border-border"
+                        videoUrl={inc.videoUrl}
+                        imageUrl={inc.imageUrl}
+                        imageCredit={inc.imageCredit}
+                        headline={inc.headline}
+                      />
+                    )}
                     <div className="mt-3">
                       <PoopRating rating={inc.rating} size="sm" />
                     </div>
