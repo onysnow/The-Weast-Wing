@@ -123,18 +123,12 @@ function Index() {
             <SectionHeading eyebrow="Featured Report" title="What Reset the Clock?" />
             {latest ? (
               <article className="border border-border bg-card">
-                {latest.videoUrl && (
-                  <div className="aspect-video w-full bg-primary/90">
-                    <iframe
-                      src={latest.videoUrl}
-                      title={latest.headline}
-                      loading="lazy"
-                      allowFullScreen
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
-                      className="size-full"
-                    />
-                  </div>
-                )}
+                <IncidentMedia
+                  videoUrl={latest.videoUrl}
+                  imageUrl={latest.imageUrl}
+                  imageCredit={latest.imageCredit}
+                  headline={latest.headline}
+                />
                 <div className="space-y-4 p-4 sm:p-6">
                   <div className="flex flex-wrap items-center gap-3">
                     <StatusBadge status={latest.status} />
