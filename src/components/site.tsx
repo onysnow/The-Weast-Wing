@@ -50,11 +50,11 @@ export function IncidentMedia({
   headline,
   className,
 }: {
-  videoUrl?: string;
-  imageUrl?: string;
-  imageCredit?: string;
+  videoUrl?: string | undefined;
+  imageUrl?: string | undefined;
+  imageCredit?: string | undefined;
   headline: string;
-  className?: string;
+  className?: string | undefined;
 }) {
   const isFile = !!videoUrl && /\.(mp4|webm)(\?|$)/i.test(videoUrl);
   if (!videoUrl && !imageUrl) return null;
