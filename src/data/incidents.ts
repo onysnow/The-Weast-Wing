@@ -230,6 +230,9 @@ export const incidents: Incident[] = [
       label: "Full debate footage from PBS",
       url: "https://www.pbs.org/wnet/preserving-democracy/2024/06/27/watch-at-the-first-2024-presidential-debate-candidates-will-play-by-their-own-rules/",
     },
+    imageUrl:
+      "https://www.pbs.org/wnet/preserving-democracy/files/2024/06/2024-06-27T161314Z_1490629363_RC2XI8AQTU9X_RTRMADP_3_USA-ELECTION-DEBATE-1200x800-1.jpg",
+    imageCredit: "PBS / Reuters",
   },
   {
     id: "new-york-criminal-trial-odor",
