@@ -51,7 +51,7 @@ function Index() {
       {/* Official banner */}
       <div className="border-b border-border bg-muted">
         <p className="mx-auto max-w-4xl px-4 py-1.5 text-[10px] uppercase tracking-[0.14em] text-muted-foreground sm:text-[11px]">
-          ⚠ A parody site. Not an official government resource. All incidents are fictional.
+          ⚠ A parody site. Not an official government resource. Allegations are unproven.
         </p>
       </div>
 
@@ -198,7 +198,7 @@ function Index() {
               <Stat label="Confirmed incidents" value={0} />
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              All figures are auto-calculated from the fictional incident log below.
+              All figures are auto-calculated from the allegation review queue below.
             </p>
           </section>
 
@@ -223,7 +223,7 @@ function Index() {
                         dateTime={inc.date}
                         className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground"
                       >
-                        {formatDate(inc.date)}
+                        {inc.dateLabel ?? formatDate(inc.date)}
                       </time>
                     </div>
                     <h3 className="mt-3 font-display text-lg font-bold leading-snug">
@@ -315,9 +315,9 @@ function Index() {
               <strong className="text-primary-foreground">Editorial disclaimer:</strong> This site
               is a work of satire and political parody protected as opinion and commentary. It is
               not affiliated with, endorsed by, or connected to any government, agency, or official.
-              All incidents, dates, sources, and statistics shown are fictional sample data created
-              for demonstration and comedic purposes. Nothing here should be read as an assertion of
-              fact about any real person.
+              Entries summarize sourced public allegations and contested interpretations of real
+              events. The alleged bodily incidents are not established facts. Nothing here should be
+              read as an assertion of fact about any person.
             </p>
             <nav className="flex flex-wrap gap-x-5 gap-y-2 pt-2 text-xs font-bold uppercase tracking-[0.12em]">
               {["About", "Methodology", "Privacy", "Contact", "Corrections"].map((m) => (
@@ -341,10 +341,10 @@ function Index() {
       <Modal open={modal === "About"} onClose={() => setModal(null)} title="About">
         <p>
           The National Incident Clock is a satirical dashboard styled after official public-health
-          statistics pages. It exists to make a joke about workplace "days since last incident"
-          signage, and nothing more.
+          statistics pages. It applies the workplace "days since last incident" joke to a curated
+          queue of public allegations and contested interpretations.
         </p>
-        <p>Every incident listed is invented. Any resemblance to real events is the joke.</p>
+        <p>The underlying events are sourced; the alleged bodily incidents remain unproven.</p>
       </Modal>
 
       <Modal open={modal === "Methodology"} onClose={() => setModal(null)} title="Methodology">
@@ -386,7 +386,7 @@ function Index() {
           Corrections policy: if a listed item is inaccurate, misleading, or unfairly implies a
           factual claim about a real person, it will be amended or removed promptly on request.
         </p>
-        <p>Currently, all entries are fictional sample data, so there is nothing to correct.</p>
+        <p>Source links and counterevidence are retained so disputed entries can be reviewed.</p>
       </Modal>
     </div>
   );
