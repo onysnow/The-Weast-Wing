@@ -303,11 +303,18 @@ function Index() {
                 not affiliated with Kalshi and does not offer wagering.
               </p>
             </div>
-            <Button asChild variant="outline" className="mt-3 shrink-0 rounded-none sm:mt-0">
-              <a href="https://kalshi.com/markets" target="_blank" rel="noopener noreferrer">
-                Browse Kalshi <ExternalLink aria-hidden="true" />
-              </a>
-            </Button>
+            <div className="mt-3 flex flex-col gap-2 sm:mt-0 sm:flex-row">
+              <Button asChild variant="outline" className="rounded-none">
+                <a href="https://kalshi.com/t/grul7kme" target="_blank" rel="noopener noreferrer">
+                  Kalshi Markets <ExternalLink aria-hidden="true" />
+                </a>
+              </Button>
+              <Button asChild variant="outline" className="rounded-none">
+                <a href="https://kalshi.com/t/hgztgz1n" target="_blank" rel="noopener noreferrer">
+                  Kalshi Perpetuals <ExternalLink aria-hidden="true" />
+                </a>
+              </Button>
+            </div>
           </aside>
 
           <AdSlot label="Advertisement" />
