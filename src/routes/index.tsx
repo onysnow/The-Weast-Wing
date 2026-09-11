@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { ExternalLink } from "lucide-react";
 import { AdSlot, Modal, PoopRating, Seal, ShareBar, StatusBadge } from "@/components/site";
+import { IncidentPoll, IncidentSubmissionForm } from "@/components/community";
+import { Button } from "@/components/ui/button";
 import { RATING_LABELS } from "@/data/incidents";
 import { computeStats, formatDate, latestIncident, sortedIncidents } from "@/lib/incident-stats";
 
@@ -163,7 +166,8 @@ function Index() {
                     <ol className="mt-4 grid gap-1 text-xs text-muted-foreground sm:grid-cols-2">
                       {[1, 2, 3, 4, 5].map((n) => (
                         <li key={n} className="tabular-nums">
-                          <span className="font-bold text-foreground">{n}</span> — {RATING_LABELS[n]}
+                          <span className="font-bold text-foreground">{n}</span> —{" "}
+                          {RATING_LABELS[n]}
                         </li>
                       ))}
                     </ol>
@@ -231,6 +235,7 @@ function Index() {
                     <div className="mt-3">
                       <PoopRating rating={inc.rating} size="sm" />
                     </div>
+                    <IncidentPoll incidentId={inc.id} />
                     <div className="mt-3 flex flex-wrap items-center gap-4 text-xs font-semibold uppercase tracking-wider">
                       <a
                         href={`#incident-${inc.id}`}
@@ -256,6 +261,16 @@ function Index() {
             </ol>
           </section>
 
+          {/* Public submissions */}
+          <section id="submit-report" className="mt-12 scroll-mt-4">
+            <SectionHeading eyebrow="Public Tip Line" title="Submit an Incident Report" />
+            <p className="mb-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              Send the editorial desk an alleged incident and a supporting link. Every submission is
+              reviewed before it can be added to the public log.
+            </p>
+            <IncidentSubmissionForm />
+          </section>
+
           {/* Share */}
           <section className="mt-12 border border-border bg-card p-5">
             <h2 className="font-display text-lg font-bold uppercase tracking-tight">
@@ -266,6 +281,21 @@ function Index() {
             </p>
             <ShareBar title={`${stats.currentStreak} days since the last alleged incident`} />
           </section>
+
+          <aside className="mt-4 border-l-4 border-seal bg-muted p-4 sm:flex sm:items-center sm:justify-between sm:gap-6">
+            <div>
+              <p className="font-display text-sm font-bold uppercase">Put your money where your poll is?</p>
+              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                Check Kalshi for any independently listed related prediction markets. This site is
+                not affiliated with Kalshi and does not offer wagering.
+              </p>
+            </div>
+            <Button asChild variant="outline" className="mt-3 shrink-0 rounded-none sm:mt-0">
+              <a href="https://kalshi.com/markets" target="_blank" rel="noopener noreferrer">
+                Browse Kalshi <ExternalLink aria-hidden="true" />
+              </a>
+            </Button>
+          </aside>
 
           <AdSlot label="Advertisement" />
         </div>
@@ -280,16 +310,20 @@ function Index() {
               </p>
             </div>
             <p className="text-xs leading-relaxed text-primary-foreground/70">
-              <strong className="text-primary-foreground">Editorial disclaimer:</strong> This site is
-              a work of satire and political parody protected as opinion and commentary. It is not
-              affiliated with, endorsed by, or connected to any government, agency, or official. All
-              incidents, dates, sources, and statistics shown are fictional sample data created for
-              demonstration and comedic purposes. Nothing here should be read as an assertion of
+              <strong className="text-primary-foreground">Editorial disclaimer:</strong> This site
+              is a work of satire and political parody protected as opinion and commentary. It is
+              not affiliated with, endorsed by, or connected to any government, agency, or official.
+              All incidents, dates, sources, and statistics shown are fictional sample data created
+              for demonstration and comedic purposes. Nothing here should be read as an assertion of
               fact about any real person.
             </p>
             <nav className="flex flex-wrap gap-x-5 gap-y-2 pt-2 text-xs font-bold uppercase tracking-[0.12em]">
               {["About", "Methodology", "Privacy", "Contact", "Corrections"].map((m) => (
-                <button key={m} onClick={() => setModal(m)} className="underline underline-offset-4">
+                <button
+                  key={m}
+                  onClick={() => setModal(m)}
+                  className="underline underline-offset-4"
+                >
                   {m}
                 </button>
               ))}
@@ -328,8 +362,9 @@ function Index() {
 
       <Modal open={modal === "Privacy"} onClose={() => setModal(null)} title="Privacy">
         <p>
-          This is a static page. We do not collect accounts, run analytics, or store anything you
-          type — mostly because there is nothing to type.
+          Incident reports are stored for editorial review. Optional contact emails are never
+          published. Polls store a random browser identifier so each browser has one current vote
+          per incident; this identifier is not tied to an account.
         </p>
         <p>
           Embedded video players and share links are third-party services with their own privacy
