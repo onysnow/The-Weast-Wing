@@ -76,6 +76,7 @@ export const incidents: Incident[] = [
       label: "Official White House event video",
       url: "https://www.whitehouse.gov/videos/president-trump-attends-the-funeral-for-senator-lindsey-graham/",
     },
+    videoUrl: "https://www.youtube-nocookie.com/embed/rENhwohTQWs",
   },
   {
     id: "world-cup-medal-ceremony",
