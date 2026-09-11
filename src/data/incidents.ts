@@ -42,7 +42,11 @@ export type Incident = {
   status: IncidentStatus;
   rating: 1 | 2 | 3 | 4 | 5;
   source?: { label: string; url: string };
+  /** Either a YouTube embed URL or a direct .mp4/.webm file URL. */
   videoUrl?: string;
+  /** Still image pulled from the source page. */
+  imageUrl?: string;
+  imageCredit?: string;
   location?: string;
 };
 
