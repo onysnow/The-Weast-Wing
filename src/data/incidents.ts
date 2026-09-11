@@ -187,6 +187,7 @@ export const incidents: Incident[] = [
       label: "Snopes review of the footage",
       url: "https://www.snopes.com/fact-check/trump-poop-white-house-kennedy/",
     },
+    videoUrl: "https://www.youtube-nocookie.com/embed/MoEAlhUTVnE",
   },
   {
     id: "notre-dame-reopening",
