@@ -284,7 +284,9 @@ function Index() {
 
           <aside className="mt-4 border-l-4 border-seal bg-muted p-4 sm:flex sm:items-center sm:justify-between sm:gap-6">
             <div>
-              <p className="font-display text-sm font-bold uppercase">Put your money where your poll is?</p>
+              <p className="font-display text-sm font-bold uppercase">
+                Put your money where your poll is?
+              </p>
               <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                 Check Kalshi for any independently listed related prediction markets. This site is
                 not affiliated with Kalshi and does not offer wagering.
