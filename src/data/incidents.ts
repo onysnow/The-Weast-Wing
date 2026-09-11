@@ -156,6 +156,8 @@ export const incidents: Incident[] = [
       label: "Official White House event gallery",
       url: "https://www.whitehouse.gov/gallery/president-donald-j-trump-signs-an-executive-order-creating-an-anti-fraud-task-force-to-be-led-by-vice-president-jd-vance/",
     },
+    imageUrl: "https://www.whitehouse.gov/wp-content/uploads/2026/03/P20260316MR-0406.jpg",
+    imageCredit: "The White House",
   },
   {
     id: "recovery-initiative-abrupt-ending",
