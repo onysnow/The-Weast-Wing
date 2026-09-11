@@ -5,7 +5,7 @@ const DAY_MS = 86_400_000;
 /** Parse a YYYY-MM-DD string as a UTC midnight timestamp. */
 export function parseDate(d: string): number {
   const [y, m, day] = d.split("-").map(Number);
-  return Date.UTC(y, (m ?? 1) - 1, day ?? 1);
+  return Date.UTC(y ?? 1970, (m ?? 1) - 1, day ?? 1);
 }
 
 export function daysBetween(a: number, b: number): number {
@@ -42,7 +42,9 @@ function gaps(): number[] {
   const asc = [...sortedIncidents].reverse();
   const out: number[] = [];
   for (let i = 1; i < asc.length; i++) {
-    out.push(daysBetween(parseDate(asc[i - 1].date), parseDate(asc[i].date)));
+    const prev = asc[i - 1]!;
+    const cur = asc[i]!;
+    out.push(daysBetween(parseDate(prev.date), parseDate(cur.date)));
   }
   return out;
 }
