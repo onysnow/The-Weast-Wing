@@ -36,10 +36,14 @@ export function IncidentPoll({ incidentId }: { incidentId: string }) {
   useEffect(() => {
     const saved = window.localStorage.getItem(`incident-vote-${incidentId}`);
     if (saved === "nothing_happened" || saved === "definitely_happened") setChoice(saved);
-    getPoll({ data: { incidentId } })
-      .then(setTotals)
+    allPollsPromise ??= getAllPolls().catch((err: unknown) => {
+      allPollsPromise = null;
+      throw err;
+    });
+    allPollsPromise
+      .then((all) => setTotals(all[incidentId] ?? { nothingHappened: 0, definitelyHappened: 0 }))
       .catch(() => setError("Totals unavailable."));
-  }, [getPoll, incidentId]);
+  }, [getAllPolls, incidentId]);
 
   const vote = async (nextChoice: VoteChoice) => {
     setPending(true);
