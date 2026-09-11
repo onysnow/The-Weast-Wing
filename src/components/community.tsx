@@ -23,8 +23,10 @@ function getVoterToken() {
   return token;
 }
 
+let allPollsPromise: Promise<Record<string, Totals>> | null = null;
+
 export function IncidentPoll({ incidentId }: { incidentId: string }) {
-  const getPoll = useServerFn(getIncidentPoll);
+  const getAllPolls = useServerFn(getAllIncidentPolls);
   const castVote = useServerFn(castIncidentVote);
   const [totals, setTotals] = useState<Totals>({ nothingHappened: 0, definitelyHappened: 0 });
   const [choice, setChoice] = useState<VoteChoice | null>(null);
