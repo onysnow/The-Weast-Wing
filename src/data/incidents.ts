@@ -105,6 +105,11 @@ export const incidents: Incident[] = [
       label: "Full federal-government event video",
       url: "https://commons.wikimedia.org/wiki/File:President_Trump_Participates_in_a_Cabinet_Meeting,_May_27,_2026.webm",
     },
+    videoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/transcoded/7/75/President_Trump_Participates_in_a_Cabinet_Meeting%2C_May_27%2C_2026.webm/President_Trump_Participates_in_a_Cabinet_Meeting%2C_May_27%2C_2026.webm.1080p.vp9.webm",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/President_Trump_Participates_in_a_Cabinet_Meeting%2C_May_27%2C_2026.webm/1280px--President_Trump_Participates_in_a_Cabinet_Meeting%2C_May_27%2C_2026.webm.jpg",
+    imageCredit: "Wikimedia Commons / U.S. federal government",
   },
   {
     id: "memorial-day-walter-reed-footage",
