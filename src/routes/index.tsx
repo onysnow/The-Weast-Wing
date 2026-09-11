@@ -1,7 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ExternalLink } from "lucide-react";
-import { AdSlot, Modal, PoopRating, Seal, ShareBar, StatusBadge } from "@/components/site";
+import {
+  AdSlot,
+  IncidentMedia,
+  Modal,
+  PoopRating,
+  Seal,
+  ShareBar,
+  StatusBadge,
+} from "@/components/site";
 import { IncidentPoll, IncidentSubmissionForm } from "@/components/community";
 import { Button } from "@/components/ui/button";
 import { RATING_LABELS } from "@/data/incidents";
