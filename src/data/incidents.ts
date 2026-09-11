@@ -172,6 +172,7 @@ export const incidents: Incident[] = [
       label: "Official White House event video",
       url: "https://www.whitehouse.gov/videos/president-trump-makes-an-announcement-jan-29-2026/",
     },
+    videoUrl: "https://www.youtube-nocookie.com/embed/OE2NtBhozT4",
   },
   {
     id: "kennedy-center-ceremony",
