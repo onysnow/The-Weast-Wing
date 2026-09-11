@@ -263,5 +263,6 @@ export const incidents: Incident[] = [
       label: "Recorded public statement by Noel Casler",
       url: "https://www.youtube.com/watch?v=4-jAtkb2hUI",
     },
+    videoUrl: "https://www.youtube-nocookie.com/embed/4-jAtkb2hUI",
   },
 ];
