@@ -141,6 +141,7 @@ export const incidents: Incident[] = [
       label: "Official White House event video",
       url: "https://www.whitehouse.gov/videos/president-trump-participates-in-a-health-care-affordability-event/",
     },
+    videoUrl: "https://www.youtube-nocookie.com/embed/1CtxlTZzElc",
   },
   {
     id: "anti-fraud-task-force-signing",
