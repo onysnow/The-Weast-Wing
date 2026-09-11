@@ -3,8 +3,9 @@
  * INCIDENT DATA — THE ONLY FILE YOU NEED TO EDIT
  * ============================================================================
  *
- * This is a SATIRE / PARODY project. Every entry below is FICTIONAL and
- * clearly labeled as sample data. Nothing here is a factual claim.
+ * This is a SATIRE / PARODY project. Entries document public allegations
+ * about authentic events; the alleged bodily incidents are not established
+ * facts. Descriptions must preserve that distinction.
  *
  * HOW TO ADD AN INCIDENT
  * ----------------------
@@ -53,60 +54,175 @@ export const RATING_LABELS: Record<number, string> = {
 };
 
 /** ---------------------------------------------------------------------
- *  SAMPLE / FICTIONAL INCIDENTS — replace with your own entries
+ *  REVIEW QUEUE — sourced from the editorial research workbook
  *  ------------------------------------------------------------------- */
 export const incidents: Incident[] = [
   {
-    id: "abrupt-podium-departure",
-    date: "2026-08-14",
-    headline: "Abrupt Podium Departure Mid-Sentence, Aides Form Human Wall",
+    id: "lindsey-graham-funeral",
+    date: "2026-07-28",
+    headline: "Nearby Reactions at Washington Cathedral Fuel Online Claims",
     description:
-      "During a routine infrastructure announcement, the President reportedly stopped mid-word, looked into the middle distance, and exited stage left at a pace observers described as 'purposeful.' Staff immediately formed what one pool reporter called 'a suspiciously tight perimeter.'",
-    status: "UNCONFIRMED",
-    rating: 5,
-    location: "East Room (fictional)",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    source: { label: "Sample Source (fictional)", url: "https://example.com/sample-incident" },
+      "Trump attended and spoke at Senator Lindsey Graham's funeral while social posts interpreted reactions from people seated nearby as evidence of a soiling incident. The attendance and official footage are documented; the bodily-incident claim is not established.",
+    status: "UNDER REVIEW",
+    rating: 2,
+    location: "Washington National Cathedral",
+    source: {
+      label: "Official White House event video",
+      url: "https://www.whitehouse.gov/videos/president-trump-attends-the-funeral-for-senator-lindsey-graham/",
+    },
   },
   {
-    id: "helicopter-tarmac-pause",
-    date: "2026-05-02",
-    headline: "Unscheduled 11-Minute Pause Before Boarding Helicopter",
+    id: "world-cup-medal-ceremony",
+    date: "2026-07-19",
+    headline: "Six-Second World Cup Clip Prompts Odor Speculation",
     description:
-      "Cameras captured an unexplained delay on the tarmac. The official explanation cited 'wind conditions.' The wind, according to publicly available fictional weather data, was 2 mph.",
+      "A short clip from the medal ceremony circulated as viewers interpreted a nearby man's expression as a reaction to a foul smell. The appearance and reaction clip are authentic, but the cause of the reaction is unknown.",
+    status: "UNDER REVIEW",
+    rating: 1,
+    location: "MetLife Stadium",
+    source: {
+      label: "X trending summary",
+      url: "https://x.com/i/trending/2082675926697910357",
+    },
+  },
+  {
+    id: "cabinet-meeting-rubio-hegseth",
+    date: "2026-05-27",
+    headline: "Cabinet Meeting Reactions Spark Odor Rumor",
+    description:
+      "Online commentary claimed Marco Rubio and Pete Hegseth visibly reacted to a bad odor while seated beside Trump. The meeting and seating arrangement are documented; the suggested cause of their behavior is not.",
+    status: "UNDER REVIEW",
+    rating: 2,
+    location: "White House Cabinet Room",
+    source: {
+      label: "Full federal-government event video",
+      url: "https://commons.wikimedia.org/wiki/File:President_Trump_Participates_in_a_Cabinet_Meeting,_May_27,_2026.webm",
+    },
+  },
+  {
+    id: "memorial-day-walter-reed-footage",
+    date: "2026-05-25",
+    headline: "Memorial Day Footage Generates Diaper Speculation",
+    description:
+      "Authentic footage of Trump's movement around Memorial Day and Walter Reed coverage generated a viral allegation that he had defecated in an adult diaper. The footage is real; that interpretation is not established.",
+    status: "UNDER REVIEW",
+    rating: 2,
+    location: "White House",
+    source: {
+      label: "Contemporary report and video",
+      url: "https://www.hindustantimes.com/world-news/us-news/did-trump-poop-his-pants-viral-video-of-potus-after-walter-reed-visit-sparks-concern-101779912356060.html",
+    },
+  },
+  {
+    id: "health-care-hot-mic",
+    date: "2026-04-23",
+    headline: "Hot Mic Captures an Unfinished, Much-Debated Phrase",
+    description:
+      "A clip appeared to capture Trump saying “I could use a shi—” immediately before the feed cut, prompting bathroom-related speculation. The event and clip are authentic, but the unfinished phrase does not establish that an accident occurred.",
+    status: "UNDER REVIEW",
+    rating: 2,
+    location: "White House",
+    source: {
+      label: "Official White House event video",
+      url: "https://www.whitehouse.gov/videos/president-trump-participates-in-a-health-care-affordability-event/",
+    },
+  },
+  {
+    id: "anti-fraud-task-force-signing",
+    date: "2026-03-16",
+    headline: "Vance and Ferguson Reactions Become a Viral ‘Stinky Moment’",
+    description:
+      "A clip from an anti-fraud task force signing showed JD Vance and Andrew Ferguson reacting while Trump discussed the B-2 bomber. The event and participants are independently documented; attributing their expressions to an odor is interpretation, not fact.",
+    status: "UNDER REVIEW",
+    rating: 2,
+    location: "Oval Office",
+    source: {
+      label: "Official White House event gallery",
+      url: "https://www.whitehouse.gov/gallery/president-donald-j-trump-signs-an-executive-order-creating-an-anti-fraud-task-force-to-be-led-by-vice-president-jd-vance/",
+    },
+  },
+  {
+    id: "recovery-initiative-abrupt-ending",
+    date: "2026-01-29",
+    headline: "Oval Office Event Ends Abruptly, Prompting Public Allegation",
+    description:
+      "An official Great American Recovery Initiative event ended abruptly, after which public posts alleged Trump had soiled himself. The video and ending are authentic; the specific explanation remains disputed and unproven.",
     status: "DISPUTED",
     rating: 3,
-    location: "South Lawn (fictional)",
-    source: { label: "Sample Source (fictional)", url: "https://example.com/sample-incident" },
+    location: "Oval Office",
+    source: {
+      label: "Official White House event video",
+      url: "https://www.whitehouse.gov/videos/president-trump-makes-an-announcement-jan-29-2026/",
+    },
   },
   {
-    id: "g20-jacket-incident",
-    date: "2026-01-19",
-    headline: "Jacket Tied Around Waist at Formal Summit Photo",
+    id: "kennedy-center-ceremony",
+    date: "2025-12-06",
+    headline: "Ceremony Reactions Interpreted as Evidence of an Odor",
     description:
-      "The President appeared in the family photo with a suit jacket knotted at the waist, a styling choice not previously observed at multilateral gatherings. No further comment was offered.",
-    status: "UNDER REVIEW",
-    rating: 4,
-    location: "Summit Venue (fictional)",
-  },
-  {
-    id: "extended-restroom-recess",
-    date: "2025-09-27",
-    headline: "Bilateral Meeting Recessed 'For Translation Reasons'",
-    description:
-      "A 40-minute recess was called during a bilateral meeting. Both delegations already spoke the same language. Officials declined to elaborate on the translation issue.",
-    status: "UNCONFIRMED",
-    rating: 2,
-    location: "Cabinet Room (fictional)",
-  },
-  {
-    id: "town-hall-chair-swap",
-    date: "2025-03-08",
-    headline: "Chair Quietly Replaced During Commercial Break",
-    description:
-      "Attendees noted that the President's chair was swapped for an identical model during a break. Production staff described the change as 'standard equipment rotation.'",
-    status: "SATIRE",
+      "Authentic footage from a Kennedy Center honorees ceremony circulated with claims that an attendee's reaction indicated an odor or soiling incident. The ceremony and reactions are real; the alleged cause is contested.",
+    status: "DISPUTED",
     rating: 1,
-    location: "Town Hall Set (fictional)",
+    location: "Oval Office",
+    source: {
+      label: "Snopes review of the footage",
+      url: "https://www.snopes.com/fact-check/trump-poop-white-house-kennedy/",
+    },
+  },
+  {
+    id: "notre-dame-reopening",
+    date: "2024-12-07",
+    headline: "Paris Audience Gestures Fuel a Viral Odor Allegation",
+    description:
+      "A short clip from the Notre-Dame reopening showed nearby attendees making facial gestures and covering their noses. The appearance and video are authentic; claims that they were reacting to Trump soiling himself are not established.",
+    status: "DISPUTED",
+    rating: 1,
+    location: "Paris, France",
+    source: {
+      label: "Original circulating X post",
+      url: "https://x.com/YourAnonCentral/status/1867356091442774279",
+    },
+  },
+  {
+    id: "detroit-economic-club",
+    date: "2024-10-10",
+    headline: "Detroit Speech Draws Bodily-Noise Speculation",
+    description:
+      "A documented Detroit Economic Club appearance generated online speculation about a bodily noise and a diaper. The event is fully recorded, but that interpretation is not established by the event record.",
+    status: "UNDER REVIEW",
+    rating: 1,
+    location: "Detroit Economic Club",
+    source: {
+      label: "Detroit Economic Club full event",
+      url: "https://www.econclub.org/meeting/dec-presents-special-guest-speaker-president-donald-j-trump/",
+    },
+  },
+  {
+    id: "cnn-presidential-debate-noise",
+    date: "2024-06-27",
+    headline: "Authentic Debate Audio Prompts Questions About an Unidentified Noise",
+    description:
+      "A sound audible in authentic presidential debate footage prompted public speculation about its source and nature. Neither who caused it nor whether it represented anything beyond an ordinary noise is established.",
+    status: "UNDER REVIEW",
+    rating: 1,
+    location: "CNN Presidential Debate",
+    source: {
+      label: "Full debate footage from PBS",
+      url: "https://www.pbs.org/wnet/preserving-democracy/2024/06/27/watch-at-the-first-2024-presidential-debate-candidates-will-play-by-their-own-rules/",
+    },
+  },
+  {
+    id: "new-york-criminal-trial-odor",
+    date: "2024-04-01",
+    headline: "Courtroom Odor Commentary Escalates Into Online Claims",
+    description:
+      "Commentary during the April trial period alleged passing gas and reactions to an odor, while online posts escalated the story into soiling claims. A viral CNN headline making that claim was fabricated and is not evidence.",
+    status: "DISPUTED",
+    rating: 1,
+    location: "New York criminal trial",
+    source: {
+      label: "PolitiFact review of the fabricated CNN image",
+      url: "https://politifact.com/factchecks/2024/apr/26/threads-posts/no-cnn-didnt-report-that-donald-trump-soiled-himse/",
+    },
   },
 ];
