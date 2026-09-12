@@ -194,7 +194,23 @@ function Index() {
 
           {/* Statistics */}
           <section id="statistics" className="mt-12 scroll-mt-4">
-            <SectionHeading eyebrow="Data Table 1.0" title="Official(?) Statistics" />
+            {/* BEA agency header */}
+            <div className="mb-4 flex items-center gap-3 border-b-2 border-primary pb-2">
+              <BEASeal className="size-10 shrink-0 text-primary" />
+              <div className="flex-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">
+                  BEA | Bureau of Executive Anomalies
+                </p>
+                <h2 className="font-display text-xl font-bold uppercase tracking-tight sm:text-2xl">
+                  Official(?) Data & Analytics Division
+                </h2>
+              </div>
+            </div>
+            <p className="mb-3 text-xs leading-relaxed text-muted-foreground">
+              Compiled and maintained by the Bureau of Executive Anomalies (BEA), the{" "}
+              {SITE_NAME}'s fictional statistics division. All figures are auto-calculated from
+              the allegation review queue below.
+            </p>
             <div className="grid grid-cols-2 gap-px border border-border bg-border sm:grid-cols-3">
               <Stat label="Total alleged incidents" value={stats.total} />
               <Stat label="Current streak (days)" value={stats.currentStreak} />
@@ -203,8 +219,8 @@ function Index() {
               <Stat label="Incidents this year" value={stats.thisYear} />
               <Stat label="Confirmed incidents" value={0} />
             </div>
-            <p className="mt-2 text-xs text-muted-foreground">
-              All figures are auto-calculated from the allegation review queue below.
+            <p className="mt-2 text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+              ▲ BEA-certified data · Not a real government agency · Figures are satirical
             </p>
           </section>
 
