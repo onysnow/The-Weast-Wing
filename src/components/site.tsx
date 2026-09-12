@@ -107,7 +107,7 @@ export function IncidentMedia({
 /** Extract a YouTube video ID from an embed URL. */
 function youtubeId(url: string): string | null {
   const m = url.match(/(?:youtube-nocookie\.com|youtube\.com)\/embed\/([^/?]+)/);
-  return m ? m[1] : null;
+  return m?.[1] ?? null;
 }
 
 /**
@@ -280,7 +280,11 @@ const ROLE_LABELS: Record<ReferenceRole, string> = {
  * news sites, fact-checkers — renders with the same compact citation-row
  * treatment regardless of platform.
  */
-export function ReferenceLedger({ references }: { references?: Reference[] }) {
+export function ReferenceLedger({
+  references,
+}: {
+  references?: Reference[] | undefined;
+}) {
   if (!references || references.length === 0) return null;
 
   return (
@@ -325,12 +329,12 @@ export function ResearchDrawer({
   sourceUrl,
   sourceLabel,
 }: {
-  established?: string;
-  notes?: string;
-  references?: Reference[];
+  established?: string | undefined;
+  notes?: string | undefined;
+  references?: Reference[] | undefined;
   permalink: string;
-  sourceUrl?: string;
-  sourceLabel?: string;
+  sourceUrl?: string | undefined;
+  sourceLabel?: string | undefined;
 }) {
   return (
     <details className="group border-t border-border">
