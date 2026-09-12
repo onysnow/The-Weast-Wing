@@ -3,9 +3,11 @@ import { useEffect, useMemo, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import {
   AdSlot,
+  CompactMedia,
   IncidentMedia,
   Modal,
   PoopRating,
+  ResearchDrawer,
   Seal,
   ShareBar,
   StatusBadge,
@@ -15,22 +17,23 @@ import { Button } from "@/components/ui/button";
 import { RATING_LABELS } from "@/data/incidents";
 import { computeStats, formatDate, latestIncident, sortedIncidents } from "@/lib/incident-stats";
 
-const TITLE = "Days Since the President Allegedly Shit Himself";
+const SITE_NAME = "The Weast Wing";
+const HERO_HEADLINE = "Days Since the President Allegedly Shit Himself";
 const DESC =
-  "An unofficial, entirely satirical public dashboard tracking the days since the last alleged presidential incident. All entries are fictional parody.";
+  "An unofficial, entirely satirical public dashboard tracking the days since the last alleged presidential incident. All entries are sourced public allegations; the alleged bodily incidents are not established facts.";
 
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: `${TITLE} — The National Incident Clock` },
+      { title: `${SITE_NAME} — ${HERO_HEADLINE}` },
       { name: "description", content: DESC },
-      { property: "og:title", content: TITLE },
+      { property: "og:title", content: `${SITE_NAME} — ${HERO_HEADLINE}` },
       { property: "og:description", content: DESC },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: TITLE },
+      { name: "twitter:title", content: `${SITE_NAME} — ${HERO_HEADLINE}` },
       { name: "twitter:description", content: DESC },
     ],
     links: [{ rel: "canonical", href: "/" }],
@@ -69,7 +72,7 @@ function Index() {
           <Seal className="size-11 shrink-0 text-seal" />
           <div>
             <p className="font-display text-sm font-bold uppercase leading-tight tracking-[0.06em]">
-              The National Incident Clock
+              {SITE_NAME}
             </p>
             <p className="text-[11px] uppercase tracking-[0.14em] text-primary-foreground/70">
               Office of Unverified Public Statistics
@@ -92,7 +95,7 @@ function Index() {
               {stats.currentStreak}
             </div>
             <p className="mx-auto max-w-xl font-display text-base font-bold uppercase leading-snug tracking-wide sm:text-2xl">
-              Days Since the President Allegedly Shit Himself
+              {HERO_HEADLINE}
             </p>
 
             <dl className="mx-auto mt-6 grid max-w-md grid-cols-2 gap-px overflow-hidden border border-primary-foreground/20 bg-primary-foreground/20 text-left">
@@ -214,13 +217,16 @@ function Index() {
                 <li key={inc.id}>
                   <article
                     id={`incident-${inc.id}`}
-                    className="scroll-mt-4 border border-border bg-card p-4 sm:p-5"
+                    className="scroll-mt-4 border border-border bg-card"
                   >
-                    <div className="flex flex-wrap items-center gap-3">
-                      <span className="border border-border bg-muted px-2 py-1 font-display text-[11px] font-bold tabular-nums tracking-wider">
-                        FILE №{String(sortedIncidents.length - i).padStart(3, "0")}
-                      </span>
-                      <StatusBadge status={inc.status} />
+                    {/* Card header: file number, status, date */}
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border p-3">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="border border-border bg-muted px-2 py-1 font-display text-[11px] font-bold tabular-nums tracking-wider">
+                          FILE №{String(sortedIncidents.length - i).padStart(3, "0")}
+                        </span>
+                        <StatusBadge status={inc.status} />
+                      </div>
                       <time
                         dateTime={inc.date}
                         className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground"
@@ -228,43 +234,46 @@ function Index() {
                         {inc.dateLabel ?? formatDate(inc.date)}
                       </time>
                     </div>
-                    <h3 className="mt-3 font-display text-lg font-bold leading-snug">
-                      {inc.headline}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                      {inc.description}
-                    </p>
-                    {(inc.videoUrl || inc.imageUrl) && (
-                      <IncidentMedia
-                        className="mt-3 border border-border"
+
+                    {/* Card body: compact media + headline + description */}
+                    <div className="flex gap-3 p-4">
+                      <CompactMedia
                         videoUrl={inc.videoUrl}
                         imageUrl={inc.imageUrl}
                         imageCredit={inc.imageCredit}
                         headline={inc.headline}
+                        sourceUrl={inc.source?.url}
+                        sourceLabel={inc.source?.label}
                       />
-                    )}
-                    <div className="mt-3">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-display text-lg font-bold leading-snug">
+                          {inc.headline}
+                        </h3>
+                        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                          {inc.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Evidence rating */}
+                    <div className="px-4 pb-3">
                       <PoopRating rating={inc.rating} size="sm" />
                     </div>
-                    <IncidentPoll incidentId={inc.id} />
-                    <div className="mt-3 flex flex-wrap items-center gap-4 text-xs font-semibold uppercase tracking-wider">
-                      <a
-                        href={`#incident-${inc.id}`}
-                        className="text-accent underline underline-offset-4"
-                      >
-                        Permalink
-                      </a>
-                      {inc.source && (
-                        <a
-                          href={inc.source.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-accent underline underline-offset-4"
-                        >
-                          Source ↗
-                        </a>
-                      )}
+
+                    {/* Public poll */}
+                    <div className="border-t border-border">
+                      <IncidentPoll incidentId={inc.id} />
                     </div>
+
+                    {/* Expandable research drawer */}
+                    <ResearchDrawer
+                      established={inc.established}
+                      notes={inc.notes}
+                      references={inc.references}
+                      permalink={`#incident-${inc.id}`}
+                      sourceUrl={inc.source?.url}
+                      sourceLabel={inc.source?.label}
+                    />
                   </article>
                   {i === 1 && <AdSlot label="Advertisement" />}
                 </li>
@@ -326,7 +335,7 @@ function Index() {
             <div className="flex items-center gap-3">
               <Seal className="size-10 text-seal" />
               <p className="font-display text-sm font-bold uppercase tracking-[0.06em]">
-                The National Incident Clock
+                {SITE_NAME}
               </p>
             </div>
             <p className="text-xs leading-relaxed text-primary-foreground/70">
@@ -358,9 +367,9 @@ function Index() {
 
       <Modal open={modal === "About"} onClose={() => setModal(null)} title="About">
         <p>
-          The National Incident Clock is a satirical dashboard styled after official public-health
-          statistics pages. It applies the workplace "days since last incident" joke to a curated
-          queue of public allegations and contested interpretations.
+          {SITE_NAME} is a satirical dashboard styled after official public-health statistics pages.
+          It applies the workplace "days since last incident" joke to a curated queue of public
+          allegations and contested interpretations.
         </p>
         <p>The underlying events are sourced; the alleged bodily incidents remain unproven.</p>
       </Modal>
