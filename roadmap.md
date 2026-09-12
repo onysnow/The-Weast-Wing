@@ -5,4 +5,4 @@
 - [x] Redesign incident cards: compact primary video, expandable details, unified cross-platform references, fact-check context
 - [x] Replace primary source per workbook (updated form) for each incident
 - [x] Rebrand site to "The Weast Wing" (title, header, footer, OG/social metadata)
-- [ ] Brand statistics section as "BEA — Bureau of Executive Anomalies" with seal/subhead
+- [x] Brand statistics section as "BEA — Bureau of Executive Anomalies" with seal/subhead
