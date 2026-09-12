@@ -156,7 +156,7 @@ function Index() {
 
       <main>
         {/* Hero */}
-        <section id="hero" className="scroll-mt-12 border-b-4 border-accent bg-primary text-primary-foreground">
+        <section id="hero" className="scroll-mt-16 border-b-4 border-accent bg-primary text-primary-foreground">
           <div className="mx-auto max-w-4xl px-4 pb-10 pt-6 text-center">
             <h1 className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-foreground/70">
               Current Reporting Period
@@ -207,7 +207,7 @@ function Index() {
           <AdSlot label="Advertisement" />
 
           {/* Featured incident */}
-          <section id="what-reset-the-clock" className="scroll-mt-4">
+          <section id="what-reset-the-clock" className="scroll-mt-16">
             <SectionHeading eyebrow="Featured Report" title="What Reset the Clock?" />
             {latest ? (
               <article className="border border-border bg-card">
@@ -269,7 +269,7 @@ function Index() {
           </section>
 
           {/* Statistics */}
-          <section id="statistics" className="mt-12 scroll-mt-4">
+          <section id="statistics" className="mt-12 scroll-mt-16">
             {/* BEA agency header */}
             <div className="mb-4 flex items-center gap-3 border-b-2 border-primary pb-2">
               <BEASeal className="size-10 shrink-0 text-primary" />
@@ -303,14 +303,14 @@ function Index() {
           <AdSlot label="Advertisement" />
 
           {/* Incident log */}
-          <section id="incident-log" className="mt-6 scroll-mt-4">
+          <section id="incident-log" className="mt-6 scroll-mt-16">
             <SectionHeading eyebrow="Public Record" title="The Incident Log" />
             <ol className="space-y-4">
               {sortedIncidents.map((inc, i) => (
                 <li key={inc.id}>
                   <article
                     id={`incident-${inc.id}`}
-                    className="scroll-mt-4 border border-border bg-card"
+                    className="scroll-mt-16 border border-border bg-card"
                   >
                     {/* Card header: file number, status, date */}
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border p-3">
@@ -375,7 +375,7 @@ function Index() {
           </section>
 
           {/* Public submissions */}
-          <section id="submit-report" className="mt-12 scroll-mt-4">
+          <section id="submit-report" className="mt-12 scroll-mt-16">
             <SectionHeading eyebrow="Public Tip Line" title="Submit an Incident Report" />
             <p className="mb-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
               Send the editorial desk an alleged incident and a supporting link. Every submission is
