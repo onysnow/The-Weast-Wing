@@ -41,6 +41,14 @@ export const Route = createFileRoute("/")({
   }),
 });
 
+const AGENCIES = [
+  { id: "hero", acronym: "POS", name: "Presidential Office of Shitistics" },
+  { id: "what-reset-the-clock", acronym: "OLI", name: "Office of the Latest Incident" },
+  { id: "statistics", acronym: "BEA", name: "Bureau of Executive Anomalies" },
+  { id: "incident-log", acronym: "FRAI", name: "Federal Registry of Alleged Incidents" },
+  { id: "submit-report", acronym: "OCT", name: "Office of Citizen Tips" },
+] as const;
+
 function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -82,9 +90,30 @@ function Index() {
         </div>
       </header>
 
+      {/* Agencies nav */}
+      <nav aria-label="Weast Wing agencies" className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
+        <div className="mx-auto flex max-w-4xl gap-1 overflow-x-auto px-2 py-1.5">
+          {AGENCIES.map((a) => (
+            <button
+              key={a.id}
+              type="button"
+              onClick={() => scrollToId(a.id)}
+              className="group flex shrink-0 items-baseline gap-1.5 whitespace-nowrap px-2.5 py-1.5 text-left hover:bg-muted"
+            >
+              <span className="font-display text-[11px] font-bold uppercase tracking-[0.08em] text-accent group-hover:underline">
+                {a.acronym}
+              </span>
+              <span className="hidden text-[11px] uppercase tracking-[0.06em] text-muted-foreground sm:inline">
+                {a.name}
+              </span>
+            </button>
+          ))}
+        </div>
+      </nav>
+
       <main>
         {/* Hero */}
-        <section className="border-b-4 border-accent bg-primary text-primary-foreground">
+        <section id="hero" className="scroll-mt-12 border-b-4 border-accent bg-primary text-primary-foreground">
           <div className="mx-auto max-w-4xl px-4 pb-10 pt-6 text-center">
             <h1 className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-foreground/70">
               Current Reporting Period
