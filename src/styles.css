@@ -21,6 +21,7 @@
 @theme inline {
   --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Roboto Slab", ui-serif, Georgia, serif;
+  --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --color-seal: var(--seal);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
