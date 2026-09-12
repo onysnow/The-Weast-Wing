@@ -44,10 +44,7 @@ export const Route = createFileRoute("/")({
 
 const AGENCIES = [
   { id: "hero", acronym: "POS", name: "Presidential Office of Shitistics" },
-  { id: "what-reset-the-clock", acronym: "OLI", name: "Office of the Latest Incident" },
   { id: "statistics", acronym: "BEA", name: "Bureau of Executive Anomalies" },
-  { id: "incident-log", acronym: "FRAI", name: "Federal Registry of Alleged Incidents" },
-  { id: "submit-report", acronym: "OCT", name: "Office of Citizen Tips" },
 ] as const;
 
 function scrollToId(id: string) {
@@ -58,6 +55,7 @@ function Index() {
   const [now, setNow] = useState(() => Date.now());
   const [modal, setModal] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<string>("hero");
+  const [lockedAgencyId, setLockedAgencyId] = useState<string | null>(null);
 
   useEffect(() => {
     setNow(Date.now());
@@ -119,18 +117,26 @@ function Index() {
         <div className="no-scrollbar mx-auto flex max-w-4xl snap-x overflow-x-auto scroll-smooth">
           {AGENCIES.map((a) => {
             const active = activeId === a.id;
+            const locked = lockedAgencyId === a.id;
             return (
-              <button
+              <Button
                 key={a.id}
                 type="button"
-                onClick={() => scrollToId(a.id)}
+                variant="ghost"
+                onClick={() => {
+                  setLockedAgencyId((current) => (current === a.id ? null : a.id));
+                  scrollToId(a.id);
+                }}
                 aria-current={active ? "location" : undefined}
+                aria-expanded={locked}
+                aria-label={`${a.acronym}: ${a.name}`}
                 className={cn(
-                  "group relative flex min-w-[118px] shrink-0 snap-start flex-col justify-center border-r border-white/10 px-3 py-2.5 text-left transition-colors hover:bg-white/5 sm:min-w-0 sm:flex-1 sm:px-4 sm:py-3",
+                  "group relative h-12 min-w-0 shrink-0 snap-start justify-start overflow-hidden rounded-none border-r border-primary-foreground/10 px-4 py-0 font-mono text-primary-foreground transition-[width,background-color] duration-300 hover:bg-primary-foreground/5 hover:text-primary-foreground sm:h-14",
+                  locked ? "w-[min(19rem,78vw)]" : "w-[4.75rem] hover:w-[min(19rem,78vw)]",
                   active && "bg-white/5",
                 )}
               >
-                <span className="mb-1 flex items-center gap-1.5 font-mono text-[10px] font-bold tracking-tight text-accent sm:text-[11px]">
+                <span className="flex shrink-0 items-center gap-1.5 text-xs font-bold text-accent">
                   {a.acronym}
                   {a.id === "hero" && (
                     <span
@@ -139,7 +145,14 @@ function Index() {
                     />
                   )}
                 </span>
-                <span className="text-[10px] font-bold uppercase leading-tight tracking-wider text-primary-foreground/90 sm:text-[11px]">
+                <span
+                  className={cn(
+                    "ml-3 overflow-hidden whitespace-nowrap text-[10px] font-bold uppercase text-primary-foreground/90 transition-[max-width,opacity] duration-300 sm:text-[11px]",
+                    locked
+                      ? "max-w-64 opacity-100"
+                      : "max-w-0 opacity-0 group-hover:max-w-64 group-hover:opacity-100",
+                  )}
+                >
                   {a.name}
                 </span>
                 <span
@@ -148,7 +161,7 @@ function Index() {
                     active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
                   )}
                 />
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -439,15 +452,27 @@ function Index() {
               events. The alleged bodily incidents are not established facts. Nothing here should be
               read as an assertion of fact about any person.
             </p>
-            <nav className="flex flex-wrap gap-x-5 gap-y-2 pt-2 text-xs font-bold uppercase tracking-[0.12em]">
-              {["About", "Methodology", "Privacy", "Contact", "Corrections"].map((m) => (
-                <button
-                  key={m}
-                  onClick={() => setModal(m)}
-                  className="underline underline-offset-4"
+            <nav
+              aria-label="Information and policies"
+              className="flex flex-wrap gap-x-5 gap-y-2 pt-2"
+            >
+              {[
+                { label: "About", modal: "About" },
+                { label: "Contact Me", modal: "Contact" },
+                { label: "Methodology", modal: "Methodology" },
+                { label: "Privacy", modal: "Privacy" },
+                { label: "Corrections", modal: "Corrections" },
+              ].map((item) => (
+                <Button
+                  key={item.modal}
+                  type="button"
+                  variant="link"
+                  onClick={() => setModal(item.modal)}
+                  aria-haspopup="dialog"
+                  className="h-auto rounded-none p-0 text-xs font-bold uppercase text-primary-foreground underline underline-offset-4 hover:text-primary-foreground/80"
                 >
-                  {m}
-                </button>
+                  {item.label}
+                </Button>
               ))}
             </nav>
             <p className="pt-2 text-[11px] text-primary-foreground/50">
@@ -496,9 +521,19 @@ function Index() {
 
       <Modal open={modal === "Contact"} onClose={() => setModal(null)} title="Contact">
         <p>
-          There is no real contact address configured yet. Add one before publishing so people can
-          reach you.
+          To send a tip, correction, source, or general note, use the incident report form. Every
+          message is held for editorial review and optional contact details are never published.
         </p>
+        <Button
+          type="button"
+          onClick={() => {
+            setModal(null);
+            window.setTimeout(() => scrollToId("submit-report"), 0);
+          }}
+          className="mt-2 rounded-none uppercase"
+        >
+          Contact the editorial desk
+        </Button>
       </Modal>
 
       <Modal open={modal === "Corrections"} onClose={() => setModal(null)} title="Corrections">
