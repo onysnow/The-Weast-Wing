@@ -41,6 +41,14 @@ export const Route = createFileRoute("/")({
   }),
 });
 
+const AGENCIES = [
+  { id: "hero", acronym: "POS", name: "Presidential Office of Shitistics" },
+  { id: "what-reset-the-clock", acronym: "OLI", name: "Office of the Latest Incident" },
+  { id: "statistics", acronym: "BEA", name: "Bureau of Executive Anomalies" },
+  { id: "incident-log", acronym: "FRAI", name: "Federal Registry of Alleged Incidents" },
+  { id: "submit-report", acronym: "OCT", name: "Office of Citizen Tips" },
+] as const;
+
 function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
