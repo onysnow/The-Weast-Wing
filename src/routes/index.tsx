@@ -112,23 +112,45 @@ function Index() {
       </header>
 
       {/* Agencies nav */}
-      <nav aria-label="Weast Wing agencies" className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
-        <div className="mx-auto flex max-w-4xl gap-1 overflow-x-auto px-2 py-1.5">
-          {AGENCIES.map((a) => (
-            <button
-              key={a.id}
-              type="button"
-              onClick={() => scrollToId(a.id)}
-              className="group flex shrink-0 items-baseline gap-1.5 whitespace-nowrap px-2.5 py-1.5 text-left hover:bg-muted"
-            >
-              <span className="font-display text-[11px] font-bold uppercase tracking-[0.08em] text-accent group-hover:underline">
-                {a.acronym}
-              </span>
-              <span className="hidden text-[11px] uppercase tracking-[0.06em] text-muted-foreground sm:inline">
-                {a.name}
-              </span>
-            </button>
-          ))}
+      <nav
+        aria-label="Weast Wing agencies"
+        className="no-scrollbar sticky top-0 z-40 border-b-2 border-accent bg-primary shadow-lg"
+      >
+        <div className="no-scrollbar mx-auto flex max-w-4xl snap-x overflow-x-auto scroll-smooth">
+          {AGENCIES.map((a) => {
+            const active = activeId === a.id;
+            return (
+              <button
+                key={a.id}
+                type="button"
+                onClick={() => scrollToId(a.id)}
+                aria-current={active ? "location" : undefined}
+                className={cn(
+                  "group relative flex min-w-[118px] shrink-0 snap-start flex-col justify-center border-r border-white/10 px-3 py-2.5 text-left transition-colors hover:bg-white/5 sm:min-w-0 sm:flex-1 sm:px-4 sm:py-3",
+                  active && "bg-white/5",
+                )}
+              >
+                <span className="mb-1 flex items-center gap-1.5 font-mono text-[10px] font-bold tracking-tight text-accent sm:text-[11px]">
+                  {a.acronym}
+                  {a.id === "hero" && (
+                    <span
+                      className="size-1.5 animate-pulse rounded-full bg-red-500"
+                      aria-hidden="true"
+                    />
+                  )}
+                </span>
+                <span className="text-[10px] font-bold uppercase leading-tight tracking-wider text-primary-foreground/90 sm:text-[11px]">
+                  {a.name}
+                </span>
+                <span
+                  className={cn(
+                    "absolute bottom-0 left-0 h-1 w-full origin-left bg-accent transition-transform duration-200",
+                    active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
+                  )}
+                />
+              </button>
+            );
+          })}
         </div>
       </nav>
 
