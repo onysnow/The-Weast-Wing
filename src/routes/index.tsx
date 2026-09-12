@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 import { ExternalLink } from "lucide-react";
 import {
   AdSlot,
@@ -56,11 +57,31 @@ function scrollToId(id: string) {
 function Index() {
   const [now, setNow] = useState(() => Date.now());
   const [modal, setModal] = useState<string | null>(null);
+  const [activeId, setActiveId] = useState<string>("hero");
 
   useEffect(() => {
     setNow(Date.now());
     const t = setInterval(() => setNow(Date.now()), 60_000);
     return () => clearInterval(t);
+  }, []);
+
+  // Scrollspy: highlight the agency nav item for the section in view.
+  useEffect(() => {
+    const sections = AGENCIES.map((a) => document.getElementById(a.id)).filter(
+      (el): el is HTMLElement => el !== null,
+    );
+    if (sections.length === 0) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]?.target.id) setActiveId(visible[0].target.id);
+      },
+      { rootMargin: "-30% 0px -55% 0px", threshold: [0, 0.25, 0.5, 1] },
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
   }, []);
 
   const stats = useMemo(() => computeStats(now), [now]);
@@ -91,29 +112,51 @@ function Index() {
       </header>
 
       {/* Agencies nav */}
-      <nav aria-label="Weast Wing agencies" className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
-        <div className="mx-auto flex max-w-4xl gap-1 overflow-x-auto px-2 py-1.5">
-          {AGENCIES.map((a) => (
-            <button
-              key={a.id}
-              type="button"
-              onClick={() => scrollToId(a.id)}
-              className="group flex shrink-0 items-baseline gap-1.5 whitespace-nowrap px-2.5 py-1.5 text-left hover:bg-muted"
-            >
-              <span className="font-display text-[11px] font-bold uppercase tracking-[0.08em] text-accent group-hover:underline">
-                {a.acronym}
-              </span>
-              <span className="hidden text-[11px] uppercase tracking-[0.06em] text-muted-foreground sm:inline">
-                {a.name}
-              </span>
-            </button>
-          ))}
+      <nav
+        aria-label="Weast Wing agencies"
+        className="no-scrollbar sticky top-0 z-40 border-b-2 border-accent bg-primary shadow-lg"
+      >
+        <div className="no-scrollbar mx-auto flex max-w-4xl snap-x overflow-x-auto scroll-smooth">
+          {AGENCIES.map((a) => {
+            const active = activeId === a.id;
+            return (
+              <button
+                key={a.id}
+                type="button"
+                onClick={() => scrollToId(a.id)}
+                aria-current={active ? "location" : undefined}
+                className={cn(
+                  "group relative flex min-w-[118px] shrink-0 snap-start flex-col justify-center border-r border-white/10 px-3 py-2.5 text-left transition-colors hover:bg-white/5 sm:min-w-0 sm:flex-1 sm:px-4 sm:py-3",
+                  active && "bg-white/5",
+                )}
+              >
+                <span className="mb-1 flex items-center gap-1.5 font-mono text-[10px] font-bold tracking-tight text-accent sm:text-[11px]">
+                  {a.acronym}
+                  {a.id === "hero" && (
+                    <span
+                      className="size-1.5 animate-pulse rounded-full bg-red-500"
+                      aria-hidden="true"
+                    />
+                  )}
+                </span>
+                <span className="text-[10px] font-bold uppercase leading-tight tracking-wider text-primary-foreground/90 sm:text-[11px]">
+                  {a.name}
+                </span>
+                <span
+                  className={cn(
+                    "absolute bottom-0 left-0 h-1 w-full origin-left bg-accent transition-transform duration-200",
+                    active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
+                  )}
+                />
+              </button>
+            );
+          })}
         </div>
       </nav>
 
       <main>
         {/* Hero */}
-        <section id="hero" className="scroll-mt-12 border-b-4 border-accent bg-primary text-primary-foreground">
+        <section id="hero" className="scroll-mt-16 border-b-4 border-accent bg-primary text-primary-foreground">
           <div className="mx-auto max-w-4xl px-4 pb-10 pt-6 text-center">
             <h1 className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-foreground/70">
               Current Reporting Period
@@ -164,7 +207,7 @@ function Index() {
           <AdSlot label="Advertisement" />
 
           {/* Featured incident */}
-          <section id="what-reset-the-clock" className="scroll-mt-4">
+          <section id="what-reset-the-clock" className="scroll-mt-16">
             <SectionHeading eyebrow="Featured Report" title="What Reset the Clock?" />
             {latest ? (
               <article className="border border-border bg-card">
@@ -226,7 +269,7 @@ function Index() {
           </section>
 
           {/* Statistics */}
-          <section id="statistics" className="mt-12 scroll-mt-4">
+          <section id="statistics" className="mt-12 scroll-mt-16">
             {/* BEA agency header */}
             <div className="mb-4 flex items-center gap-3 border-b-2 border-primary pb-2">
               <BEASeal className="size-10 shrink-0 text-primary" />
@@ -260,14 +303,14 @@ function Index() {
           <AdSlot label="Advertisement" />
 
           {/* Incident log */}
-          <section id="incident-log" className="mt-6 scroll-mt-4">
+          <section id="incident-log" className="mt-6 scroll-mt-16">
             <SectionHeading eyebrow="Public Record" title="The Incident Log" />
             <ol className="space-y-4">
               {sortedIncidents.map((inc, i) => (
                 <li key={inc.id}>
                   <article
                     id={`incident-${inc.id}`}
-                    className="scroll-mt-4 border border-border bg-card"
+                    className="scroll-mt-16 border border-border bg-card"
                   >
                     {/* Card header: file number, status, date */}
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border p-3">
@@ -332,7 +375,7 @@ function Index() {
           </section>
 
           {/* Public submissions */}
-          <section id="submit-report" className="mt-12 scroll-mt-4">
+          <section id="submit-report" className="mt-12 scroll-mt-16">
             <SectionHeading eyebrow="Public Tip Line" title="Submit an Incident Report" />
             <p className="mb-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
               Send the editorial desk an alleged incident and a supporting link. Every submission is
