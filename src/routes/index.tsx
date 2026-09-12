@@ -118,6 +118,10 @@ function Index() {
               </div>
             </dl>
 
+            <p className="mt-2 text-[10px] uppercase tracking-[0.14em] text-primary-foreground/50">
+              ▲ Compiled by the Bureau of Executive Anomalies (BEA)
+            </p>
+
             <button
               onClick={() => scrollToId("what-reset-the-clock")}
               className="mt-6 w-full max-w-md border-2 border-accent bg-accent px-5 py-3 font-display text-sm font-bold uppercase tracking-[0.12em] text-accent-foreground transition hover:bg-accent/85"
