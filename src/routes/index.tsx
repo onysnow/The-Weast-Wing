@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import {
   AdSlot,
+  BEASeal,
   CompactMedia,
   IncidentMedia,
   Modal,
