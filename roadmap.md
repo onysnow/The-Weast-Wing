@@ -6,3 +6,5 @@
 - [x] Replace primary source per workbook (updated form) for each incident
 - [x] Rebrand site to "The Weast Wing" (title, header, footer, OG/social metadata)
 - [x] Brand statistics section as "BEA — Bureau of Executive Anomalies" with seal/subhead
+- [x] Limit agency navigation to POS and BEA with expandable, lockable labels
+- [x] Ensure About, Contact Me, Methodology, Privacy, and Corrections footer modals are accessible
