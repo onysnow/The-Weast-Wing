@@ -76,7 +76,7 @@ function Index() {
               {SITE_NAME}
             </p>
             <p className="text-[11px] uppercase tracking-[0.14em] text-primary-foreground/70">
-              Office of Unverified Public Statistics
+              Office of Shitistics
             </p>
           </div>
         </div>
