@@ -57,11 +57,31 @@ function scrollToId(id: string) {
 function Index() {
   const [now, setNow] = useState(() => Date.now());
   const [modal, setModal] = useState<string | null>(null);
+  const [activeId, setActiveId] = useState<string>("hero");
 
   useEffect(() => {
     setNow(Date.now());
     const t = setInterval(() => setNow(Date.now()), 60_000);
     return () => clearInterval(t);
+  }, []);
+
+  // Scrollspy: highlight the agency nav item for the section in view.
+  useEffect(() => {
+    const sections = AGENCIES.map((a) => document.getElementById(a.id)).filter(
+      (el): el is HTMLElement => el !== null,
+    );
+    if (sections.length === 0) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]?.target.id) setActiveId(visible[0].target.id);
+      },
+      { rootMargin: "-30% 0px -55% 0px", threshold: [0, 0.25, 0.5, 1] },
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
   }, []);
 
   const stats = useMemo(() => computeStats(now), [now]);
