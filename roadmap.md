@@ -10,3 +10,4 @@
 - [x] Ensure About, Contact Me, Methodology, Privacy, and Corrections footer modals are accessible
 - [x] Improve dialog accessibility, incident media layout, mobile card spacing, and restrained motion
 - [x] Add “1600 Pennsylvania Weast Avenue” to the footer
+- [ ] Separate BEA onto its own agency page and return incident statistics to POS
