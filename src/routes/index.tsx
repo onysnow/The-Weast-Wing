@@ -1,10 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import { useEffect, useMemo, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import {
   AdSlot,
-  BEASeal,
   CompactMedia,
   IncidentMedia,
   Modal,
@@ -15,6 +13,7 @@ import {
   ShareBar,
   StatusBadge,
 } from "@/components/site";
+import { AgencyNav } from "@/components/agency-nav";
 import { IncidentPoll, IncidentSubmissionForm } from "@/components/community";
 import { Button } from "@/components/ui/button";
 import { RATING_LABELS } from "@/data/incidents";
@@ -43,11 +42,6 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-const AGENCIES = [
-  { id: "hero", acronym: "POS", name: "Presidential Office of Shitistics" },
-  { id: "statistics", acronym: "BEA", name: "Bureau of Executive Anomalies" },
-] as const;
-
 function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -55,32 +49,11 @@ function scrollToId(id: string) {
 function Index() {
   const [now, setNow] = useState(() => Date.now());
   const [modal, setModal] = useState<string | null>(null);
-  const [activeId, setActiveId] = useState<string>("hero");
-  const [lockedAgencyId, setLockedAgencyId] = useState<string | null>(null);
 
   useEffect(() => {
     setNow(Date.now());
     const t = setInterval(() => setNow(Date.now()), 60_000);
     return () => clearInterval(t);
-  }, []);
-
-  // Scrollspy: highlight the agency nav item for the section in view.
-  useEffect(() => {
-    const sections = AGENCIES.map((a) => document.getElementById(a.id)).filter(
-      (el): el is HTMLElement => el !== null,
-    );
-    if (sections.length === 0) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible[0]?.target.id) setActiveId(visible[0].target.id);
-      },
-      { rootMargin: "-30% 0px -55% 0px", threshold: [0, 0.25, 0.5, 1] },
-    );
-    sections.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
   }, []);
 
   const stats = useMemo(() => computeStats(now), [now]);
@@ -132,63 +105,7 @@ function Index() {
         </div>
       </header>
 
-      {/* Agencies nav */}
-      <nav
-        aria-label="Weast Wing agencies"
-        className="no-scrollbar sticky top-0 z-40 border-b-2 border-accent bg-primary shadow-lg"
-      >
-        <div className="no-scrollbar mx-auto flex max-w-4xl snap-x overflow-x-auto scroll-smooth">
-          {AGENCIES.map((a) => {
-            const active = activeId === a.id;
-            const locked = lockedAgencyId === a.id;
-            return (
-              <Button
-                key={a.id}
-                type="button"
-                variant="ghost"
-                onClick={() => {
-                  setLockedAgencyId((current) => (current === a.id ? null : a.id));
-                  scrollToId(a.id);
-                }}
-                aria-current={active ? "location" : undefined}
-                aria-expanded={locked}
-                aria-label={`${a.acronym}: ${a.name}`}
-                className={cn(
-                  "group relative h-12 min-w-0 shrink-0 snap-start justify-start overflow-hidden rounded-none border-r border-primary-foreground/10 px-4 py-0 font-mono text-primary-foreground transition-[width,background-color] duration-300 hover:bg-primary-foreground/5 hover:text-primary-foreground sm:h-14",
-                  locked ? "w-[min(19rem,78vw)]" : "w-[4.75rem] hover:w-[min(19rem,78vw)]",
-                  active && "bg-white/5",
-                )}
-              >
-                <span className="flex shrink-0 items-center gap-1.5 text-xs font-bold text-accent">
-                  {a.acronym}
-                  {a.id === "hero" && (
-                    <span
-                      className="size-1.5 animate-pulse rounded-full bg-red-500"
-                      aria-hidden="true"
-                    />
-                  )}
-                </span>
-                <span
-                  className={cn(
-                    "ml-3 overflow-hidden whitespace-nowrap text-[10px] font-bold uppercase text-primary-foreground/90 transition-[max-width,opacity] duration-300 sm:text-[11px]",
-                    locked
-                      ? "max-w-64 opacity-100"
-                      : "max-w-0 opacity-0 group-hover:max-w-64 group-hover:opacity-100",
-                  )}
-                >
-                  {a.name}
-                </span>
-                <span
-                  className={cn(
-                    "absolute bottom-0 left-0 h-1 w-full origin-left bg-accent transition-transform duration-200",
-                    active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
-                  )}
-                />
-              </Button>
-            );
-          })}
-        </div>
-      </nav>
+      <AgencyNav activeAgency="POS" />
 
       <main>
         {/* Hero */}
@@ -228,7 +145,7 @@ function Index() {
             </dl>
 
             <p className="mt-2 text-[10px] uppercase tracking-[0.14em] text-primary-foreground/50">
-              ▲ Compiled by the Bureau of Executive Anomalies (BEA)
+              ▲ Compiled by the Presidential Office of Shitistics (POS)
             </p>
 
             <button
@@ -307,22 +224,20 @@ function Index() {
 
           {/* Statistics */}
           <section id="statistics" className="mt-12 scroll-mt-16">
-            {/* BEA agency header */}
             <div className="mb-4 flex items-center gap-3 border-b-2 border-primary pb-2">
-              <BEASeal className="size-10 shrink-0 text-primary" />
+              <Seal className="size-10 shrink-0 text-primary" />
               <div className="flex-1">
                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">
-                  BEA | Bureau of Executive Anomalies
+                  POS | Presidential Office of Shitistics
                 </p>
                 <h2 className="font-display text-xl font-bold uppercase tracking-tight sm:text-2xl">
-                  Official(?) Data & Analytics Division
+                  Incident Data & Analytics
                 </h2>
               </div>
             </div>
             <p className="mb-3 text-xs leading-relaxed text-muted-foreground">
-              Compiled and maintained by the Bureau of Executive Anomalies (BEA), the{" "}
-              {SITE_NAME}'s fictional statistics division. All figures are auto-calculated from
-              the allegation review queue below.
+              Compiled and maintained by the Presidential Office of Shitistics (POS). All figures
+              are auto-calculated from the allegation review queue below.
             </p>
             <div className="grid grid-cols-2 gap-px border border-border bg-border sm:grid-cols-3">
               <Stat label="Total alleged incidents" value={stats.total} />
@@ -333,7 +248,7 @@ function Index() {
               <Stat label="Confirmed incidents" value={0} />
             </div>
             <p className="mt-2 text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
-              ▲ BEA-certified data · Not a real government agency · Figures are satirical
+              ▲ POS incident data · Not a real government agency · Figures are satirical
             </p>
           </section>
 
