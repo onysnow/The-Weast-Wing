@@ -9,6 +9,7 @@ import {
   IncidentMedia,
   Modal,
   PoopRating,
+  Reveal,
   ResearchDrawer,
   Seal,
   ShareBar,
@@ -84,6 +85,28 @@ function Index() {
 
   const stats = useMemo(() => computeStats(now), [now]);
   const latest = latestIncident;
+  const [displayedStreak, setDisplayedStreak] = useState(99);
+
+  useEffect(() => {
+    const target = stats.currentStreak;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setDisplayedStreak(target);
+      return;
+    }
+
+    const start = Math.max(99, target);
+    const duration = 950;
+    const startedAt = performance.now();
+    let frame = 0;
+    const tick = (time: number) => {
+      const progress = Math.min(1, (time - startedAt) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplayedStreak(Math.round(start + (target - start) * eased));
+      if (progress < 1) frame = window.requestAnimationFrame(tick);
+    };
+    frame = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frame);
+  }, [stats.currentStreak]);
 
   return (
     <div className="min-h-screen bg-background font-sans text-foreground">
@@ -176,10 +199,11 @@ function Index() {
             </h1>
             <div
               className="my-2 font-display text-[26vw] font-black leading-[0.85] tabular-nums sm:text-[10rem]"
-              aria-live="polite"
+              aria-hidden="true"
             >
-              {stats.currentStreak}
+              {displayedStreak}
             </div>
+            <span className="sr-only">{stats.currentStreak} days</span>
             <p className="mx-auto max-w-xl font-display text-base font-bold uppercase leading-snug tracking-wide sm:text-2xl">
               {HERO_HEADLINE}
             </p>
@@ -223,7 +247,7 @@ function Index() {
           <section id="what-reset-the-clock" className="scroll-mt-16">
             <SectionHeading eyebrow="Featured Report" title="What Reset the Clock?" />
             {latest ? (
-              <article className="border border-border bg-card">
+              <article className="border border-border bg-card shadow-sm">
                 <IncidentMedia
                   videoUrl={latest.videoUrl}
                   imageUrl={latest.imageUrl}
@@ -321,13 +345,14 @@ function Index() {
             <ol className="space-y-4">
               {sortedIncidents.map((inc, i) => (
                 <li key={inc.id}>
+                  <Reveal>
                   <article
                     id={`incident-${inc.id}`}
-                    className="scroll-mt-16 border border-border bg-card"
+                    className="scroll-mt-16 overflow-hidden border border-border bg-card shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-primary/35 hover:shadow-md"
                   >
                     {/* Card header: file number, status, date */}
-                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border p-3">
-                      <div className="flex flex-wrap items-center gap-2">
+                    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 border-b border-border px-4 py-3 sm:px-5">
+                      <div className="flex min-w-0 flex-wrap items-center gap-2">
                         <span className="border border-border bg-muted px-2 py-1 font-display text-[11px] font-bold tabular-nums tracking-wider">
                           FILE №{String(sortedIncidents.length - i).padStart(3, "0")}
                         </span>
@@ -335,14 +360,14 @@ function Index() {
                       </div>
                       <time
                         dateTime={inc.date}
-                        className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground"
+                        className="max-w-32 text-right text-[11px] font-semibold uppercase leading-relaxed tracking-[0.1em] text-muted-foreground sm:max-w-none sm:text-xs"
                       >
                         {inc.dateLabel ?? formatDate(inc.date)}
                       </time>
                     </div>
 
-                    {/* Card body: compact media + headline + description */}
-                    <div className="flex gap-3 p-4">
+                    {/* Full-width responsive source media */}
+                    <div className="px-4 pt-4 sm:px-5 sm:pt-5">
                       <CompactMedia
                         videoUrl={inc.videoUrl}
                         imageUrl={inc.imageUrl}
@@ -351,7 +376,11 @@ function Index() {
                         sourceUrl={inc.source?.url}
                         sourceLabel={inc.source?.label}
                       />
-                      <div className="min-w-0 flex-1">
+                    </div>
+
+                    {/* Card body */}
+                    <div className="px-4 pb-4 pt-4 sm:px-5 sm:pb-5">
+                      <div className="min-w-0">
                         <h3 className="font-display text-lg font-bold leading-snug">
                           {inc.headline}
                         </h3>
@@ -362,7 +391,7 @@ function Index() {
                     </div>
 
                     {/* Evidence rating */}
-                    <div className="px-4 pb-3">
+                    <div className="border-t border-border px-4 py-4 sm:px-5">
                       <PoopRating rating={inc.rating} size="sm" />
                     </div>
 
@@ -381,6 +410,7 @@ function Index() {
                       sourceLabel={inc.source?.label}
                     />
                   </article>
+                  </Reveal>
                   {i === 1 && <AdSlot label="Advertisement" />}
                 </li>
               ))}
@@ -452,6 +482,11 @@ function Index() {
               events. The alleged bodily incidents are not established facts. Nothing here should be
               read as an assertion of fact about any person.
             </p>
+            <address className="border-l-2 border-accent pl-3 text-xs not-italic leading-relaxed text-primary-foreground/70">
+              <span className="block font-bold uppercase text-primary-foreground">Office address</span>
+              1600 Pennsylvania Weast Avenue<br />
+              Washington, DC 20500
+            </address>
             <nav
               aria-label="Information and policies"
               className="flex flex-wrap gap-x-5 gap-y-2 pt-2"

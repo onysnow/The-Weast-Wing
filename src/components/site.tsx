@@ -1,7 +1,14 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ChevronDown, ExternalLink, Play } from "lucide-react";
 import { RATING_LABELS, type Reference, type ReferenceRole } from "@/data/incidents";
 import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 /* ---------------------------------- Seal --------------------------------- */
 
@@ -221,7 +228,7 @@ export function CompactMedia({
         href={sourceUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex aspect-video w-32 shrink-0 items-center justify-center border border-border bg-muted p-2 text-center hover:bg-muted/70 sm:w-40"
+        className="flex aspect-video w-full items-center justify-center border border-border bg-muted p-4 text-center transition-colors hover:bg-muted/70"
       >
         <span className="text-[10px] font-bold uppercase leading-tight tracking-wider text-muted-foreground">
           {sourceLabel ?? "View Source"}
@@ -235,7 +242,7 @@ export function CompactMedia({
     <button
       type="button"
       onClick={() => setExpanded(true)}
-      className="group relative aspect-video w-32 shrink-0 overflow-hidden border border-border bg-primary/90 sm:w-40"
+      className="group relative aspect-video w-full overflow-hidden border border-border bg-primary/90 transition-[border-color,box-shadow] duration-200 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       aria-label={`Play video: ${headline}`}
     >
       <img
@@ -243,11 +250,11 @@ export function CompactMedia({
         alt=""
         loading="lazy"
         decoding="async"
-        className="size-full object-cover"
+        className="size-full object-contain"
       />
       <span className="absolute inset-0 flex items-center justify-center bg-primary/30 transition-colors group-hover:bg-primary/45">
-        <span className="flex size-7 items-center justify-center rounded-full border-2 border-white bg-primary/40 sm:size-8">
-          <Play className="ml-0.5 size-3 fill-white text-white sm:size-4" />
+        <span className="flex size-11 items-center justify-center rounded-full border-2 border-primary-foreground bg-primary/60 shadow-lg">
+          <Play className="ml-0.5 size-5 fill-primary-foreground text-primary-foreground" />
         </span>
       </span>
     </button>
@@ -403,13 +410,13 @@ export function ResearchDrawer({
 }) {
   return (
     <details className="group border-t border-border">
-      <summary className="flex cursor-pointer items-center justify-between p-3 transition-colors hover:bg-muted [&::-webkit-details-marker]:hidden">
+      <summary className="flex min-h-12 cursor-pointer items-center justify-between px-4 py-3 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring sm:px-5 [&::-webkit-details-marker]:hidden">
         <span className="text-xs font-bold uppercase tracking-tight text-foreground">
           Research Dossier
         </span>
         <ChevronDown className="size-4 text-muted-foreground transition-transform group-open:rotate-180" />
       </summary>
-      <div className="space-y-4 p-4 pt-0">
+      <div className="space-y-4 px-4 pb-5 pt-1 sm:px-5">
         {established && (
           <div>
             <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
@@ -475,38 +482,63 @@ export function Modal({
   title: string;
   children: ReactNode;
 }) {
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+  const openerRef = useRef<HTMLElement | null>(null);
 
-  if (!open) return null;
+  useEffect(() => {
+    if (open && document.activeElement instanceof HTMLElement) {
+      openerRef.current = document.activeElement;
+    }
+  }, [open]);
+
+  const closeAndRestoreFocus = () => {
+    onClose();
+    window.requestAnimationFrame(() => openerRef.current?.focus());
+  };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/60 p-0 sm:items-center sm:p-4"
-      onClick={onClose}
-    >
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-        onClick={(e) => e.stopPropagation()}
-        className="max-h-[85vh] w-full max-w-lg overflow-y-auto border-t-4 border-accent bg-background p-6 shadow-xl sm:border sm:border-border sm:border-t-4"
-      >
-        <div className="mb-3 flex items-start justify-between gap-4">
-          <h2 className="font-display text-xl font-bold uppercase tracking-tight">{title}</h2>
-          <button
-            onClick={onClose}
-            className="shrink-0 border border-border px-2 py-1 text-xs font-semibold uppercase hover:bg-muted"
-          >
-            Close
-          </button>
+    <Dialog open={open} onOpenChange={(nextOpen) => !nextOpen && closeAndRestoreFocus()}>
+      <DialogContent className="inset-x-0 bottom-0 top-auto max-h-[88dvh] w-full max-w-none translate-x-0 translate-y-0 gap-0 overflow-y-auto rounded-none border-x-0 border-b-0 border-t-4 border-t-accent p-0 sm:left-1/2 sm:top-1/2 sm:max-w-lg sm:-translate-x-1/2 sm:-translate-y-1/2 sm:border-x sm:border-b">
+        <DialogHeader className="border-b border-border px-5 py-5 pr-14 text-left sm:px-6">
+          <DialogTitle className="font-display text-xl font-bold uppercase leading-tight">
+            {title}
+          </DialogTitle>
+          <DialogDescription className="sr-only">
+            Information from The Weast Wing about {title.toLowerCase()}.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-3 px-5 py-5 text-sm leading-relaxed text-muted-foreground sm:px-6">
+          {children}
         </div>
-        <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">{children}</div>
-      </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export function Reveal({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [state, setState] = useState<"visible" | "hidden">("visible");
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (element.getBoundingClientRect().top <= window.innerHeight * 0.92) return;
+
+    setState("hidden");
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setState("visible");
+        observer.disconnect();
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} data-reveal={state} className="incident-reveal">
+      {children}
     </div>
   );
 }
