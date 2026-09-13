@@ -66,7 +66,7 @@ export function IncidentPoll({ incidentId }: { incidentId: string }) {
   const percent = (value: number) => (total ? Math.round((value / total) * 100) : 0);
 
   return (
-    <div className="mt-4 border-t border-border pt-4">
+    <div className="px-4 py-5 sm:px-5">
       <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
         Public assessment
       </p>
@@ -77,7 +77,7 @@ export function IncidentPoll({ incidentId }: { incidentId: string }) {
           variant={choice === "nothing_happened" ? "default" : "outline"}
           disabled={pending}
           onClick={() => vote("nothing_happened")}
-          className="h-auto min-h-12 whitespace-normal rounded-none py-2"
+          className="h-auto min-h-12 justify-between gap-3 whitespace-normal rounded-none px-3 py-2 text-left"
         >
           Nothing happened
           <span className="tabular-nums opacity-75">{percent(totals.nothingHappened)}%</span>
@@ -87,13 +87,13 @@ export function IncidentPoll({ incidentId }: { incidentId: string }) {
           variant={choice === "definitely_happened" ? "destructive" : "outline"}
           disabled={pending}
           onClick={() => vote("definitely_happened")}
-          className="h-auto min-h-12 whitespace-normal rounded-none py-2"
+          className="h-auto min-h-12 justify-between gap-3 whitespace-normal rounded-none px-3 py-2 text-left"
         >
           Just a fart to def shit himself
           <span className="tabular-nums opacity-75">{percent(totals.definitelyHappened)}%</span>
         </Button>
       </div>
-      <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
+      <div className="mt-2 grid gap-1 text-[11px] text-muted-foreground sm:grid-cols-[auto_1fr] sm:gap-4">
         <span>{total.toLocaleString()} public votes</span>
         {choice && <span>Your selection is saved on this browser.</span>}
       </div>

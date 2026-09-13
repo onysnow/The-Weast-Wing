@@ -8,3 +8,5 @@
 - [x] Brand statistics section as "BEA — Bureau of Executive Anomalies" with seal/subhead
 - [x] Limit agency navigation to POS and BEA with expandable, lockable labels
 - [x] Ensure About, Contact Me, Methodology, Privacy, and Corrections footer modals are accessible
+- [ ] Improve dialog accessibility, incident media layout, mobile card spacing, and restrained motion
+- [ ] Add “1600 Pennsylvania Weast Avenue” to the footer

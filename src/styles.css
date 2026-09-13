@@ -161,3 +161,37 @@
     display: none;
   }
 }
+
+@utility incident-reveal {
+  transition: opacity 500ms ease, transform 500ms ease;
+
+  &[data-reveal="hidden"] {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  &[data-reveal="visible"] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .incident-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
