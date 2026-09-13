@@ -33,12 +33,12 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: `${SITE_NAME} — ${HERO_HEADLINE}` },
       { property: "og:description", content: DESC },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: "https://theweastwing.com/" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: `${SITE_NAME} — ${HERO_HEADLINE}` },
       { name: "twitter:description", content: DESC },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: "https://theweastwing.com/" }],
   }),
 });
 
@@ -94,14 +94,9 @@ function Index() {
       <header className="bg-primary text-primary-foreground">
         <div className="mx-auto flex max-w-4xl items-center gap-3 px-4 py-4">
           <Seal className="size-11 shrink-0 text-seal" />
-          <div>
-            <p className="font-display text-sm font-bold uppercase leading-tight tracking-[0.06em]">
-              {SITE_NAME}
-            </p>
-            <p className="text-[11px] uppercase tracking-[0.14em] text-primary-foreground/70">
-              Presidential Office of Shitistics
-            </p>
-          </div>
+          <p className="font-display text-lg font-bold uppercase leading-tight tracking-[0.06em] sm:text-xl">
+            {SITE_NAME}
+          </p>
         </div>
       </header>
 
@@ -111,6 +106,17 @@ function Index() {
         {/* Hero */}
         <section id="hero" className="scroll-mt-16 border-b-4 border-accent bg-primary text-primary-foreground">
           <div className="mx-auto max-w-4xl px-4 pb-10 pt-6 text-center">
+            <div className="mx-auto mb-5 flex max-w-xl items-center justify-center gap-3 border-b border-primary-foreground/25 pb-4 text-left">
+              <Seal className="size-10 shrink-0 text-seal" />
+              <div>
+                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent">
+                  Office of the President
+                </p>
+                <p className="font-display text-sm font-bold uppercase leading-tight sm:text-base">
+                  Presidential Office of Shitistics
+                </p>
+              </div>
+            </div>
             <h1 className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-foreground/70">
               Current Reporting Period
             </h1>

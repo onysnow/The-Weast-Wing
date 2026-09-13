@@ -15,11 +15,12 @@ export const Route = createFileRoute("/bea")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://theweastwing.com/bea" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: "/bea" }],
+    links: [{ rel: "canonical", href: "https://theweastwing.com/bea" }],
   }),
 });
 
@@ -35,14 +36,9 @@ function BEAPage() {
       <header className="bg-primary text-primary-foreground">
         <div className="mx-auto flex max-w-4xl items-center gap-3 px-4 py-4">
           <Seal className="size-11 shrink-0 text-seal" />
-          <div>
-            <p className="font-display text-sm font-bold uppercase leading-tight tracking-[0.06em]">
-              The Weast Wing
-            </p>
-            <p className="text-[11px] uppercase tracking-[0.14em] text-primary-foreground/70">
-              Bureau of Executive Anomalies
-            </p>
-          </div>
+          <p className="font-display text-lg font-bold uppercase leading-tight tracking-[0.06em] sm:text-xl">
+            The Weast Wing
+          </p>
         </div>
       </header>
 
