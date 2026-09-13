@@ -5,9 +5,8 @@
 - [x] Redesign incident cards: compact primary video, expandable details, unified cross-platform references, fact-check context
 - [x] Replace primary source per workbook (updated form) for each incident
 - [x] Rebrand site to "The Weast Wing" (title, header, footer, OG/social metadata)
-- [x] Brand statistics section as "BEA — Bureau of Executive Anomalies" with seal/subhead
+- [x] Keep incident statistics under POS; separate BEA into its own agency page
 - [x] Limit agency navigation to POS and BEA with expandable, lockable labels
 - [x] Ensure About, Contact Me, Methodology, Privacy, and Corrections footer modals are accessible
 - [x] Improve dialog accessibility, incident media layout, mobile card spacing, and restrained motion
 - [x] Add “1600 Pennsylvania Weast Avenue” to the footer
-- [ ] Separate BEA onto its own agency page and return incident statistics to POS
