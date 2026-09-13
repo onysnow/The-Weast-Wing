@@ -405,7 +405,7 @@ function Index() {
             </p>
             <address className="border-l-2 border-accent pl-3 text-xs not-italic leading-relaxed text-primary-foreground/70">
               <span className="block font-bold uppercase text-primary-foreground">Office address</span>
-              1600 Pennsylvania Weast Avenue<br />
+              1600 Weast Pennsylvania Avenue<br />
               Washington, DC 20500
             </address>
             <nav
