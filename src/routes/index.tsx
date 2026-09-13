@@ -13,7 +13,7 @@ import {
   ShareBar,
   StatusBadge,
 } from "@/components/site";
-import { AgencyNav } from "@/components/agency-nav";
+import { WeastShell } from "@/components/app-sidebar";
 import { IncidentPoll, IncidentSubmissionForm } from "@/components/community";
 import { Button } from "@/components/ui/button";
 import { RATING_LABELS } from "@/data/incidents";
@@ -82,26 +82,7 @@ function Index() {
   }, [stats.currentStreak]);
 
   return (
-    <div className="min-h-screen bg-background font-sans text-foreground">
-      {/* Official banner */}
-      <div className="border-b border-border bg-muted">
-        <p className="mx-auto max-w-4xl px-4 py-1.5 text-[10px] uppercase tracking-[0.14em] text-muted-foreground sm:text-[11px]">
-          ⚠ A parody site. Not an official government resource. Allegations are unproven.
-        </p>
-      </div>
-
-      {/* Masthead */}
-      <header className="bg-primary text-primary-foreground">
-        <div className="mx-auto flex max-w-4xl items-center gap-3 px-4 py-4">
-          <Seal className="size-11 shrink-0 text-seal" />
-          <p className="font-display text-lg font-bold uppercase leading-tight tracking-[0.06em] sm:text-xl">
-            {SITE_NAME}
-          </p>
-        </div>
-      </header>
-
-      <AgencyNav activeAgency="POS" />
-
+    <WeastShell activeAgency="POS">
       <main>
         {/* Hero */}
         <section id="hero" className="scroll-mt-16 border-b-4 border-accent bg-primary text-primary-foreground">
@@ -499,7 +480,7 @@ function Index() {
         </p>
         <p>Source links and counterevidence are retained so disputed entries can be reviewed.</p>
       </Modal>
-    </div>
+    </WeastShell>
   );
 }
 

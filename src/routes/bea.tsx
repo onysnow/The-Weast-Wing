@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AgencyNav } from "@/components/agency-nav";
-import { BEASeal, Seal } from "@/components/site";
+import { WeastShell } from "@/components/app-sidebar";
+import { BEASeal } from "@/components/site";
 
 const TITLE = "Bureau of Executive Anomalies — The Weast Wing";
 const DESCRIPTION =
@@ -26,24 +26,7 @@ export const Route = createFileRoute("/bea")({
 
 function BEAPage() {
   return (
-    <div className="min-h-screen bg-background font-sans text-foreground">
-      <div className="border-b border-border bg-muted">
-        <p className="mx-auto max-w-4xl px-4 py-1.5 text-[10px] uppercase tracking-[0.14em] text-muted-foreground sm:text-[11px]">
-          ⚠ A parody site. Not an official government resource.
-        </p>
-      </div>
-
-      <header className="bg-primary text-primary-foreground">
-        <div className="mx-auto flex max-w-4xl items-center gap-3 px-4 py-4">
-          <Seal className="size-11 shrink-0 text-seal" />
-          <p className="font-display text-lg font-bold uppercase leading-tight tracking-[0.06em] sm:text-xl">
-            The Weast Wing
-          </p>
-        </div>
-      </header>
-
-      <AgencyNav activeAgency="BEA" />
-
+    <WeastShell activeAgency="BEA">
       <main>
         <section className="border-b-4 border-accent bg-primary text-primary-foreground">
           <div className="mx-auto flex max-w-4xl flex-col items-start gap-5 px-4 py-10 sm:flex-row sm:items-center">
@@ -56,8 +39,8 @@ function BEAPage() {
                 Bureau of Executive Anomalies
               </h1>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-primary-foreground/75 sm:text-base">
-                A separate Weast Wing bureau for matters outside the jurisdiction of presidential
-                incident statistics.
+                A separate Weast Wing bureau for matters outside the jurisdiction
+                of presidential incident statistics.
               </p>
             </div>
           </div>
@@ -73,8 +56,9 @@ function BEAPage() {
             </h2>
           </div>
           <p className="max-w-2xl border-l-4 border-accent bg-muted p-5 text-sm leading-relaxed text-muted-foreground">
-            BEA records will appear here when formally catalogued. POS incident counts and streaks
-            remain under the Presidential Office of Shitistics and are not BEA statistics.
+            BEA records will appear here when formally catalogued. POS incident
+            counts and streaks remain under the Presidential Office of
+            Shitistics and are not BEA statistics.
           </p>
         </section>
       </main>
@@ -90,6 +74,6 @@ function BEAPage() {
           </div>
         </div>
       </footer>
-    </div>
+    </WeastShell>
   );
 }

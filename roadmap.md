@@ -9,4 +9,5 @@
 - [x] Limit agency navigation to POS and BEA with expandable, lockable labels
 - [x] Ensure About, Contact Me, Methodology, Privacy, and Corrections footer modals are accessible
 - [x] Improve dialog accessibility, incident media layout, mobile card spacing, and restrained motion
-- [x] Add “1600 Pennsylvania Weast Avenue” to the footer
+- [x] Add "1600 Weast Pennsylvania Avenue" to the footer
+- [x] Replace top agency nav with an expandable side nav (bars trigger top-left)
