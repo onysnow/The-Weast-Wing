@@ -13,3 +13,4 @@
 - [x] Replace top agency nav with an expandable side nav (bars trigger top-left)
 - [ ] Reframe Weast Wing mission: humorously and poorly defend the President (add per-incident "Official Response")
 - [ ] Remove poop-emoji rating from incident cards
+- [ ] Sidebar stays open until manually closed (no auto-close on navigation)
