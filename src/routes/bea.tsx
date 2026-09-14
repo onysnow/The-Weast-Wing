@@ -75,6 +75,6 @@ function BEAPage() {
           </div>
         </div>
       </footer>
-    </WeastShell>
+    </>
   );
 }

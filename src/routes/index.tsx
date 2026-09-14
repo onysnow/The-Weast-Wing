@@ -473,7 +473,7 @@ function Index() {
         </p>
         <p>Source links and counterevidence are retained so disputed entries can be reviewed.</p>
       </Modal>
-    </WeastShell>
+    </>
   );
 }
 
