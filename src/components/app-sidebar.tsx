@@ -157,15 +157,28 @@ export function WeastShell({ children }: { children: ReactNode }) {
           "flex min-h-svh w-full flex-col bg-background font-sans text-foreground",
         )}
       >
-        <div className="border-b border-border bg-muted">
-          <p className="mx-auto max-w-4xl px-4 py-1.5 text-[10px] uppercase tracking-[0.14em] text-muted-foreground sm:text-[11px]">
-            ⚠ A parody site. Not an official government resource. Allegations
-            are unproven.
-          </p>
+        <div
+          className="flex overflow-hidden border-b border-border bg-muted py-1.5"
+          role="marquee"
+          aria-label="Site notice"
+        >
+          {[0, 1].map((i) => (
+            <div key={i} className="marquee-track" aria-hidden={i === 1}>
+              {[0, 1, 2].map((j) => (
+                <span
+                  key={j}
+                  className="whitespace-nowrap px-6 text-[10px] uppercase tracking-[0.14em] text-muted-foreground sm:text-[11px]"
+                >
+                  ⚠ A parody site. Not an official government resource.
+                  Allegations are unproven.
+                </span>
+              ))}
+            </div>
+          ))}
         </div>
 
         <header className="bg-primary text-primary-foreground">
-          <div className="mx-auto flex max-w-4xl items-center gap-1 px-2 py-2.5 sm:px-4 sm:py-4">
+          <div className="flex w-full items-center gap-2 px-2 py-2.5 sm:px-4 sm:py-4 lg:px-8">
             <BarsTrigger />
             <Seal className="size-11 shrink-0 text-seal" />
             <p className="font-display text-lg font-bold uppercase leading-tight tracking-[0.06em] sm:text-xl">

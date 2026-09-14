@@ -195,3 +195,25 @@
     transform: none !important;
   }
 }
+
+@utility marquee-track {
+  display: inline-flex;
+  min-width: 100%;
+  flex-shrink: 0;
+  animation: weast-marquee 28s linear infinite;
+}
+
+@keyframes weast-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none !important;
+  }
+}

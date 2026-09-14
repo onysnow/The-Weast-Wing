@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { WeastShell } from "@/components/app-sidebar";
+import { EmailSignupPopup } from "@/components/email-signup-popup";
 
 function NotFoundComponent() {
   return (
@@ -124,6 +125,7 @@ function RootComponent() {
       <WeastShell>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
+        <EmailSignupPopup />
       </WeastShell>
     </QueryClientProvider>
   );
