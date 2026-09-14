@@ -178,7 +178,7 @@ export function WeastShell({ children }: { children: ReactNode }) {
         </div>
 
         <header className="bg-primary text-primary-foreground">
-          <div className="mx-auto flex max-w-4xl items-center gap-1 px-2 py-2.5 sm:px-4 sm:py-4">
+          <div className="flex w-full items-center gap-2 px-2 py-2.5 sm:px-4 sm:py-4 lg:px-8">
             <BarsTrigger />
             <Seal className="size-11 shrink-0 text-seal" />
             <p className="font-display text-lg font-bold uppercase leading-tight tracking-[0.06em] sm:text-xl">
