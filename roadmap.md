@@ -16,3 +16,4 @@
 - [x] Sidebar stays open until manually closed (no auto-close on navigation)
 - [ ] Scrolling parody ticker + full-screen background video hero with counter overlaid
 - [ ] Full-width desktop shell: hamburger top-left, widen header/hero/banner only
+- [ ] Bottom-of-screen email signup popup (dismissible, stores emails in backend)
