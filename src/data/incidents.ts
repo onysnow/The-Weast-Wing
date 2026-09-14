@@ -545,5 +545,7 @@ export const incidents: Incident[] = [
     established:
       "Casler has publicly made the allegation repeatedly. Independent corroboration of the alleged incidents was not located in this pass.",
     notes: "Treat as a recurring eyewitness allegation, not a known count of individual incidents.",
+    defense:
+      "The President has never met a diaper he didn't like, because he has never met a diaper. Allegedly.",
   },
 ];
