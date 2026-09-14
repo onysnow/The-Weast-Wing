@@ -83,9 +83,32 @@ function Index() {
   return (
     <>
       <main>
-        {/* Hero */}
-        <section id="hero" className="scroll-mt-16 border-b-4 border-accent bg-primary text-primary-foreground">
-          <div className="mx-auto max-w-4xl px-4 pb-10 pt-6 text-center">
+        {/* Hero — full-screen background video with the counter on top */}
+        <section
+          id="hero"
+          className="relative flex min-h-[100svh] scroll-mt-16 items-center justify-center overflow-hidden border-b-4 border-accent bg-primary text-primary-foreground"
+        >
+          <video
+            className="pointer-events-none absolute inset-0 size-full object-cover"
+            src={heroVideo.url}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+            tabIndex={-1}
+          />
+          <div
+            className="pointer-events-none absolute inset-0 bg-primary/75"
+            aria-hidden="true"
+          />
+          <div
+            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/40 to-primary"
+            aria-hidden="true"
+          />
+
+          <div className="relative z-10 mx-auto w-full max-w-4xl px-4 py-12 text-center">
             <div className="mx-auto mb-5 flex max-w-xl items-center justify-center gap-3 border-b border-primary-foreground/25 pb-4 text-left">
               <Seal className="size-10 shrink-0 text-seal" />
               <div>
@@ -97,11 +120,11 @@ function Index() {
                 </p>
               </div>
             </div>
-            <h1 className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-foreground/70">
+            <h1 className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-foreground/80">
               Current Reporting Period
             </h1>
             <div
-              className="my-2 font-display text-[26vw] font-black leading-[0.85] tabular-nums sm:text-[10rem]"
+              className="my-2 font-display text-[26vw] font-black leading-[0.85] tabular-nums drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)] sm:text-[10rem]"
               aria-hidden="true"
             >
               {displayedStreak}
@@ -111,17 +134,17 @@ function Index() {
               {HERO_HEADLINE}
             </p>
 
-            <dl className="mx-auto mt-6 grid max-w-md grid-cols-2 gap-px overflow-hidden border border-primary-foreground/20 bg-primary-foreground/20 text-left">
-              <div className="bg-primary px-3 py-2">
-                <dt className="text-[10px] uppercase tracking-[0.14em] text-primary-foreground/60">
+            <dl className="mx-auto mt-6 grid max-w-md grid-cols-2 gap-px overflow-hidden border border-primary-foreground/25 bg-primary-foreground/25 text-left backdrop-blur-sm">
+              <div className="bg-primary/85 px-3 py-2">
+                <dt className="text-[10px] uppercase tracking-[0.14em] text-primary-foreground/70">
                   Previous record
                 </dt>
                 <dd className="font-display text-lg font-bold tabular-nums">
                   {stats.previousRecord} days
                 </dd>
               </div>
-              <div className="bg-primary px-3 py-2">
-                <dt className="text-[10px] uppercase tracking-[0.14em] text-primary-foreground/60">
+              <div className="bg-primary/85 px-3 py-2">
+                <dt className="text-[10px] uppercase tracking-[0.14em] text-primary-foreground/70">
                   Last alleged incident
                 </dt>
                 <dd className="font-display text-lg font-bold">
@@ -130,10 +153,10 @@ function Index() {
               </div>
             </dl>
 
-            <p className="mt-2 text-[10px] uppercase tracking-[0.14em] text-primary-foreground/50">
+            <p className="mt-2 text-[10px] uppercase tracking-[0.14em] text-primary-foreground/60">
               ▲ Compiled by the Presidential Office of Shitistics (POS)
             </p>
-            <p className="mx-auto mt-3 max-w-md text-xs italic leading-relaxed text-primary-foreground/70">
+            <p className="mx-auto mt-3 max-w-md text-xs italic leading-relaxed text-primary-foreground/80">
               The Weast Wing's mission: defend the President and his administration — earnestly,
               officially, and not particularly well.
             </p>
