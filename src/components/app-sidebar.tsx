@@ -108,7 +108,10 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
       </SidebarContent>
 
       <SidebarFooter>
-        <p className="px-2 text-[10px] leading-relaxed text-muted-foreground">
+        <p className="border-l-2 border-accent px-2 text-[10px] font-semibold uppercase leading-relaxed tracking-wide text-foreground">
+          Our mission: defend the President. Badly.
+        </p>
+        <p className="px-2 pt-1 text-[10px] leading-relaxed text-muted-foreground">
           A parody site. Not an official government resource. Allegations are
           unproven.
         </p>

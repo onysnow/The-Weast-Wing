@@ -39,8 +39,9 @@ function BEAPage() {
                 Bureau of Executive Anomalies
               </h1>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-primary-foreground/75 sm:text-base">
-                A separate Weast Wing bureau for matters outside the jurisdiction
-                of presidential incident statistics.
+                A separate Weast Wing bureau chartered to explain away matters
+                outside the jurisdiction of presidential incident statistics.
+                Explanations are issued with total confidence and reviewed by no one.
               </p>
             </div>
           </div>
