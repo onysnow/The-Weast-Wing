@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu } from "lucide-react";
 import type { ReactNode } from "react";
 import { Seal } from "@/components/site";
@@ -35,12 +35,6 @@ const POS_SECTIONS = [
 /* ------------------------------- Sidebar -------------------------------- */
 
 function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
-  const { setOpen, setOpenMobile } = useSidebar();
-  const close = () => {
-    setOpen(false);
-    setOpenMobile(false);
-  };
-
   return (
     <Sidebar
       collapsible="offcanvas"
@@ -72,7 +66,7 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
                 const active = activeAgency === agency.acronym;
                 return (
                   <SidebarMenuItem key={agency.acronym}>
-                    <SidebarMenuButton asChild isActive={active} onClick={close}>
+                    <SidebarMenuButton asChild isActive={active}>
                       <Link to={agency.to}>
                         <span className="flex items-center gap-1 font-mono text-xs font-bold text-accent">
                           {agency.acronym}
@@ -102,7 +96,7 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
               <SidebarMenu>
                 {POS_SECTIONS.map((section) => (
                   <SidebarMenuItem key={section.id}>
-                    <SidebarMenuButton asChild onClick={close}>
+                    <SidebarMenuButton asChild>
                       <a href={`#${section.id}`}>{section.label}</a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -114,7 +108,10 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
       </SidebarContent>
 
       <SidebarFooter>
-        <p className="px-2 text-[10px] leading-relaxed text-muted-foreground">
+        <p className="border-l-2 border-accent px-2 text-[10px] font-semibold uppercase leading-relaxed tracking-wide text-foreground">
+          Our mission: defend the President. Badly.
+        </p>
+        <p className="px-2 pt-1 text-[10px] leading-relaxed text-muted-foreground">
           A parody site. Not an official government resource. Allegations are
           unproven.
         </p>
@@ -143,13 +140,15 @@ function BarsTrigger() {
 
 /* ------------------------------- Shell ---------------------------------- */
 
-export function WeastShell({
-  activeAgency,
-  children,
-}: {
-  activeAgency: "POS" | "BEA";
-  children: ReactNode;
-}) {
+/**
+ * Root-level shell. Mounted once around <Outlet /> so the sidebar open state
+ * survives client-side navigation between routes. The active agency is derived
+ * from the current pathname.
+ */
+export function WeastShell({ children }: { children: ReactNode }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const activeAgency: "POS" | "BEA" = pathname.startsWith("/bea") ? "BEA" : "POS";
+
   return (
     <SidebarProvider defaultOpen={false}>
       <AppSidebar activeAgency={activeAgency} />

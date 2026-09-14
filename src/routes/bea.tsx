@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { WeastShell } from "@/components/app-sidebar";
+
 import { BEASeal } from "@/components/site";
 
 const TITLE = "Bureau of Executive Anomalies — The Weast Wing";
@@ -26,7 +26,7 @@ export const Route = createFileRoute("/bea")({
 
 function BEAPage() {
   return (
-    <WeastShell activeAgency="BEA">
+    <>
       <main>
         <section className="border-b-4 border-accent bg-primary text-primary-foreground">
           <div className="mx-auto flex max-w-4xl flex-col items-start gap-5 px-4 py-10 sm:flex-row sm:items-center">
@@ -39,8 +39,9 @@ function BEAPage() {
                 Bureau of Executive Anomalies
               </h1>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-primary-foreground/75 sm:text-base">
-                A separate Weast Wing bureau for matters outside the jurisdiction
-                of presidential incident statistics.
+                A separate Weast Wing bureau chartered to explain away matters
+                outside the jurisdiction of presidential incident statistics.
+                Explanations are issued with total confidence and reviewed by no one.
               </p>
             </div>
           </div>
@@ -74,6 +75,6 @@ function BEAPage() {
           </div>
         </div>
       </footer>
-    </WeastShell>
+    </>
   );
 }

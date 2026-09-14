@@ -6,17 +6,16 @@ import {
   CompactMedia,
   IncidentMedia,
   Modal,
-  PoopRating,
+  OfficialResponse,
   Reveal,
   ResearchDrawer,
   Seal,
   ShareBar,
   StatusBadge,
 } from "@/components/site";
-import { WeastShell } from "@/components/app-sidebar";
+
 import { IncidentPoll, IncidentSubmissionForm } from "@/components/community";
 import { Button } from "@/components/ui/button";
-import { RATING_LABELS } from "@/data/incidents";
 import { computeStats, formatDate, latestIncident, sortedIncidents } from "@/lib/incident-stats";
 
 const SITE_NAME = "The Weast Wing";
@@ -82,7 +81,7 @@ function Index() {
   }, [stats.currentStreak]);
 
   return (
-    <WeastShell activeAgency="POS">
+    <>
       <main>
         {/* Hero */}
         <section id="hero" className="scroll-mt-16 border-b-4 border-accent bg-primary text-primary-foreground">
@@ -134,6 +133,10 @@ function Index() {
             <p className="mt-2 text-[10px] uppercase tracking-[0.14em] text-primary-foreground/50">
               ▲ Compiled by the Presidential Office of Shitistics (POS)
             </p>
+            <p className="mx-auto mt-3 max-w-md text-xs italic leading-relaxed text-primary-foreground/70">
+              The Weast Wing's mission: defend the President and his administration — earnestly,
+              officially, and not particularly well.
+            </p>
 
             <button
               onClick={() => scrollToId("what-reset-the-clock")}
@@ -182,23 +185,7 @@ function Index() {
                   )}
 
                   <div className="border-t border-border pt-4">
-                    <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
-                      Evidence Rating
-                    </p>
-                    <PoopRating rating={latest.rating} />
-                    <ol className="mt-4 grid gap-1 text-xs text-muted-foreground sm:grid-cols-2">
-                      {[1, 2, 3, 4, 5].map((n) => (
-                        <li key={n} className="tabular-nums">
-                          <span className="font-bold text-foreground">{n}</span> —{" "}
-                          {RATING_LABELS[n]}
-                        </li>
-                      ))}
-                    </ol>
-                    <p className="mt-3 border-l-2 border-accent bg-muted p-3 text-xs leading-relaxed text-muted-foreground">
-                      <strong className="text-foreground">Disclaimer:</strong> Evidence ratings are
-                      comedic commentary and opinion. They are not investigative findings, forensic
-                      analysis, or statements of fact about any real person.
-                    </p>
+                    <OfficialResponse text={latest.defense} />
                   </div>
 
                   <ShareBar title={`${stats.currentStreak} days since the last alleged incident`} />
@@ -292,10 +279,12 @@ function Index() {
                       </div>
                     </div>
 
-                    {/* Evidence rating */}
-                    <div className="border-t border-border px-4 py-4 sm:px-5">
-                      <PoopRating rating={inc.rating} size="sm" />
-                    </div>
+                    {/* Official response */}
+                    {inc.defense && (
+                      <div className="border-t border-border px-4 py-4 sm:px-5">
+                        <OfficialResponse text={inc.defense} />
+                      </div>
+                    )}
 
                     {/* Public poll */}
                     <div className="border-t border-border">
@@ -422,11 +411,15 @@ function Index() {
 
       <Modal open={modal === "About"} onClose={() => setModal(null)} title="About">
         <p>
-          {SITE_NAME} is a satirical dashboard styled after official public-health statistics pages.
-          It applies the workplace "days since last incident" joke to a curated queue of public
-          allegations and contested interpretations.
+          {SITE_NAME} is a satirical institution with a simple mission: to defend the President and
+          his administration — humorously and poorly. Every incident file comes with an official
+          response issued with total confidence and reviewed by no one.
         </p>
-        <p>The underlying events are sourced; the alleged bodily incidents remain unproven.</p>
+        <p>
+          The dashboard itself is styled after official public-health statistics pages. The
+          underlying events are sourced; the alleged bodily incidents remain unproven; the defenses
+          remain unconvincing.
+        </p>
       </Modal>
 
       <Modal open={modal === "Methodology"} onClose={() => setModal(null)} title="Methodology">
@@ -480,7 +473,7 @@ function Index() {
         </p>
         <p>Source links and counterevidence are retained so disputed entries can be reviewed.</p>
       </Modal>
-    </WeastShell>
+    </>
   );
 }
 
