@@ -72,7 +72,7 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
                 const active = activeAgency === agency.acronym;
                 return (
                   <SidebarMenuItem key={agency.acronym}>
-                    <SidebarMenuButton asChild isActive={active} onClick={close}>
+                    <SidebarMenuButton asChild isActive={active}>
                       <Link to={agency.to}>
                         <span className="flex items-center gap-1 font-mono text-xs font-bold text-accent">
                           {agency.acronym}
@@ -102,7 +102,7 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
               <SidebarMenu>
                 {POS_SECTIONS.map((section) => (
                   <SidebarMenuItem key={section.id}>
-                    <SidebarMenuButton asChild onClick={close}>
+                    <SidebarMenuButton asChild>
                       <a href={`#${section.id}`}>{section.label}</a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
