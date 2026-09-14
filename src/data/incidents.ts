@@ -127,6 +127,8 @@ export const incidents: Incident[] = [
     established:
       "Trump attended and spoke at Graham's July 28 funeral; official full-event footage exists. The soiling interpretation comes from social-media reactions to the footage.",
     notes: "Official White House video gives a clean source for reviewing the alleged moment.",
+    defense:
+      "The President was paying his respects. The people seated nearby were grieving. Grief has many faces, and several smells.",
   },
   {
     id: "world-cup-medal-ceremony",
@@ -151,6 +153,8 @@ export const incidents: Incident[] = [
     established:
       "The World Cup appearance and reaction clip are authentic enough to have generated a distinct X trend; the cause of the man's reaction is not established.",
     notes: "Need to locate Margo Martin's exact original post/video URL before publishing.",
+    defense:
+      "MetLife Stadium seats 82,500 people. Statistically, at least one man was going to make that face about something else.",
   },
   {
     id: "cabinet-meeting-rubio-hegseth",
@@ -185,6 +189,8 @@ export const incidents: Incident[] = [
     established:
       "The Cabinet meeting and seating arrangement are independently documented. The claim that Hegseth/Rubio were reacting to an odor from Trump is an interpretation of the footage, not independently established.",
     notes: "This is separate from the March 16 JD Vance + Andrew Ferguson Oval Office clip.",
+    defense:
+      "Secretaries Rubio and Hegseth were visibly moved by the President's remarks. Deeply moved. Through the nose.",
   },
   {
     id: "memorial-day-walter-reed-footage",
@@ -218,6 +224,8 @@ export const incidents: Incident[] = [
       "The underlying footage is real. The claimed bodily accident is an interpretation of the footage, not an established fact.",
     notes:
       "Potential repost/date confusion exists; treat this as one incident cluster until the exact original recording date is pinned down.",
+    defense:
+      "The President walks with purpose. Purpose has a distinctive silhouette, and the Weast Wing will not be taking further questions about it.",
   },
   {
     id: "health-care-hot-mic",
@@ -248,6 +256,8 @@ export const incidents: Incident[] = [
     established:
       "The event and viral hot-mic clip are real. The audio appears to contain an unfinished phrase interpreted online as 'I could use a sh—'; it does not by itself establish an accident occurred.",
     notes: "Review the original White House video and compare timing against the Acyn clip before using.",
+    defense:
+      "The President was clearly about to say “ship” — as in shipping American jobs back home. The feed cut for unrelated, routine, completely normal reasons.",
   },
   {
     id: "anti-fraud-task-force-signing",
@@ -285,6 +295,8 @@ export const incidents: Incident[] = [
       "The March 16 event, participants, and Trump's discussion of the B-2 bomber and bombs are independently documented. The claim that the visible reactions were caused by an odor from Trump is an interpretation.",
     notes:
       "Andrew Ferguson is the other man. Transcript places Trump's B-2/bomb discussion at about 19:41–20:31. Review the unedited event footage around that point.",
+    defense:
+      "The Vice President and Mr. Ferguson were reacting to the B-2 bomber, which is extremely impressive and not a smell.",
   },
   {
     id: "recovery-initiative-abrupt-ending",
@@ -320,6 +332,8 @@ export const incidents: Incident[] = [
     established:
       "The video and abrupt ending are authentic. The specific explanation that he soiled himself is disputed/unproven.",
     notes: "High-priority review because an official full video exists.",
+    defense:
+      "The event ended precisely on schedule. The schedule was revised moments earlier. This is called efficiency.",
   },
   {
     id: "kennedy-center-ceremony",
@@ -350,6 +364,7 @@ export const incidents: Incident[] = [
     established:
       "A real ceremony and real reactions exist on video. The claim that the reactions were caused by Trump soiling himself is contested.",
     notes: "Kept specifically because you asked to review contested material yourself.",
+    defense: "The attendee was simply overcome by the arts. It happens at the Kennedy Center constantly.",
   },
   {
     id: "notre-dame-reopening",
@@ -384,6 +399,8 @@ export const incidents: Incident[] = [
     established:
       "The Paris appearance and underlying video are real; the interpretation that attendees were reacting to Trump soiling himself is not established.",
     notes: "Distinct from the 2025 Kennedy Center incident.",
+    defense:
+      "Parisians cover their noses as a matter of culture, fashion, and civic pride. The President happened to be standing nearby.",
   },
   {
     id: "detroit-economic-club",
@@ -418,6 +435,7 @@ export const incidents: Incident[] = [
     established:
       "The appearance is fully documented. The bodily-function interpretation is not established by the event record.",
     notes: "Locate and record the exact timestamp after personally reviewing the full video.",
+    defense: "That was not a bodily noise. That was the sound of the American economy roaring back.",
   },
   {
     id: "cnn-presidential-debate-noise",
@@ -450,6 +468,8 @@ export const incidents: Incident[] = [
     established:
       "The debate and sound are authentic. The source of the noise and whether it represented anything beyond flatulence/noise are not established.",
     notes: "Review the full-event footage rather than relying on short reposts.",
+    defense:
+      "The unidentified noise has since been identified: patriotism. The matter is closed.",
   },
   {
     id: "new-york-criminal-trial-odor",
@@ -486,6 +506,8 @@ export const incidents: Incident[] = [
       "There was online reporting/commentary about an alleged odor/farting. The viral CNN 'soils himself' headline was fabricated and is NOT being offered as evidence.",
     notes:
       "Included because there is a real underlying allegation distinct from the fake CNN image.",
+    defense:
+      "Courtrooms are famously stuffy. Justice itself was holding its breath out of respect for the proceedings.",
   },
   {
     id: "apprentice-recurring-allegation",
