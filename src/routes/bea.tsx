@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { WeastShell } from "@/components/app-sidebar";
+
 import { BEASeal } from "@/components/site";
 
 const TITLE = "Bureau of Executive Anomalies — The Weast Wing";

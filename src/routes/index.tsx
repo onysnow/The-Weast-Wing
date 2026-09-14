@@ -13,7 +13,7 @@ import {
   ShareBar,
   StatusBadge,
 } from "@/components/site";
-import { WeastShell } from "@/components/app-sidebar";
+
 import { IncidentPoll, IncidentSubmissionForm } from "@/components/community";
 import { Button } from "@/components/ui/button";
 import { computeStats, formatDate, latestIncident, sortedIncidents } from "@/lib/incident-stats";
