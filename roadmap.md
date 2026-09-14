@@ -11,3 +11,5 @@
 - [x] Improve dialog accessibility, incident media layout, mobile card spacing, and restrained motion
 - [x] Add "1600 Weast Pennsylvania Avenue" to the footer
 - [x] Replace top agency nav with an expandable side nav (bars trigger top-left)
+- [ ] Reframe Weast Wing mission: humorously and poorly defend the President (add per-incident "Official Response")
+- [ ] Remove poop-emoji rating from incident cards
