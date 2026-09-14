@@ -101,13 +101,10 @@ function Index() {
             tabIndex={-1}
           />
           <div
-            className="pointer-events-none absolute inset-0 bg-primary/75"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/55 to-primary"
             aria-hidden="true"
           />
-          <div
-            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/40 to-primary"
-            aria-hidden="true"
-          />
+
 
           <div className="relative z-10 mx-auto w-full max-w-4xl px-4 py-12 text-center">
             <div className="mx-auto mb-5 flex max-w-xl items-center justify-center gap-3 border-b border-primary-foreground/25 pb-4 text-left">
