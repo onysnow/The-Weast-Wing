@@ -28,6 +28,8 @@
  *                  "transcript" | "news" | "commentary".
  *    established   Optional. What is independently established as fact.
  *    notes         Optional. Editorial review notes.
+ *    defense       Optional. The Weast Wing's official response: an earnestly
+ *                  delivered but deeply unconvincing defense of the President.
  *    videoUrl      Optional. An EMBED url (e.g. https://www.youtube.com/embed/ID)
  *    location      Optional. Where it allegedly happened.
  *
@@ -68,6 +70,8 @@ export type Incident = {
   established?: string;
   /** Editorial review notes. */
   notes?: string;
+  /** The Weast Wing's official (and officially unconvincing) defense. */
+  defense?: string;
   /** Either a YouTube embed URL or a direct .mp4/.webm file URL. */
   videoUrl?: string;
   /** Still image pulled from the source page. */
