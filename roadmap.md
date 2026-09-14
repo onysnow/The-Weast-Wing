@@ -14,6 +14,6 @@
 - [x] Reframe Weast Wing mission: humorously and poorly defend the President (add per-incident "Official Response")
 - [x] Remove poop-emoji rating from incident cards
 - [x] Sidebar stays open until manually closed (no auto-close on navigation)
-- [ ] Scrolling parody ticker + full-screen background video hero with counter overlaid
-- [ ] Full-width desktop shell: hamburger top-left, widen header/hero/banner only
-- [ ] Bottom-corner closable email signup popup card (dismissible, stores emails in backend)
+- [x] Scrolling parody ticker + full-screen background video hero with counter overlaid
+- [x] Full-width desktop shell: hamburger top-left, widen header/hero/banner only
+- [x] Bottom-corner closable email signup popup card (dismissible, stores emails in backend)
