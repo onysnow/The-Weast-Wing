@@ -182,23 +182,7 @@ function Index() {
                   )}
 
                   <div className="border-t border-border pt-4">
-                    <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
-                      Evidence Rating
-                    </p>
-                    <PoopRating rating={latest.rating} />
-                    <ol className="mt-4 grid gap-1 text-xs text-muted-foreground sm:grid-cols-2">
-                      {[1, 2, 3, 4, 5].map((n) => (
-                        <li key={n} className="tabular-nums">
-                          <span className="font-bold text-foreground">{n}</span> —{" "}
-                          {RATING_LABELS[n]}
-                        </li>
-                      ))}
-                    </ol>
-                    <p className="mt-3 border-l-2 border-accent bg-muted p-3 text-xs leading-relaxed text-muted-foreground">
-                      <strong className="text-foreground">Disclaimer:</strong> Evidence ratings are
-                      comedic commentary and opinion. They are not investigative findings, forensic
-                      analysis, or statements of fact about any real person.
-                    </p>
+                    <OfficialResponse text={latest.defense} />
                   </div>
 
                   <ShareBar title={`${stats.currentStreak} days since the last alleged incident`} />
@@ -292,10 +276,12 @@ function Index() {
                       </div>
                     </div>
 
-                    {/* Evidence rating */}
-                    <div className="border-t border-border px-4 py-4 sm:px-5">
-                      <PoopRating rating={inc.rating} size="sm" />
-                    </div>
+                    {/* Official response */}
+                    {inc.defense && (
+                      <div className="border-t border-border px-4 py-4 sm:px-5">
+                        <OfficialResponse text={inc.defense} />
+                      </div>
+                    )}
 
                     {/* Public poll */}
                     <div className="border-t border-border">
