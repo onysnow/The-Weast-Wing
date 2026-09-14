@@ -106,8 +106,8 @@ function Index() {
           />
 
 
-          <div className="relative z-10 mx-auto w-full max-w-4xl px-4 py-12 text-center">
-            <div className="mx-auto mb-5 flex max-w-xl items-center justify-center gap-3 border-b border-primary-foreground/25 pb-4 text-left">
+          <div className="relative z-10 mx-auto w-full max-w-4xl px-4 py-12 text-center lg:max-w-6xl lg:px-10">
+            <div className="mx-auto mb-5 flex max-w-xl items-center justify-center gap-3 border-b border-primary-foreground/25 pb-4 text-left lg:max-w-2xl">
               <Seal className="size-10 shrink-0 text-seal" />
               <div>
                 <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent">
