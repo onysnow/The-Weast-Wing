@@ -122,17 +122,17 @@ function Index() {
               Current Reporting Period
             </h1>
             <div
-              className="my-2 font-display text-[26vw] font-black leading-[0.85] tabular-nums drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)] sm:text-[10rem]"
+              className="my-2 font-display text-[26vw] font-black leading-[0.85] tabular-nums drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)] sm:text-[10rem] lg:text-[13rem]"
               aria-hidden="true"
             >
               {displayedStreak}
             </div>
             <span className="sr-only">{stats.currentStreak} days</span>
-            <p className="mx-auto max-w-xl font-display text-base font-bold uppercase leading-snug tracking-wide sm:text-2xl">
+            <p className="mx-auto max-w-xl font-display text-base font-bold uppercase leading-snug tracking-wide sm:text-2xl lg:max-w-3xl lg:text-3xl">
               {HERO_HEADLINE}
             </p>
 
-            <dl className="mx-auto mt-6 grid max-w-md grid-cols-2 gap-px overflow-hidden border border-primary-foreground/25 bg-primary-foreground/25 text-left backdrop-blur-sm">
+            <dl className="mx-auto mt-6 grid max-w-md grid-cols-2 gap-px overflow-hidden border border-primary-foreground/25 bg-primary-foreground/25 text-left backdrop-blur-sm lg:max-w-2xl">
               <div className="bg-primary/85 px-3 py-2">
                 <dt className="text-[10px] uppercase tracking-[0.14em] text-primary-foreground/70">
                   Previous record
