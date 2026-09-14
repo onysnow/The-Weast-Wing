@@ -26,7 +26,7 @@ export const Route = createFileRoute("/bea")({
 
 function BEAPage() {
   return (
-    <WeastShell activeAgency="BEA">
+    <>
       <main>
         <section className="border-b-4 border-accent bg-primary text-primary-foreground">
           <div className="mx-auto flex max-w-4xl flex-col items-start gap-5 px-4 py-10 sm:flex-row sm:items-center">

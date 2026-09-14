@@ -81,7 +81,7 @@ function Index() {
   }, [stats.currentStreak]);
 
   return (
-    <WeastShell activeAgency="POS">
+    <>
       <main>
         {/* Hero */}
         <section id="hero" className="scroll-mt-16 border-b-4 border-accent bg-primary text-primary-foreground">
