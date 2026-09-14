@@ -6,7 +6,7 @@ import {
   CompactMedia,
   IncidentMedia,
   Modal,
-  PoopRating,
+  OfficialResponse,
   Reveal,
   ResearchDrawer,
   Seal,
@@ -16,7 +16,6 @@ import {
 import { WeastShell } from "@/components/app-sidebar";
 import { IncidentPoll, IncidentSubmissionForm } from "@/components/community";
 import { Button } from "@/components/ui/button";
-import { RATING_LABELS } from "@/data/incidents";
 import { computeStats, formatDate, latestIncident, sortedIncidents } from "@/lib/incident-stats";
 
 const SITE_NAME = "The Weast Wing";
