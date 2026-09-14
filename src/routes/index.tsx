@@ -17,7 +17,6 @@ import {
 import { IncidentPoll, IncidentSubmissionForm } from "@/components/community";
 import { Button } from "@/components/ui/button";
 import { computeStats, formatDate, latestIncident, sortedIncidents } from "@/lib/incident-stats";
-import heroVideo from "@/assets/hero-weast.mp4.asset.json";
 
 const SITE_NAME = "The Weast Wing";
 const HERO_HEADLINE = "Days Since the President Allegedly Shit Himself";
@@ -91,7 +90,7 @@ function Index() {
         >
           <video
             className="pointer-events-none absolute inset-0 size-full object-cover"
-            src={heroVideo.url}
+            src="/hero-weast.mp4"
             autoPlay
             muted
             loop
