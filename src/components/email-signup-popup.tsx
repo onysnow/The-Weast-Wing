@@ -39,7 +39,7 @@ export function EmailSignupPopup() {
     event.preventDefault();
     const parsed = emailSchema.safeParse(email);
     if (!parsed.success) {
-      setError(parsed.error.issues[0].message);
+      setError(parsed.error.issues[0]?.message ?? "Invalid email address.");
       return;
     }
     setError(null);
