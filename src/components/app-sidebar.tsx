@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu } from "lucide-react";
 import type { ReactNode } from "react";
 import { Seal } from "@/components/site";
@@ -140,13 +140,15 @@ function BarsTrigger() {
 
 /* ------------------------------- Shell ---------------------------------- */
 
-export function WeastShell({
-  activeAgency,
-  children,
-}: {
-  activeAgency: "POS" | "BEA";
-  children: ReactNode;
-}) {
+/**
+ * Root-level shell. Mounted once around <Outlet /> so the sidebar open state
+ * survives client-side navigation between routes. The active agency is derived
+ * from the current pathname.
+ */
+export function WeastShell({ children }: { children: ReactNode }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const activeAgency: "POS" | "BEA" = pathname.startsWith("/bea") ? "BEA" : "POS";
+
   return (
     <SidebarProvider defaultOpen={false}>
       <AppSidebar activeAgency={activeAgency} />
