@@ -35,12 +35,6 @@ const POS_SECTIONS = [
 /* ------------------------------- Sidebar -------------------------------- */
 
 function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
-  const { setOpen, setOpenMobile } = useSidebar();
-  const close = () => {
-    setOpen(false);
-    setOpenMobile(false);
-  };
-
   return (
     <Sidebar
       collapsible="offcanvas"
