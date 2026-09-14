@@ -157,11 +157,24 @@ export function WeastShell({ children }: { children: ReactNode }) {
           "flex min-h-svh w-full flex-col bg-background font-sans text-foreground",
         )}
       >
-        <div className="border-b border-border bg-muted">
-          <p className="mx-auto max-w-4xl px-4 py-1.5 text-[10px] uppercase tracking-[0.14em] text-muted-foreground sm:text-[11px]">
-            ⚠ A parody site. Not an official government resource. Allegations
-            are unproven.
-          </p>
+        <div
+          className="flex overflow-hidden border-b border-border bg-muted py-1.5"
+          role="marquee"
+          aria-label="Site notice"
+        >
+          {[0, 1].map((i) => (
+            <div key={i} className="marquee-track" aria-hidden={i === 1}>
+              {[0, 1, 2].map((j) => (
+                <span
+                  key={j}
+                  className="whitespace-nowrap px-6 text-[10px] uppercase tracking-[0.14em] text-muted-foreground sm:text-[11px]"
+                >
+                  ⚠ A parody site. Not an official government resource.
+                  Allegations are unproven.
+                </span>
+              ))}
+            </div>
+          ))}
         </div>
 
         <header className="bg-primary text-primary-foreground">
