@@ -20,7 +20,7 @@
  *    headline      Short, newspaper-style headline.
  *    description   1-3 sentences of deadpan, official-sounding write-up.
  *    status        "UNCONFIRMED" | "DISPUTED" | "UNDER REVIEW" | "SATIRE"
- *    rating        1-5. Comedic "evidence rating". See RATING_LABELS below.
+ *    rating        1-5. Comedic "evidence rating"; rendered by the card.
  *    source        Optional. { label: string; url: string } — primary source.
  *    references    Optional. Array of all sources (primary + allegation +
  *                  counterevidence). Each: { label, url, role }.
@@ -78,15 +78,6 @@ export type Incident = {
   imageUrl?: string;
   imageCredit?: string;
   location?: string;
-};
-
-/** Comedic 5-point evidence scale. Not a scientific instrument. */
-export const RATING_LABELS: Record<number, string> = {
-  1: "Internet is reaching",
-  2: "Suspicious",
-  3: "We have questions",
-  4: "Extremely concerning evidence",
-  5: "We may need congressional hearings",
 };
 
 /** ---------------------------------------------------------------------

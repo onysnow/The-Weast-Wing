@@ -56,6 +56,13 @@ export const getIncidentPoll = createServerFn({ method: "GET" })
 type PollTotals = Record<string, { nothingHappened: number; definitelyHappened: number }>;
 
 /**
+ * Whether the database aggregate is callable by this role. Unknown until the
+ * first attempt; once it fails we stop paying for a doomed round-trip (and a
+ * log line) on every page load.
+ */
+let pollAggregateAvailable: boolean | undefined;
+
+/**
  * Every page load used to pull the entire votes table down and count it in
  * JavaScript. The database has done the aggregation since the first migration
  * — `get_incident_poll_totals()` — it just was not callable by the server
@@ -65,21 +72,28 @@ type PollTotals = Record<string, { nothingHappened: number; definitelyHappened: 
 export const getAllIncidentPolls = createServerFn({ method: "GET" }).handler(async () => {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-  const { data: aggregated, error: rpcError } = await supabaseAdmin.rpc(
-    "get_incident_poll_totals",
-  );
-  if (!rpcError && aggregated) {
-    const totals: PollTotals = {};
-    for (const row of aggregated) {
-      totals[row.incident_id] = {
-        nothingHappened: Number(row.nothing_happened ?? 0),
-        definitelyHappened: Number(row.definitely_happened ?? 0),
-      };
+  if (pollAggregateAvailable !== false) {
+    const { data: aggregated, error: rpcError } = await supabaseAdmin.rpc(
+      "get_incident_poll_totals",
+    );
+    if (!rpcError && aggregated) {
+      pollAggregateAvailable = true;
+      const totals: PollTotals = {};
+      for (const row of aggregated) {
+        totals[row.incident_id] = {
+          nothingHappened: Number(row.nothing_happened ?? 0),
+          definitelyHappened: Number(row.definitely_happened ?? 0),
+        };
+      }
+      return totals;
     }
-    return totals;
-  }
-  if (rpcError) {
-    console.warn("[poll] aggregate unavailable, counting rows instead", rpcError.message);
+    if (rpcError) {
+      pollAggregateAvailable = false;
+      console.warn(
+        "[poll] aggregate unavailable, counting rows instead (apply the migration to fix)",
+        rpcError.message,
+      );
+    }
   }
 
   const { data: rows, error } = await supabaseAdmin

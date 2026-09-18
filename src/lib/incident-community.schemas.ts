@@ -15,7 +15,10 @@ export const incidentSubmissionSchema = z.object({
       "The link must start with http:// or https://",
     ),
   contactEmail: z.union([z.literal(""), z.string().trim().email("Enter a valid email.").max(255)]),
-  website: z.string().max(0).optional().default(""),
+  // Honeypot. Permissive on purpose: rejecting a filled honeypot in the schema
+  // fails the request and shows the bot an error to tune against, and it makes
+  // the handler's silent-accept unreachable. Accept it, drop it there.
+  website: z.string().max(500).optional().default(""),
 });
 
 export const voteSchema = z.object({

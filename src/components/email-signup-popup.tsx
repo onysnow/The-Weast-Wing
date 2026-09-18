@@ -33,10 +33,10 @@ export function EmailSignupPopup() {
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const parsed = mailingListSignupSchema.safeParse({
-      email,
-      website: honeypot.current?.value ?? "",
-    });
+    // Validate only the address here. Checking the honeypot client-side would
+    // show a bot an error it could learn to avoid; the server absorbs it
+    // silently instead.
+    const parsed = mailingListSignupSchema.shape.email.safeParse(email);
     if (!parsed.success) {
       setError(parsed.error.issues[0]?.message ?? "Invalid email address.");
       return;
@@ -45,7 +45,9 @@ export function EmailSignupPopup() {
     setStatus("saving");
 
     try {
-      await subscribe({ data: parsed.data });
+      await subscribe({
+        data: { email: parsed.data, website: honeypot.current?.value ?? "" },
+      });
     } catch {
       setStatus("idle");
       setError("The Bureau could not process that. Please try again.");

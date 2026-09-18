@@ -47,6 +47,18 @@ function initialize() {
     current = "paused";
   }
 
+  // Keep tabs in step: a toggle in one window should not leave another
+  // window's ticker running.
+  window.addEventListener("storage", (event) => {
+    if (event.key !== STORAGE_KEY) return;
+    const next = event.newValue;
+    if (next !== "paused" && next !== "running") return;
+    if (next === current) return;
+    current = next;
+    apply(current);
+    emit();
+  });
+
   apply(current);
   emit();
 }

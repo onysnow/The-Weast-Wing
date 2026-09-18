@@ -109,14 +109,14 @@ function Index() {
         {/* Hero — full-screen background video with the counter on top */}
         <section
           id="hero"
-          className="relative flex min-h-[100svh] scroll-mt-16 items-center justify-center overflow-hidden border-b-4 border-accent bg-primary text-primary-foreground"
+          className="relative flex min-h-[100svh] scroll-mt-20 items-center justify-center overflow-hidden border-b-4 border-accent bg-primary text-primary-foreground"
         >
           <video
             ref={heroVideo}
             className="pointer-events-none absolute inset-0 size-full object-cover"
             src="/hero-weast.mp4"
             poster="/hero-weast-poster.jpg"
-            autoPlay
+            autoPlay={motion === "running"}
             muted
             loop
             playsInline
@@ -196,7 +196,7 @@ function Index() {
           <AdSlot label="Advertisement" />
 
           {/* Featured incident */}
-          <section id="what-reset-the-clock" className="scroll-mt-16">
+          <section id="what-reset-the-clock" className="scroll-mt-20">
             <SectionHeading eyebrow="Featured Report" title="What Reset the Clock?" />
             {latest ? (
               <article className="border border-border bg-card shadow-sm">
@@ -242,7 +242,7 @@ function Index() {
           </section>
 
           {/* Statistics */}
-          <section id="statistics" className="mt-12 scroll-mt-16">
+          <section id="statistics" className="mt-12 scroll-mt-20">
             <div className="mb-4 flex items-center gap-3 border-b-2 border-primary pb-2">
               <Seal className="size-10 shrink-0 text-primary" />
               <div className="flex-1">
@@ -274,7 +274,7 @@ function Index() {
           <AdSlot label="Advertisement" />
 
           {/* Incident log */}
-          <section id="incident-log" className="mt-6 scroll-mt-16">
+          <section id="incident-log" className="mt-6 scroll-mt-20">
             <SectionHeading eyebrow="Public Record" title="The Incident Log" />
             <ol className="space-y-4">
               {sortedIncidents.map((inc, i) => (
@@ -282,7 +282,7 @@ function Index() {
                   <Reveal>
                   <article
                     id={`incident-${inc.id}`}
-                    className="scroll-mt-16 overflow-hidden border border-border bg-card shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-primary/35 hover:shadow-md"
+                    className="scroll-mt-20 overflow-hidden border border-border bg-card shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-primary/35 hover:shadow-md"
                   >
                     {/* Card header: file number, status, date */}
                     <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 border-b border-border px-4 py-3 sm:px-5">
@@ -354,7 +354,7 @@ function Index() {
           </section>
 
           {/* Public submissions */}
-          <section id="submit-report" className="mt-12 scroll-mt-16">
+          <section id="submit-report" className="mt-12 scroll-mt-20">
             <SectionHeading eyebrow="Public Tip Line" title="Submit an Incident Report" />
             <p className="mb-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
               Send the editorial desk an alleged incident and a supporting link. Every submission is
