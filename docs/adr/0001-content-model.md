@@ -129,12 +129,18 @@ so this is not wasted work.
 
 ## Action items
 
-1. [ ] `src/content/types.ts` — `ContentItem`, `MediaRef`, `Block`; redefine
+1. [x] `src/content/types.ts` — `ContentItem`, `MediaRef`, `Block`; redefine
        `Incident` as an extension
-2. [ ] Split `site.tsx`; rename `IncidentMedia` to `MediaFrame`, taking a
+2. [x] Split `site.tsx`; rename `IncidentMedia` to `MediaFrame`, taking a
        `MediaRef`
-3. [ ] Extract `<ContentCard>` with a `variant` prop, replacing both existing
-       card implementations
+3. [x] Extract a card with a `variant` prop, replacing both existing card
+       implementations — shipped as `IncidentCard`, not `ContentCard`. The
+       duplication is gone, which was the point, but generalizing the name
+       implies generalizing the shape, and there is still only one content
+       type to generalize from: an article card wants a byline, a dek and a
+       reading time, none of them knowable until an article exists. Rename
+       when step 6 lands. Same reasoning as leaving media normalization in
+       the data until then.
 4. [ ] Migration: `incident_votes` to
        `content_votes(kind, slug, poll_key, voter_token, choice)`, and swap the
        server whitelist for a registry covering both types

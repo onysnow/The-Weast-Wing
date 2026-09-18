@@ -2,18 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { Seal } from "@/components/brand/seal";
-import { MediaFrame } from "@/components/media/media-frame";
-import { MediaThumb } from "@/components/media/media-thumb";
 import { AdSlot } from "@/components/primitives/ad-slot";
 import { Modal } from "@/components/primitives/modal";
 import { Reveal } from "@/components/primitives/reveal";
 import { ShareBar } from "@/components/primitives/share-bar";
-import { StatusBadge } from "@/components/primitives/status-badge";
-import { OfficialResponse } from "@/features/incidents/official-response";
-import { ResearchDrawer } from "@/features/incidents/research-drawer";
 
-import { IncidentPoll, IncidentSubmissionForm } from "@/components/community";
-import { incidentMedia } from "@/data/incidents";
+import { IncidentSubmissionForm } from "@/components/community";
+import { IncidentCard } from "@/features/incidents/incident-card";
 import { Button } from "@/components/ui/button";
 import {
   computeStats,
@@ -198,38 +193,11 @@ function Index() {
           <section id="what-reset-the-clock" className="scroll-mt-20">
             <SectionHeading eyebrow="Featured Report" title="What Reset the Clock?" />
             {latest ? (
-              <article className="border border-border bg-card shadow-sm">
-                <MediaFrame media={incidentMedia(latest)} />
-                <div className="space-y-4 p-4 sm:p-6">
-                  <div className="flex flex-wrap items-center gap-3">
-                    <StatusBadge status={latest.status} />
-                    <span className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-                      {formatDate(latest.date)}
-                      {latest.location ? ` · ${latest.location}` : ""}
-                    </span>
-                  </div>
-                  <h3 className="font-display text-2xl font-bold leading-tight">
-                    {latest.title}
-                  </h3>
-                  <p className="leading-relaxed text-muted-foreground">{latest.summary}</p>
-                  {latest.source && (
-                    <a
-                      href={latest.source.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block text-sm font-semibold text-accent underline underline-offset-4"
-                    >
-                      Source: {latest.source.label} ↗
-                    </a>
-                  )}
-
-                  <div className="border-t border-border pt-4">
-                    <OfficialResponse text={latest.defense} />
-                  </div>
-
-                  <ShareBar title={`${stats.currentStreak} days since the last alleged incident`} />
-                </div>
-              </article>
+              <IncidentCard
+                incident={latest}
+                variant="featured"
+                shareTitle={`${stats.currentStreak} days since the last alleged incident`}
+              />
             ) : (
               <p className="text-muted-foreground">No incidents on record.</p>
             )}
@@ -274,69 +242,11 @@ function Index() {
               {sortedIncidents.map((inc, i) => (
                 <li key={inc.slug}>
                   <Reveal>
-                  <article
-                    id={`incident-${inc.slug}`}
-                    className="scroll-mt-20 overflow-hidden border border-border bg-card shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-primary/35 hover:shadow-md"
-                  >
-                    {/* Card header: file number, status, date */}
-                    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 border-b border-border px-4 py-3 sm:px-5">
-                      <div className="flex min-w-0 flex-wrap items-center gap-2">
-                        <span className="border border-border bg-muted px-2 py-1 font-display text-[11px] font-bold tabular-nums tracking-wider">
-                          FILE №{String(sortedIncidents.length - i).padStart(3, "0")}
-                        </span>
-                        <StatusBadge status={inc.status} />
-                      </div>
-                      <time
-                        dateTime={inc.date}
-                        className="max-w-32 text-right text-[11px] font-semibold uppercase leading-relaxed tracking-[0.1em] text-muted-foreground sm:max-w-none sm:text-xs"
-                      >
-                        {inc.dateLabel ?? formatDate(inc.date)}
-                      </time>
-                    </div>
-
-                    {/* Full-width responsive source media */}
-                    <div className="px-4 pt-4 sm:px-5 sm:pt-5">
-                      <MediaThumb
-                        media={incidentMedia(inc)}
-                        sourceUrl={inc.source?.url}
-                        sourceLabel={inc.source?.label}
-                      />
-                    </div>
-
-                    {/* Card body */}
-                    <div className="px-4 pb-4 pt-4 sm:px-5 sm:pb-5">
-                      <div className="min-w-0">
-                        <h3 className="font-display text-lg font-bold leading-snug">
-                          {inc.title}
-                        </h3>
-                        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                          {inc.summary}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Official response */}
-                    {inc.defense && (
-                      <div className="border-t border-border px-4 py-4 sm:px-5">
-                        <OfficialResponse text={inc.defense} />
-                      </div>
-                    )}
-
-                    {/* Public poll */}
-                    <div className="border-t border-border">
-                      <IncidentPoll incidentId={inc.slug} />
-                    </div>
-
-                    {/* Expandable research drawer */}
-                    <ResearchDrawer
-                      established={inc.established}
-                      notes={inc.notes}
-                      references={inc.references}
-                      permalink={`#incident-${inc.slug}`}
-                      sourceUrl={inc.source?.url}
-                      sourceLabel={inc.source?.label}
+                    <IncidentCard
+                      incident={inc}
+                      variant="log"
+                      fileNumber={sortedIncidents.length - i}
                     />
-                  </article>
                   </Reveal>
                   {i === 1 && <AdSlot label="Advertisement" />}
                 </li>
