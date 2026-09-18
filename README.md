@@ -1,6 +1,6 @@
-# Welcome to your Lovable project
+# The Weast Wing
 
-This project was built with [Lovable](https://lovable.dev).
+The Weast Wing is a satirical public-information dashboard built with [Lovable](https://lovable.dev).
 
 ## Build with Lovable
 
