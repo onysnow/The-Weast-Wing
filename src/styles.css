@@ -217,3 +217,12 @@
     animation: none !important;
   }
 }
+
+/*
+ * Site-wide motion switch (see src/lib/motion-preference.ts). WCAG 2.2.2 wants
+ * a stop control for anything that loops past five seconds, for visitors who
+ * have not set a system-level preference.
+ */
+:root[data-motion="paused"] .marquee-track {
+  animation-play-state: paused;
+}

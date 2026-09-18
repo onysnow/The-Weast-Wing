@@ -2,10 +2,39 @@ import { incidents, type Incident } from "@/data/incidents";
 
 const DAY_MS = 86_400_000;
 
+/**
+ * The newsroom clock. Incident dates are US calendar dates, so "today" has to
+ * be the US date too — computing in UTC rolled the counter over at 7 or 8pm
+ * the previous evening for the entire audience.
+ */
+export const SITE_TIME_ZONE = "America/New_York";
+
+const siteDateParts = new Intl.DateTimeFormat("en-CA", {
+  timeZone: SITE_TIME_ZONE,
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
 /** Parse a YYYY-MM-DD string as a UTC midnight timestamp. */
 export function parseDate(d: string): number {
   const [y, m, day] = d.split("-").map(Number);
   return Date.UTC(y ?? 1970, (m ?? 1) - 1, day ?? 1);
+}
+
+/**
+ * The calendar date in the site's time zone at `instant`, as a UTC-midnight
+ * timestamp — directly comparable with `parseDate`. Server and browser agree
+ * because both ask for the same named zone rather than their own offset.
+ */
+export function siteToday(instant: number = Date.now()): number {
+  // en-CA formats as YYYY-MM-DD.
+  return parseDate(siteDateParts.format(new Date(instant)));
+}
+
+/** The calendar year in the site's time zone. */
+export function siteYear(instant: number = Date.now()): number {
+  return new Date(siteToday(instant)).getUTCFullYear();
 }
 
 export function daysBetween(a: number, b: number): number {
@@ -53,9 +82,10 @@ function gaps(): number[] {
 
 export function computeStats(now: number = Date.now()): Stats {
   const g = gaps();
-  const currentStreak = latestIncident ? daysBetween(parseDate(latestIncident.date), now) : 0;
+  const today = siteToday(now);
+  const currentStreak = latestIncident ? daysBetween(parseDate(latestIncident.date), today) : 0;
   const previousRecord = g.length ? Math.max(...g) : 0;
-  const year = new Date(now).getUTCFullYear();
+  const year = siteYear(now);
 
   return {
     total: countedIncidents.length,

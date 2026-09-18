@@ -69,7 +69,7 @@ export function EmailSignupPopup() {
       role="dialog"
       aria-modal="false"
       aria-labelledby="mailing-list-title"
-      className="animate-fade-in fixed bottom-4 left-4 right-4 z-50 max-w-sm border-2 border-accent bg-card p-4 shadow-2xl sm:left-auto sm:right-6 sm:bottom-6"
+      className="fixed bottom-4 left-4 right-4 z-50 max-w-sm animate-in border-2 border-accent bg-card p-4 shadow-2xl duration-300 ease-out fade-in-0 slide-in-from-bottom-4 sm:bottom-6 sm:left-auto sm:right-6"
     >
       <button
         type="button"

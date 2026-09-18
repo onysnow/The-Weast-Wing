@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ChevronDown, ExternalLink, Play } from "lucide-react";
-import { RATING_LABELS, type Reference, type ReferenceRole } from "@/data/incidents";
+import { type Reference, type ReferenceRole } from "@/data/incidents";
 import { cn } from "@/lib/utils";
 import {
   Dialog,
@@ -258,34 +258,6 @@ export function CompactMedia({
         </span>
       </span>
     </button>
-  );
-}
-
-/* --------------------------------- Rating -------------------------------- */
-
-export function PoopRating({ rating, size = "md" }: { rating: number; size?: "sm" | "md" }) {
-  return (
-    <div className="flex flex-wrap items-center gap-2">
-      <div
-        className={cn("flex gap-0.5", size === "md" ? "text-2xl" : "text-base")}
-        role="img"
-        aria-label={`Evidence rating ${rating} of 5: ${RATING_LABELS[rating]}`}
-      >
-        {[1, 2, 3, 4, 5].map((n) => (
-          <span key={n} className={n <= rating ? "" : "opacity-20 grayscale"} aria-hidden="true">
-            💩
-          </span>
-        ))}
-      </div>
-      <span
-        className={cn(
-          "font-semibold uppercase tracking-wide text-accent",
-          size === "md" ? "text-sm" : "text-xs",
-        )}
-      >
-        {rating}/5 — {RATING_LABELS[rating]}
-      </span>
-    </div>
   );
 }
 

@@ -242,6 +242,10 @@ const Sidebar = React.forwardRef<
               : "group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l",
             className,
           )}
+          // A collapsed offcanvas panel is translated off-screen but stays in the
+          // DOM, so without `inert` its links remain tabbable and keyboard users
+          // hit several invisible stops before reaching the page.
+          inert={state === "collapsed" && collapsible === "offcanvas"}
           {...props}
         >
           <div

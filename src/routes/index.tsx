@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import {
   AdSlot,
@@ -16,7 +16,14 @@ import {
 
 import { IncidentPoll, IncidentSubmissionForm } from "@/components/community";
 import { Button } from "@/components/ui/button";
-import { computeStats, formatDate, latestIncident, sortedIncidents } from "@/lib/incident-stats";
+import {
+  computeStats,
+  formatDate,
+  latestIncident,
+  siteYear,
+  sortedIncidents,
+} from "@/lib/incident-stats";
+import { useMotionState } from "@/lib/motion-preference";
 
 const SITE_NAME = "The Weast Wing";
 const HERO_HEADLINE = "Days Since the President Allegedly Shit Himself";
@@ -48,6 +55,22 @@ function scrollToId(id: string) {
 function Index() {
   const [now, setNow] = useState(() => Date.now());
   const [modal, setModal] = useState<string | null>(null);
+  const motion = useMotionState();
+  const heroVideo = useRef<HTMLVideoElement>(null);
+
+  // The hero loop is ambient decoration, so it follows the site-wide motion
+  // switch (which itself seeds from prefers-reduced-motion).
+  useEffect(() => {
+    const video = heroVideo.current;
+    if (!video) return;
+    if (motion === "paused") {
+      video.pause();
+    } else {
+      void video.play().catch(() => {
+        /* autoplay refused — the poster frame stands in */
+      });
+    }
+  }, [motion]);
 
   useEffect(() => {
     setNow(Date.now());
@@ -89,8 +112,10 @@ function Index() {
           className="relative flex min-h-[100svh] scroll-mt-16 items-center justify-center overflow-hidden border-b-4 border-accent bg-primary text-primary-foreground"
         >
           <video
+            ref={heroVideo}
             className="pointer-events-none absolute inset-0 size-full object-cover"
             src="/hero-weast.mp4"
+            poster="/hero-weast-poster.jpg"
             autoPlay
             muted
             loop
@@ -117,9 +142,9 @@ function Index() {
                 </p>
               </div>
             </div>
-            <h1 className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-foreground/80">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-foreground/80">
               Current Reporting Period
-            </h1>
+            </p>
             <div
               className="my-2 font-display text-[26vw] font-black leading-[0.85] tabular-nums drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)] sm:text-[10rem] lg:text-[13rem]"
               aria-hidden="true"
@@ -127,9 +152,9 @@ function Index() {
               {displayedStreak}
             </div>
             <span className="sr-only">{stats.currentStreak} days</span>
-            <p className="mx-auto max-w-xl font-display text-base font-bold uppercase leading-snug tracking-wide sm:text-2xl lg:max-w-3xl lg:text-3xl">
+            <h1 className="mx-auto max-w-xl font-display text-base font-bold uppercase leading-snug tracking-wide sm:text-2xl lg:max-w-3xl lg:text-3xl">
               {HERO_HEADLINE}
-            </p>
+            </h1>
 
             <dl className="mx-auto mt-6 grid max-w-md grid-cols-2 gap-px overflow-hidden border border-primary-foreground/25 bg-primary-foreground/25 text-left backdrop-blur-sm lg:max-w-2xl">
               <div className="bg-primary/85 px-3 py-2">
@@ -422,7 +447,7 @@ function Index() {
               ))}
             </nav>
             <p className="pt-2 text-[11px] text-primary-foreground/50">
-              © {new Date(now).getUTCFullYear()} — No rights reserved. Absolutely no authority
+              © {siteYear(now)} — No rights reserved. Absolutely no authority
               claimed.
             </p>
           </div>
@@ -445,7 +470,8 @@ function Index() {
       <Modal open={modal === "Methodology"} onClose={() => setModal(null)} title="Methodology">
         <p>
           The counter is the number of whole days between the most recent logged incident date and
-          today, computed in UTC.
+          today, computed on the U.S. Eastern calendar — so it turns over at midnight in
+          Washington, not somewhere else.
         </p>
         <p>
           Streaks are the gaps between consecutive logged incidents. The "previous record" is the
