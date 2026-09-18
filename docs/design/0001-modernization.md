@@ -298,10 +298,10 @@ goals are needed · chasing shadcn tree-shaking that already works.
 - **Automated accessibility tooling caps at ~57% of real issues** (Deque's own
   figure across 13,000+ pages). Budget one manual keyboard and screen-reader
   pass, then repeat on significant changes.
-- **Vite 8 shipped March 2026 with Rolldown as the default bundler.** If the
-  Lovable config is still on `rolldown-vite` (last published January 2026),
-  moving to plain Vite 8 is the right call — and Vitest 5 requires Vite ≥ 6.4.
-  This one is Lovable's call, not ours.
+- ~~**Vite 8 / Rolldown migration.**~~ Resolved: the project is already on
+  **Vite 8.1.5**, so Lovable's config is current and Rolldown is the default
+  bundler. Nothing to do. (Noted because Vitest 5 requires Vite ≥ 6.4, which
+  this satisfies.)
 - **EAA has applied since June 2025** and EN 301 549 v4.1.1 now references WCAG
   2.2. A purely informational satire site with no commerce is a weak
   enforcement target; if the site ever sells anything into the EU, AA becomes a
