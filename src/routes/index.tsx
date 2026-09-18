@@ -1,20 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ExternalLink } from "lucide-react";
-import {
-  AdSlot,
-  CompactMedia,
-  IncidentMedia,
-  Modal,
-  OfficialResponse,
-  Reveal,
-  ResearchDrawer,
-  Seal,
-  ShareBar,
-  StatusBadge,
-} from "@/components/site";
+import { Seal } from "@/components/brand/seal";
+import { MediaFrame } from "@/components/media/media-frame";
+import { MediaThumb } from "@/components/media/media-thumb";
+import { AdSlot } from "@/components/primitives/ad-slot";
+import { Modal } from "@/components/primitives/modal";
+import { Reveal } from "@/components/primitives/reveal";
+import { ShareBar } from "@/components/primitives/share-bar";
+import { StatusBadge } from "@/components/primitives/status-badge";
+import { OfficialResponse } from "@/features/incidents/official-response";
+import { ResearchDrawer } from "@/features/incidents/research-drawer";
 
 import { IncidentPoll, IncidentSubmissionForm } from "@/components/community";
+import { incidentMedia } from "@/data/incidents";
 import { Button } from "@/components/ui/button";
 import {
   computeStats,
@@ -200,12 +199,7 @@ function Index() {
             <SectionHeading eyebrow="Featured Report" title="What Reset the Clock?" />
             {latest ? (
               <article className="border border-border bg-card shadow-sm">
-                <IncidentMedia
-                  videoUrl={latest.videoUrl}
-                  imageUrl={latest.imageUrl}
-                  imageCredit={latest.imageCredit}
-                  headline={latest.title}
-                />
+                <MediaFrame media={incidentMedia(latest)} />
                 <div className="space-y-4 p-4 sm:p-6">
                   <div className="flex flex-wrap items-center gap-3">
                     <StatusBadge status={latest.status} />
@@ -302,11 +296,8 @@ function Index() {
 
                     {/* Full-width responsive source media */}
                     <div className="px-4 pt-4 sm:px-5 sm:pt-5">
-                      <CompactMedia
-                        videoUrl={inc.videoUrl}
-                        imageUrl={inc.imageUrl}
-                        imageCredit={inc.imageCredit}
-                        headline={inc.title}
+                      <MediaThumb
+                        media={incidentMedia(inc)}
                         sourceUrl={inc.source?.url}
                         sourceLabel={inc.source?.label}
                       />

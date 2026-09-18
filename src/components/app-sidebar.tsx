@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, Pause, Play } from "lucide-react";
 import type { ReactNode } from "react";
-import { Seal } from "@/components/site";
+import { Seal } from "@/components/brand/seal";
 import { cn } from "@/lib/utils";
 import { setMotionState, useMotionState } from "@/lib/motion-preference";
 import {

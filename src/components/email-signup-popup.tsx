@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
-import { Seal } from "@/components/site";
+import { Seal } from "@/components/brand/seal";
 import { subscribeToMailingList } from "@/lib/mailing-list.functions";
 import { mailingListSignupSchema } from "@/lib/mailing-list.schemas";
 

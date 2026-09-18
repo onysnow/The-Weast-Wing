@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { BEASeal } from "@/components/site";
+import { BEASeal } from "@/components/brand/bea-seal";
 
 const TITLE = "Bureau of Executive Anomalies — The Weast Wing";
 const DESCRIPTION =
