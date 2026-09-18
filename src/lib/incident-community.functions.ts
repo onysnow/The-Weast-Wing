@@ -53,14 +53,43 @@ export const getIncidentPoll = createServerFn({ method: "GET" })
     };
   });
 
+type PollTotals = Record<string, { nothingHappened: number; definitelyHappened: number }>;
+
+/**
+ * Every page load used to pull the entire votes table down and count it in
+ * JavaScript. The database has done the aggregation since the first migration
+ * — `get_incident_poll_totals()` — it just was not callable by the server
+ * role. We prefer the aggregate and keep the old path as a fallback so polls
+ * survive a deployment where the grant has not been applied yet.
+ */
 export const getAllIncidentPolls = createServerFn({ method: "GET" }).handler(async () => {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data: rows, error } = await supabaseAdmin.from("incident_votes").select("incident_id, choice");
+
+  const { data: aggregated, error: rpcError } = await supabaseAdmin.rpc(
+    "get_incident_poll_totals",
+  );
+  if (!rpcError && aggregated) {
+    const totals: PollTotals = {};
+    for (const row of aggregated) {
+      totals[row.incident_id] = {
+        nothingHappened: Number(row.nothing_happened ?? 0),
+        definitelyHappened: Number(row.definitely_happened ?? 0),
+      };
+    }
+    return totals;
+  }
+  if (rpcError) {
+    console.warn("[poll] aggregate unavailable, counting rows instead", rpcError.message);
+  }
+
+  const { data: rows, error } = await supabaseAdmin
+    .from("incident_votes")
+    .select("incident_id, choice");
   if (error) {
     console.error("[poll] bulk totals failed", error);
     throw new Error("Poll totals are temporarily unavailable.");
   }
-  const totals: Record<string, { nothingHappened: number; definitelyHappened: number }> = {};
+  const totals: PollTotals = {};
   for (const row of rows) {
     const entry = (totals[row.incident_id] ??= { nothingHappened: 0, definitelyHappened: 0 });
     if (row.choice === "nothing_happened") entry.nothingHappened += 1;

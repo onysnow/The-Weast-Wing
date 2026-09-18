@@ -1,23 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
-import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
 import { Seal } from "@/components/site";
+import { subscribeToMailingList } from "@/lib/mailing-list.functions";
+import { mailingListSignupSchema } from "@/lib/mailing-list.schemas";
 
 const STORAGE_KEY = "weast-wing-mailing-list";
-
-const emailSchema = z
-  .string()
-  .trim()
-  .min(1, { message: "An email address is required." })
-  .email({ message: "That does not look like a valid email address." })
-  .max(255, { message: "That email address is too long." });
 
 export function EmailSignupPopup() {
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "saving" | "done">("idle");
+  const honeypot = useRef<HTMLInputElement>(null);
+  const subscribe = useServerFn(subscribeToMailingList);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -37,22 +33,25 @@ export function EmailSignupPopup() {
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const parsed = emailSchema.safeParse(email);
+    const parsed = mailingListSignupSchema.safeParse({
+      email,
+      website: honeypot.current?.value ?? "",
+    });
     if (!parsed.success) {
       setError(parsed.error.issues[0]?.message ?? "Invalid email address.");
       return;
     }
     setError(null);
     setStatus("saving");
-    const { error: insertError } = await supabase
-      .from("email_subscribers")
-      .insert({ email: parsed.data.toLowerCase() });
 
-    if (insertError && insertError.code !== "23505") {
+    try {
+      await subscribe({ data: parsed.data });
+    } catch {
       setStatus("idle");
       setError("The Bureau could not process that. Please try again.");
       return;
     }
+
     setStatus("done");
     try {
       window.localStorage.setItem(STORAGE_KEY, "subscribed");
@@ -125,6 +124,16 @@ export function EmailSignupPopup() {
               {error}
             </p>
           )}
+          <div className="hidden" aria-hidden="true">
+            <label htmlFor="mailing-list-website">Website</label>
+            <input
+              ref={honeypot}
+              id="mailing-list-website"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
           <button
             type="submit"
             disabled={status === "saving"}
