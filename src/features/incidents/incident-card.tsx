@@ -87,7 +87,7 @@ export function IncidentCard({ incident, variant, fileNumber, shareTitle }: Prop
         </div>
         <time
           dateTime={incident.date}
-          className="max-w-32 text-right text-[11px] font-semibold uppercase leading-relaxed tracking-[0.1em] text-muted-foreground sm:max-w-none sm:text-xs"
+          className="max-w-44 text-right text-[11px] font-semibold uppercase leading-relaxed tracking-[0.1em] text-muted-foreground sm:max-w-none sm:text-xs"
         >
           {incident.dateLabel ?? formatDate(incident.date)}
         </time>

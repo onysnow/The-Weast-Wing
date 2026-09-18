@@ -44,6 +44,8 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-on-dark: var(--accent-on-dark);
+  --color-ring-on-dark: var(--ring-on-dark);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
@@ -82,10 +84,24 @@
   --muted-foreground: oklch(0.48 0.03 258);
   --accent: oklch(0.48 0.19 26);
   --accent-foreground: oklch(0.99 0.003 250);
+  /*
+   * The brand red reads 2.04:1 on the navy surfaces (primary), well under the
+   * 4.5:1 floor, and it is used for small uppercase labels in the hero, the
+   * sidebar and the BEA page. This lighter red measures 5.14:1 on that navy.
+   * Use it anywhere accent text sits on primary; keep --accent on paper,
+   * where it already measures 7.23:1.
+   */
+  --accent-on-dark: oklch(0.7 0.16 26);
+  /* --ring equals --primary, so the focus ring was invisible against navy
+   * (1:1). This is the same near-white as the text there: 14.31:1. */
+  --ring-on-dark: oklch(0.99 0.003 250);
   --destructive: oklch(0.52 0.21 27);
   --destructive-foreground: oklch(0.99 0.003 250);
   --border: oklch(0.88 0.012 252);
-  --input: oklch(0.88 0.012 252);
+  /* Form field boundaries are UI components under WCAG 1.4.11, so they need
+   * 3:1 against the page — the old value managed 1.43:1. Decorative hairlines
+   * (--border) are a separate, debatable case and are left alone. */
+  --input: oklch(0.66 0.02 252);
   --ring: oklch(0.28 0.09 259);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);

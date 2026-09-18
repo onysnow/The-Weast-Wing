@@ -128,7 +128,7 @@ function Index() {
             <div className="mx-auto mb-5 flex max-w-xl items-center justify-center gap-3 border-b border-primary-foreground/25 pb-4 text-left lg:max-w-2xl">
               <Seal className="size-10 shrink-0 text-seal" />
               <div>
-                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent">
+                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent-on-dark">
                   Office of the President
                 </p>
                 <p className="font-display text-sm font-bold uppercase leading-tight sm:text-base">
@@ -179,7 +179,7 @@ function Index() {
 
             <button
               onClick={() => scrollToId("what-reset-the-clock")}
-              className="mt-6 w-full max-w-md border-2 border-accent bg-accent px-5 py-3 font-display text-sm font-bold uppercase tracking-[0.12em] text-accent-foreground transition hover:bg-accent/85"
+              className="mt-6 w-full max-w-md border-2 border-accent bg-accent px-5 py-3 font-display text-sm font-bold uppercase tracking-[0.12em] text-accent-foreground transition hover:bg-accent/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-on-dark focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
             >
               What reset the clock? ↓
             </button>

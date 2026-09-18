@@ -1,6 +1,11 @@
 import { cn } from "@/lib/utils";
 import type { MediaRef } from "@/content/types";
 
+/** Add autoplay to an embed URL without clobbering existing query params. */
+function withAutoplay(url: string): string {
+  return url + (url.includes("?") ? "&" : "?") + "autoplay=1";
+}
+
 /**
  * A 16:9 media frame for any content item. Takes a normalized MediaRef rather
  * than an Incident's fields, which is what lets articles reuse it.
@@ -8,9 +13,13 @@ import type { MediaRef } from "@/content/types";
 export function MediaFrame({
   media,
   className,
+  autoPlay = false,
 }: {
   media: MediaRef;
   className?: string | undefined;
+  /** Set when the frame replaced a poster the reader just clicked, so the
+   *  video starts rather than making them press play a second time. */
+  autoPlay?: boolean;
 }) {
   const { videoUrl, imageUrl, imageCredit, label } = media;
   const isFile = !!videoUrl && /\.(mp4|webm)(\?|$)/i.test(videoUrl);
@@ -25,13 +34,14 @@ export function MediaFrame({
               src={videoUrl}
               poster={imageUrl}
               controls
-              preload="none"
+              autoPlay={autoPlay}
+              preload={autoPlay ? "auto" : "none"}
               playsInline
               className="size-full object-contain"
             />
           ) : (
             <iframe
-              src={videoUrl}
+              src={autoPlay ? withAutoplay(videoUrl) : videoUrl}
               title={label}
               loading="lazy"
               allowFullScreen

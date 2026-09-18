@@ -57,7 +57,7 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
             <p className="font-display text-sm font-bold uppercase leading-tight tracking-[0.04em]">
               The Weast Wing
             </p>
-            <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-accent">
+            <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-accent-on-dark">
               Agency directory
             </p>
           </div>
@@ -142,7 +142,7 @@ function BarsTrigger() {
       onClick={toggleSidebar}
       aria-label={isOpen ? "Close navigation" : "Open navigation"}
       aria-expanded={isOpen}
-      className="flex size-11 shrink-0 items-center justify-center text-primary-foreground transition-colors hover:bg-primary-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+      className="flex size-11 shrink-0 items-center justify-center text-primary-foreground transition-colors hover:bg-primary-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring-on-dark"
     >
       <Menu className="size-6" aria-hidden="true" />
     </button>

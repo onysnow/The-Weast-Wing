@@ -32,7 +32,7 @@ function BEAPage() {
           <div className="mx-auto flex max-w-4xl flex-col items-start gap-5 px-4 py-10 sm:flex-row sm:items-center">
             <BEASeal className="size-20 shrink-0 text-seal sm:size-24" />
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent-on-dark">
                 Independent Agency
               </p>
               <h1 className="mt-1 font-display text-3xl font-black uppercase leading-tight sm:text-5xl">

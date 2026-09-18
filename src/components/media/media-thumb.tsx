@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ExternalLink, Play } from "lucide-react";
 import { MediaFrame } from "@/components/media/media-frame";
 import { youtubeId } from "@/components/media/youtube";
@@ -19,16 +19,32 @@ export function MediaThumb({
 }) {
   const { videoUrl, imageUrl, label } = media;
   const [expanded, setExpanded] = useState(false);
+  const [thumbFailed, setThumbFailed] = useState(false);
+  const playerRef = useRef<HTMLDivElement>(null);
+
+  // Expanding replaces the button the reader just activated, which dropped
+  // keyboard focus to the top of the document. Move it onto the player.
+  useEffect(() => {
+    if (expanded) playerRef.current?.focus();
+  }, [expanded]);
 
   if (expanded) {
     return (
-      <MediaFrame media={media} className="border border-border" />
+      <div ref={playerRef} tabIndex={-1} className="outline-none">
+        <MediaFrame media={media} className="border border-border" autoPlay />
+      </div>
     );
   }
 
   // Determine thumbnail image
   const ytId = videoUrl ? youtubeId(videoUrl) : null;
-  const thumb = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : imageUrl;
+  // maxresdefault is a true 16:9 frame but is not generated for every video;
+  // hqdefault always exists, at 4:3 with black bars baked in, which
+  // object-cover crops away. Falling back on error covers both.
+  const ytThumb = ytId
+    ? `https://img.youtube.com/vi/${ytId}/${thumbFailed ? "hqdefault" : "maxresdefault"}.jpg`
+    : undefined;
+  const thumb = ytThumb ?? imageUrl;
 
   if (!thumb && !sourceUrl) return null;
 
@@ -53,7 +69,7 @@ export function MediaThumb({
     <button
       type="button"
       onClick={() => setExpanded(true)}
-      className="group relative aspect-video w-full overflow-hidden border border-border bg-primary/90 transition-[border-color,box-shadow] duration-200 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      className="group relative aspect-video w-full overflow-hidden border border-border bg-primary/90 transition-[border-color,box-shadow] duration-200 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-on-dark focus-visible:ring-offset-2"
       aria-label={`Play video: ${label}`}
     >
       <img
@@ -61,7 +77,8 @@ export function MediaThumb({
         alt=""
         loading="lazy"
         decoding="async"
-        className="size-full object-contain"
+        onError={() => setThumbFailed(true)}
+        className="size-full object-cover"
       />
       <span className="absolute inset-0 flex items-center justify-center bg-primary/30 transition-colors group-hover:bg-primary/45">
         <span className="flex size-11 items-center justify-center rounded-full border-2 border-primary-foreground bg-primary/60 shadow-lg">
