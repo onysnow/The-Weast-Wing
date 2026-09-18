@@ -6,7 +6,7 @@ import {
   voteSchema,
 } from "@/lib/incident-community.schemas";
 
-const incidentIds = new Set(incidents.map((incident) => incident.id));
+const incidentIds = new Set(incidents.map((incident) => incident.slug));
 
 export const submitIncidentReport = createServerFn({ method: "POST" })
   .inputValidator((input) => incidentSubmissionSchema.parse(input))

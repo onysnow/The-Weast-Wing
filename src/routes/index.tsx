@@ -204,7 +204,7 @@ function Index() {
                   videoUrl={latest.videoUrl}
                   imageUrl={latest.imageUrl}
                   imageCredit={latest.imageCredit}
-                  headline={latest.headline}
+                  headline={latest.title}
                 />
                 <div className="space-y-4 p-4 sm:p-6">
                   <div className="flex flex-wrap items-center gap-3">
@@ -215,9 +215,9 @@ function Index() {
                     </span>
                   </div>
                   <h3 className="font-display text-2xl font-bold leading-tight">
-                    {latest.headline}
+                    {latest.title}
                   </h3>
-                  <p className="leading-relaxed text-muted-foreground">{latest.description}</p>
+                  <p className="leading-relaxed text-muted-foreground">{latest.summary}</p>
                   {latest.source && (
                     <a
                       href={latest.source.url}
@@ -278,10 +278,10 @@ function Index() {
             <SectionHeading eyebrow="Public Record" title="The Incident Log" />
             <ol className="space-y-4">
               {sortedIncidents.map((inc, i) => (
-                <li key={inc.id}>
+                <li key={inc.slug}>
                   <Reveal>
                   <article
-                    id={`incident-${inc.id}`}
+                    id={`incident-${inc.slug}`}
                     className="scroll-mt-20 overflow-hidden border border-border bg-card shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-primary/35 hover:shadow-md"
                   >
                     {/* Card header: file number, status, date */}
@@ -306,7 +306,7 @@ function Index() {
                         videoUrl={inc.videoUrl}
                         imageUrl={inc.imageUrl}
                         imageCredit={inc.imageCredit}
-                        headline={inc.headline}
+                        headline={inc.title}
                         sourceUrl={inc.source?.url}
                         sourceLabel={inc.source?.label}
                       />
@@ -316,10 +316,10 @@ function Index() {
                     <div className="px-4 pb-4 pt-4 sm:px-5 sm:pb-5">
                       <div className="min-w-0">
                         <h3 className="font-display text-lg font-bold leading-snug">
-                          {inc.headline}
+                          {inc.title}
                         </h3>
                         <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                          {inc.description}
+                          {inc.summary}
                         </p>
                       </div>
                     </div>
@@ -333,7 +333,7 @@ function Index() {
 
                     {/* Public poll */}
                     <div className="border-t border-border">
-                      <IncidentPoll incidentId={inc.id} />
+                      <IncidentPoll incidentId={inc.slug} />
                     </div>
 
                     {/* Expandable research drawer */}
@@ -341,7 +341,7 @@ function Index() {
                       established={inc.established}
                       notes={inc.notes}
                       references={inc.references}
-                      permalink={`#incident-${inc.id}`}
+                      permalink={`#incident-${inc.slug}`}
                       sourceUrl={inc.source?.url}
                       sourceLabel={inc.source?.label}
                     />
