@@ -1,5 +1,11 @@
-import { describe, expect, it } from "vitest";
-import { daysBetween, parseDate, siteToday, siteYear } from "./incident-stats";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import {
+  daysBetween,
+  parseDate,
+  resetSiteClockForTests,
+  siteToday,
+  siteYear,
+} from "./incident-stats";
 
 /**
  * These exist because the counter's time zone changed. It used to be computed
@@ -46,6 +52,34 @@ describe("siteToday", () => {
   it("returns a UTC-midnight timestamp, comparable with parseDate", () => {
     const today = siteToday(at("2026-09-18T16:00:00Z"));
     expect(today % 86_400_000).toBe(0);
+  });
+});
+
+describe("siteToday without time-zone data", () => {
+  // Node built with small-icu, and some slim container images, throw
+  // RangeError for any named zone. The site must still render.
+  afterEach(() => {
+    vi.restoreAllMocks();
+    resetSiteClockForTests();
+  });
+
+  const breakIntl = () => {
+    resetSiteClockForTests();
+    vi.spyOn(Intl, "DateTimeFormat").mockImplementation(() => {
+      throw new RangeError("Invalid time zone specified: America/New_York");
+    });
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+  };
+
+  it("does not throw", () => {
+    breakIntl();
+    expect(() => siteToday(at("2026-09-19T00:30:00Z"))).not.toThrow();
+  });
+
+  it("still reports the US date rather than the UTC one", () => {
+    breakIntl();
+    // 8:30pm on the 18th in New York. UTC would say the 19th.
+    expect(siteToday(at("2026-09-19T00:30:00Z"))).toBe(parseDate("2026-09-18"));
   });
 });
 

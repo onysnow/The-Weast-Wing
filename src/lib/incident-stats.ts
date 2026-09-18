@@ -9,12 +9,46 @@ const DAY_MS = 86_400_000;
  */
 export const SITE_TIME_ZONE = "America/New_York";
 
-const siteDateParts = new Intl.DateTimeFormat("en-CA", {
-  timeZone: SITE_TIME_ZONE,
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-});
+/**
+ * Eastern Standard Time, in milliseconds. Only used if the runtime cannot
+ * resolve named time zones at all (see below) — an hour out during daylight
+ * saving, which beats being five hours out.
+ */
+const EST_OFFSET_MS = 5 * 60 * 60 * 1000;
+
+let cachedFormatter: Intl.DateTimeFormat | null | undefined;
+
+/**
+ * A formatter for the site's zone, or null where the runtime has no zone data.
+ *
+ * Node built with small-icu, and some slim container images, throw
+ * `RangeError: Invalid time zone specified` for any named zone. Building this
+ * at module scope meant that throw happened on *import* — which would take out
+ * server rendering of the whole site, not just the counter. Built lazily and
+ * guarded instead, and memoized so the cost is paid once.
+ */
+function siteDateParts(): Intl.DateTimeFormat | null {
+  if (cachedFormatter !== undefined) return cachedFormatter;
+  try {
+    cachedFormatter = new Intl.DateTimeFormat("en-CA", {
+      timeZone: SITE_TIME_ZONE,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+  } catch {
+    console.warn(
+      `[clock] runtime cannot resolve ${SITE_TIME_ZONE}; falling back to a fixed EST offset`,
+    );
+    cachedFormatter = null;
+  }
+  return cachedFormatter;
+}
+
+/** Test seam: forget the memoized formatter. Not used by application code. */
+export function resetSiteClockForTests(): void {
+  cachedFormatter = undefined;
+}
 
 /** Parse a YYYY-MM-DD string as a UTC midnight timestamp. */
 export function parseDate(d: string): number {
@@ -28,8 +62,12 @@ export function parseDate(d: string): number {
  * because both ask for the same named zone rather than their own offset.
  */
 export function siteToday(instant: number = Date.now()): number {
+  const formatter = siteDateParts();
   // en-CA formats as YYYY-MM-DD.
-  return parseDate(siteDateParts.format(new Date(instant)));
+  if (formatter) return parseDate(formatter.format(new Date(instant)));
+  // No zone data: shift by a fixed EST offset and read the UTC date off that.
+  const shifted = new Date(instant - EST_OFFSET_MS);
+  return Date.UTC(shifted.getUTCFullYear(), shifted.getUTCMonth(), shifted.getUTCDate());
 }
 
 /** The calendar year in the site's time zone. */
