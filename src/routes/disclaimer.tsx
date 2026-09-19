@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { Seal } from "@/components/brand/seal";
-import { SatireChip } from "@/components/brand/satire-chip";
 import { StructuredData, siteStructuredData } from "@/components/seo/structured-data";
 
 const TITLE = "Disclaimer — The Weast Wing";
@@ -46,8 +45,7 @@ function DisclaimerPage() {
           <div className="mx-auto flex max-w-4xl flex-col items-start gap-5 px-4 py-10 sm:flex-row sm:items-center">
             <Seal className="size-20 shrink-0 text-seal sm:size-24" />
             <div>
-              <SatireChip tone="dark" />
-              <h1 className="mt-2 font-display text-3xl font-black uppercase leading-tight sm:text-5xl">
+              <h1 className="font-display text-3xl font-black uppercase leading-tight sm:text-5xl">
                 This site is fiction
               </h1>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-primary-foreground/80 sm:text-base">
@@ -103,11 +101,10 @@ function DisclaimerPage() {
 
           <Clause title="If you are here because something was mistaken for real">
             <p>
-              That is what this page is for. Send the link you saw, and we will look at whether the
-              satire marking on that page needs to be louder. Every card and article carries a
-              SATIRE mark, the header carries one at every scroll position, and the share images are
-              marked so the label travels with the link — but if something got past all of that, we
-              want to know.
+              That is what this page is for. Send us the link you saw. This site does not stamp a
+              label on every page — the writing is the joke, and a warning sticker would spoil it —
+              so if something travelled without its context and someone took it at face value, we
+              would rather hear about it than not.
             </p>
           </Clause>
 

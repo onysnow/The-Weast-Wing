@@ -42,7 +42,10 @@ export const Route = createFileRoute("/")({
       { property: "og:image", content: "https://theweastwing.com/og-default.png" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "The Weast Wing, marked SATIRE" },
+      {
+        property: "og:image:alt",
+        content: "The Weast Wing — Days since the President allegedly shit himself",
+      },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: `${SITE_NAME} — ${HERO_HEADLINE}` },
       { name: "twitter:description", content: DESC },
@@ -109,9 +112,11 @@ function Index() {
 
   return (
     <>
-      {/* Declared as satire in the markup as well as on the page: schema.org
-          has a real SatiricalArticle type, and a crawler should not have to
-          infer it from the prose. */}
+      {/* The site carries no visible satire label — the writing is the joke
+          and a sticker would spoil it — so the declaration lives here, where
+          only crawlers see it: schema.org has a real SatiricalArticle type,
+          which keeps the signal machine-readable without putting a warning
+          on the page. */}
       <StructuredData data={siteStructuredData()} />
       {latest && (
         <StructuredData

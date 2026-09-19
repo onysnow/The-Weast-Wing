@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { BEASeal } from "@/components/brand/bea-seal";
-import { SatireChip } from "@/components/brand/satire-chip";
 
 const TITLE = "Bureau of Executive Anomalies — The Weast Wing";
 const DESCRIPTION =
@@ -20,7 +19,10 @@ export const Route = createFileRoute("/bea")({
       { property: "og:image", content: "https://theweastwing.com/og-default.png" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "The Weast Wing, marked SATIRE" },
+      {
+        property: "og:image:alt",
+        content: "The Weast Wing — Days since the President allegedly shit himself",
+      },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
@@ -38,12 +40,9 @@ function BEAPage() {
           <div className="mx-auto flex max-w-4xl flex-col items-start gap-5 px-4 py-10 sm:flex-row sm:items-center">
             <BEASeal className="size-20 shrink-0 text-seal sm:size-24" />
             <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <SatireChip tone="dark" />
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent-on-dark">
-                  Independent Agency
-                </p>
-              </div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent-on-dark">
+                Independent Agency
+              </p>
               <h1 className="mt-1 font-display text-3xl font-black uppercase leading-tight sm:text-5xl">
                 Bureau of Executive Anomalies
               </h1>

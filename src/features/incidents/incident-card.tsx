@@ -1,4 +1,3 @@
-import { SatireChip } from "@/components/brand/satire-chip";
 import { MediaFrame } from "@/components/media/media-frame";
 import { MediaThumb } from "@/components/media/media-thumb";
 import { ShareBar } from "@/components/primitives/share-bar";
@@ -43,7 +42,6 @@ export function IncidentCard({ incident, variant, fileNumber, shareTitle }: Prop
       <MediaFrame media={incidentMedia(incident)} />
       <div className="space-y-4 p-4 sm:p-6">
         <div className="flex flex-wrap items-center gap-3">
-          <SatireChip />
           <StatusBadge status={incident.status} />
           <span className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
             {formatDate(incident.date)}
@@ -85,9 +83,6 @@ export function IncidentCard({ incident, variant, fileNumber, shareTitle }: Prop
               FILE №{String(fileNumber).padStart(3, "0")}
             </span>
           )}
-          {/* A card is the unit that travels — it has its own anchor and its
-              own share buttons — so the marker rides with it. */}
-          <SatireChip />
           <StatusBadge status={incident.status} />
         </div>
         <time
