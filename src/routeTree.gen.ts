@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BeaRouteImport } from './routes/bea'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
+import { Route as QuizIndexRouteImport } from './routes/quiz.index'
+import { Route as QuizSlugRouteImport } from './routes/quiz.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +30,53 @@ const DisclaimerRoute = DisclaimerRouteImport.update({
   path: '/disclaimer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuizIndexRoute = QuizIndexRouteImport.update({
+  id: '/quiz/',
+  path: '/quiz/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizSlugRoute = QuizSlugRouteImport.update({
+  id: '/quiz/$slug',
+  path: '/quiz/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bea': typeof BeaRoute
   '/disclaimer': typeof DisclaimerRoute
+  '/quiz/$slug': typeof QuizSlugRoute
+  '/quiz/': typeof QuizIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bea': typeof BeaRoute
   '/disclaimer': typeof DisclaimerRoute
+  '/quiz/$slug': typeof QuizSlugRoute
+  '/quiz': typeof QuizIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/bea': typeof BeaRoute
   '/disclaimer': typeof DisclaimerRoute
+  '/quiz/$slug': typeof QuizSlugRoute
+  '/quiz/': typeof QuizIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bea' | '/disclaimer'
+  fullPaths: '/' | '/bea' | '/disclaimer' | '/quiz/$slug' | '/quiz/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bea' | '/disclaimer'
-  id: '__root__' | '/' | '/bea' | '/disclaimer'
+  to: '/' | '/bea' | '/disclaimer' | '/quiz/$slug' | '/quiz'
+  id: '__root__' | '/' | '/bea' | '/disclaimer' | '/quiz/$slug' | '/quiz/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BeaRoute: typeof BeaRoute
   DisclaimerRoute: typeof DisclaimerRoute
+  QuizSlugRoute: typeof QuizSlugRoute
+  QuizIndexRoute: typeof QuizIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +102,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DisclaimerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quiz/': {
+      id: '/quiz/'
+      path: '/quiz'
+      fullPath: '/quiz/'
+      preLoaderRoute: typeof QuizIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quiz/$slug': {
+      id: '/quiz/$slug'
+      path: '/quiz/$slug'
+      fullPath: '/quiz/$slug'
+      preLoaderRoute: typeof QuizSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +123,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BeaRoute: BeaRoute,
   DisclaimerRoute: DisclaimerRoute,
+  QuizSlugRoute: QuizSlugRoute,
+  QuizIndexRoute: QuizIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
