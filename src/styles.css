@@ -44,6 +44,8 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-on-dark: var(--accent-on-dark);
+  --color-ring-on-dark: var(--ring-on-dark);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
@@ -82,10 +84,34 @@
   --muted-foreground: oklch(0.48 0.03 258);
   --accent: oklch(0.48 0.19 26);
   --accent-foreground: oklch(0.99 0.003 250);
+  /*
+   * The brand red reads 2.04:1 on the navy surfaces (primary), well under the
+   * 4.5:1 floor, and it is used for small uppercase labels in the hero, the
+   * sidebar and the BEA page. This lighter red measures 5.14:1 on that navy.
+   * Use it anywhere accent text sits on primary; keep --accent on paper,
+   * where it already measures 7.23:1.
+   */
+  --accent-on-dark: oklch(0.7 0.16 26);
+  /* --ring equals --primary, so the focus ring was invisible against navy
+   * (1:1). This is the same near-white as the text there: 14.31:1. */
+  --ring-on-dark: oklch(0.99 0.003 250);
+  /*
+   * Focus is a site-wide convention, not a per-component decision. Every
+   * focusable element gets the same indicator from the base rule below, and
+   * the two override utilities near the bottom of this file read the same
+   * variables. A dark surface redefines them with `on-navy`; nothing else
+   * overrides them.
+   * Defaults are for the paper surfaces: navy on near-white, 11.4:1.
+   */
+  --focus: oklch(0.28 0.09 259);
+  --focus-contrast: oklch(0.99 0.003 250);
   --destructive: oklch(0.52 0.21 27);
   --destructive-foreground: oklch(0.99 0.003 250);
   --border: oklch(0.88 0.012 252);
-  --input: oklch(0.88 0.012 252);
+  /* Form field boundaries are UI components under WCAG 1.4.11, so they need
+   * 3:1 against the page — the old value managed 1.43:1. Decorative hairlines
+   * (--border) are a separate, debatable case and are left alone. */
+  --input: oklch(0.66 0.02 252);
   --ring: oklch(0.28 0.09 259);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -152,6 +178,72 @@
   html {
     scroll-behavior: smooth;
   }
+
+  /*
+   * The focus convention applies to everything focusable by default, so a
+   * plain <a> in body copy is covered without opting in. Components override
+   * it only with `focus-ring-inset` or `focus-invert`.
+   */
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+}
+
+/* ---------------------------- Interaction -------------------------------
+ *
+ * The base rule above already gives every focusable element the default
+ * indicator. These exist for the cases that need something else; components
+ * do not invent their own, which is how the header trigger ended up with a
+ * ring nothing else on the site had.
+ *
+ *   on-navy          declares a surface dark, so anything inside focuses light
+ *   focus-ring       re-asserts the default where something has overridden it
+ *   focus-ring-inset same outline drawn inside, for full-bleed rows
+ *   focus-invert     for controls inside a solid bar, where an outline reads
+ *                    as a box floating over the glyph — the target fills instead
+ *   hover-wash       the matching hover for those bar-mounted controls
+ *
+ * Every indicator clears WCAG 1.4.11's 3:1 floor on either surface: navy on
+ * paper is 11.4:1, paper on navy 14.31:1.
+ */
+
+@utility on-navy {
+  --focus: var(--primary-foreground);
+  --focus-contrast: var(--primary);
+}
+
+@utility focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+}
+
+/* Same indicator, drawn inside the box. For full-bleed rows — a drawer
+ * summary, a list item — where an offset outline would be clipped by the
+ * card's own overflow. */
+@utility focus-ring-inset {
+  &:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+}
+
+@utility focus-invert {
+  &:focus-visible {
+    background-color: var(--focus);
+    color: var(--focus-contrast);
+    outline: none;
+  }
+}
+
+/* The wash a bar-mounted control gets on hover, in the surface's own ink so
+ * it works on navy and paper alike. */
+@utility hover-wash {
+  &:hover {
+    background-color: color-mix(in oklch, currentColor 12%, transparent);
+  }
 }
 
 @utility no-scrollbar {
@@ -216,4 +308,13 @@
   .marquee-track {
     animation: none !important;
   }
+}
+
+/*
+ * Site-wide motion switch (see src/lib/motion-preference.ts). WCAG 2.2.2 wants
+ * a stop control for anything that loops past five seconds, for visitors who
+ * have not set a system-level preference.
+ */
+:root[data-motion="paused"] .marquee-track {
+  animation-play-state: paused;
 }

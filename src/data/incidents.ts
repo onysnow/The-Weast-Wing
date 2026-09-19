@@ -14,13 +14,14 @@
  *    sorts by date anyway, so order does not actually matter).
  * 3. Fill in the fields:
  *
- *    id            A short, url-safe, UNIQUE slug. Becomes the shareable
+ *    kind          Always "incident" for entries in this file.
+ *    slug          A short, url-safe, UNIQUE slug. Becomes the shareable
  *                  permalink anchor, e.g. "#incident-rose-garden-2026".
  *    date          The alleged incident date, "YYYY-MM-DD".
- *    headline      Short, newspaper-style headline.
- *    description   1-3 sentences of deadpan, official-sounding write-up.
+ *    title         Short, newspaper-style headline.
+ *    summary       1-3 sentences of deadpan, official-sounding write-up.
  *    status        "UNCONFIRMED" | "DISPUTED" | "UNDER REVIEW" | "SATIRE"
- *    rating        1-5. Comedic "evidence rating". See RATING_LABELS below.
+ *    rating        1-5. Comedic "evidence rating"; rendered by the card.
  *    source        Optional. { label: string; url: string } — primary source.
  *    references    Optional. Array of all sources (primary + allegation +
  *                  counterevidence). Each: { label, url, role }.
@@ -38,34 +39,22 @@
  * ============================================================================
  */
 
+import type { ContentItem, MediaRef, Reference } from "@/content/types";
+
+export type { Reference, ReferenceRole } from "@/content/types";
+
 export type IncidentStatus = "UNCONFIRMED" | "DISPUTED" | "UNDER REVIEW" | "SATIRE";
 
-export type ReferenceRole =
-  | "primary"
-  | "allegation"
-  | "fact-check"
-  | "transcript"
-  | "news"
-  | "commentary";
-
-export type Reference = {
-  label: string;
-  url: string;
-  role: ReferenceRole;
-};
-
-export type Incident = {
-  id: string;
-  date: string; // YYYY-MM-DD
-  dateLabel?: string;
+/**
+ * An incident is a ContentItem plus the things only the review queue has.
+ * Shared fields (slug, date, title, summary, source, references) live in
+ * src/content/types.ts so articles can reuse every component that reads them.
+ */
+export type Incident = ContentItem & {
+  kind: "incident";
   countInStats?: boolean;
-  headline: string;
-  description: string;
   status: IncidentStatus;
   rating: 1 | 2 | 3 | 4 | 5;
-  source?: { label: string; url: string };
-  /** All sources: primary, allegation, counterevidence, transcript, news. */
-  references?: Reference[];
   /** What is independently established as fact (not the allegation itself). */
   established?: string;
   /** Editorial review notes. */
@@ -80,24 +69,26 @@ export type Incident = {
   location?: string;
 };
 
-/** Comedic 5-point evidence scale. Not a scientific instrument. */
-export const RATING_LABELS: Record<number, string> = {
-  1: "Internet is reaching",
-  2: "Suspicious",
-  3: "We have questions",
-  4: "Extremely concerning evidence",
-  5: "We may need congressional hearings",
-};
+/** Normalize an incident's flat media fields into the shared MediaRef shape. */
+export function incidentMedia(incident: Incident): MediaRef {
+  return {
+    ...(incident.videoUrl !== undefined ? { videoUrl: incident.videoUrl } : {}),
+    ...(incident.imageUrl !== undefined ? { imageUrl: incident.imageUrl } : {}),
+    ...(incident.imageCredit !== undefined ? { imageCredit: incident.imageCredit } : {}),
+    label: incident.title,
+  };
+}
 
 /** ---------------------------------------------------------------------
  *  REVIEW QUEUE — sourced from the editorial research workbook
  *  ------------------------------------------------------------------- */
 export const incidents: Incident[] = [
   {
-    id: "lindsey-graham-funeral",
+    kind: "incident",
+    slug: "lindsey-graham-funeral",
     date: "2026-07-28",
-    headline: "Nearby Reactions at Washington Cathedral Fuel Online Claims",
-    description:
+    title: "Nearby Reactions at Washington Cathedral Fuel Online Claims",
+    summary:
       "Trump attended and spoke at Senator Lindsey Graham's funeral while social posts interpreted reactions from people seated nearby as evidence of a soiling incident. The attendance and official footage are documented; the bodily-incident claim is not established.",
     status: "UNDER REVIEW",
     rating: 2,
@@ -131,10 +122,11 @@ export const incidents: Incident[] = [
       "The President was paying his respects. The people seated nearby were grieving. Grief has many faces, and several smells.",
   },
   {
-    id: "world-cup-medal-ceremony",
+    kind: "incident",
+    slug: "world-cup-medal-ceremony",
     date: "2026-07-19",
-    headline: "Six-Second World Cup Clip Prompts Odor Speculation",
-    description:
+    title: "Six-Second World Cup Clip Prompts Odor Speculation",
+    summary:
       "A short clip from the medal ceremony circulated as viewers interpreted a nearby man's expression as a reaction to a foul smell. The appearance and reaction clip are authentic, but the cause of the reaction is unknown.",
     status: "UNDER REVIEW",
     rating: 1,
@@ -157,10 +149,11 @@ export const incidents: Incident[] = [
       "MetLife Stadium seats 82,500 people. Statistically, at least one man was going to make that face about something else.",
   },
   {
-    id: "cabinet-meeting-rubio-hegseth",
+    kind: "incident",
+    slug: "cabinet-meeting-rubio-hegseth",
     date: "2026-05-27",
-    headline: "Cabinet Meeting Reactions Spark Odor Rumor",
-    description:
+    title: "Cabinet Meeting Reactions Spark Odor Rumor",
+    summary:
       "Online commentary claimed Marco Rubio and Pete Hegseth visibly reacted to a bad odor while seated beside Trump. The meeting and seating arrangement are documented; the suggested cause of their behavior is not.",
     status: "UNDER REVIEW",
     rating: 2,
@@ -193,10 +186,11 @@ export const incidents: Incident[] = [
       "Secretaries Rubio and Hegseth were visibly moved by the President's remarks. Deeply moved. Through the nose.",
   },
   {
-    id: "memorial-day-walter-reed-footage",
+    kind: "incident",
+    slug: "memorial-day-walter-reed-footage",
     date: "2026-05-25",
-    headline: "Memorial Day Footage Generates Diaper Speculation",
-    description:
+    title: "Memorial Day Footage Generates Diaper Speculation",
+    summary:
       "Authentic footage of Trump's movement around Memorial Day and Walter Reed coverage generated a viral allegation that he had defecated in an adult diaper. The footage is real; that interpretation is not established.",
     status: "UNDER REVIEW",
     rating: 2,
@@ -228,10 +222,11 @@ export const incidents: Incident[] = [
       "The President walks with purpose. Purpose has a distinctive silhouette, and the Weast Wing will not be taking further questions about it.",
   },
   {
-    id: "health-care-hot-mic",
+    kind: "incident",
+    slug: "health-care-hot-mic",
     date: "2026-04-23",
-    headline: "Hot Mic Captures an Unfinished, Much-Debated Phrase",
-    description:
+    title: "Hot Mic Captures an Unfinished, Much-Debated Phrase",
+    summary:
       "A clip appeared to capture Trump saying “I could use a shi—” immediately before the feed cut, prompting bathroom-related speculation. The event and clip are authentic, but the unfinished phrase does not establish that an accident occurred.",
     status: "UNDER REVIEW",
     rating: 2,
@@ -255,15 +250,17 @@ export const incidents: Incident[] = [
     ],
     established:
       "The event and viral hot-mic clip are real. The audio appears to contain an unfinished phrase interpreted online as 'I could use a sh—'; it does not by itself establish an accident occurred.",
-    notes: "Review the original White House video and compare timing against the Acyn clip before using.",
+    notes:
+      "Review the original White House video and compare timing against the Acyn clip before using.",
     defense:
       "The President was clearly about to say “ship” — as in shipping American jobs back home. The feed cut for unrelated, routine, completely normal reasons.",
   },
   {
-    id: "anti-fraud-task-force-signing",
+    kind: "incident",
+    slug: "anti-fraud-task-force-signing",
     date: "2026-03-16",
-    headline: "Vance and Ferguson Reactions Become a Viral ‘Stinky Moment’",
-    description:
+    title: "Vance and Ferguson Reactions Become a Viral ‘Stinky Moment’",
+    summary:
       "A clip from an anti-fraud task force signing showed JD Vance and Andrew Ferguson reacting while Trump discussed the B-2 bomber. The event and participants are independently documented; attributing their expressions to an odor is interpretation, not fact.",
     status: "UNDER REVIEW",
     rating: 2,
@@ -299,10 +296,11 @@ export const incidents: Incident[] = [
       "The Vice President and Mr. Ferguson were reacting to the B-2 bomber, which is extremely impressive and not a smell.",
   },
   {
-    id: "recovery-initiative-abrupt-ending",
+    kind: "incident",
+    slug: "recovery-initiative-abrupt-ending",
     date: "2026-01-29",
-    headline: "Oval Office Event Ends Abruptly, Prompting Public Allegation",
-    description:
+    title: "Oval Office Event Ends Abruptly, Prompting Public Allegation",
+    summary:
       "An official Great American Recovery Initiative event ended abruptly, after which public posts alleged Trump had soiled himself. The video and ending are authentic; the specific explanation remains disputed and unproven.",
     status: "DISPUTED",
     rating: 3,
@@ -336,10 +334,11 @@ export const incidents: Incident[] = [
       "The event ended precisely on schedule. The schedule was revised moments earlier. This is called efficiency.",
   },
   {
-    id: "kennedy-center-ceremony",
+    kind: "incident",
+    slug: "kennedy-center-ceremony",
     date: "2025-12-06",
-    headline: "Ceremony Reactions Interpreted as Evidence of an Odor",
-    description:
+    title: "Ceremony Reactions Interpreted as Evidence of an Odor",
+    summary:
       "Authentic footage from a Kennedy Center honorees ceremony circulated with claims that an attendee's reaction indicated an odor or soiling incident. The ceremony and reactions are real; the alleged cause is contested.",
     status: "DISPUTED",
     rating: 1,
@@ -364,13 +363,15 @@ export const incidents: Incident[] = [
     established:
       "A real ceremony and real reactions exist on video. The claim that the reactions were caused by Trump soiling himself is contested.",
     notes: "Kept specifically because you asked to review contested material yourself.",
-    defense: "The attendee was simply overcome by the arts. It happens at the Kennedy Center constantly.",
+    defense:
+      "The attendee was simply overcome by the arts. It happens at the Kennedy Center constantly.",
   },
   {
-    id: "notre-dame-reopening",
+    kind: "incident",
+    slug: "notre-dame-reopening",
     date: "2024-12-07",
-    headline: "Paris Audience Gestures Fuel a Viral Odor Allegation",
-    description:
+    title: "Paris Audience Gestures Fuel a Viral Odor Allegation",
+    summary:
       "A short clip from the Notre-Dame reopening showed nearby attendees making facial gestures and covering their noses. The appearance and video are authentic; claims that they were reacting to Trump soiling himself are not established.",
     status: "DISPUTED",
     rating: 1,
@@ -403,10 +404,11 @@ export const incidents: Incident[] = [
       "Parisians cover their noses as a matter of culture, fashion, and civic pride. The President happened to be standing nearby.",
   },
   {
-    id: "detroit-economic-club",
+    kind: "incident",
+    slug: "detroit-economic-club",
     date: "2024-10-10",
-    headline: "Detroit Speech Draws Bodily-Noise Speculation",
-    description:
+    title: "Detroit Speech Draws Bodily-Noise Speculation",
+    summary:
       "A documented Detroit Economic Club appearance generated online speculation about a bodily noise and a diaper. The event is fully recorded, but that interpretation is not established by the event record.",
     status: "UNDER REVIEW",
     rating: 1,
@@ -435,13 +437,15 @@ export const incidents: Incident[] = [
     established:
       "The appearance is fully documented. The bodily-function interpretation is not established by the event record.",
     notes: "Locate and record the exact timestamp after personally reviewing the full video.",
-    defense: "That was not a bodily noise. That was the sound of the American economy roaring back.",
+    defense:
+      "That was not a bodily noise. That was the sound of the American economy roaring back.",
   },
   {
-    id: "cnn-presidential-debate-noise",
+    kind: "incident",
+    slug: "cnn-presidential-debate-noise",
     date: "2024-06-27",
-    headline: "Authentic Debate Audio Prompts Questions About an Unidentified Noise",
-    description:
+    title: "Authentic Debate Audio Prompts Questions About an Unidentified Noise",
+    summary:
       "A sound audible in authentic presidential debate footage prompted public speculation about its source and nature. Neither who caused it nor whether it represented anything beyond an ordinary noise is established.",
     status: "UNDER REVIEW",
     rating: 1,
@@ -468,15 +472,15 @@ export const incidents: Incident[] = [
     established:
       "The debate and sound are authentic. The source of the noise and whether it represented anything beyond flatulence/noise are not established.",
     notes: "Review the full-event footage rather than relying on short reposts.",
-    defense:
-      "The unidentified noise has since been identified: patriotism. The matter is closed.",
+    defense: "The unidentified noise has since been identified: patriotism. The matter is closed.",
   },
   {
-    id: "new-york-criminal-trial-odor",
+    kind: "incident",
+    slug: "new-york-criminal-trial-odor",
     date: "2024-04-15",
     dateLabel: "April 2024 (trial period)",
-    headline: "Courtroom Odor Commentary Escalates Into Online Claims",
-    description:
+    title: "Courtroom Odor Commentary Escalates Into Online Claims",
+    summary:
       "Commentary during the April trial period alleged passing gas and reactions to an odor, while online posts escalated the story into soiling claims. A viral CNN headline making that claim was fabricated and is not evidence.",
     status: "DISPUTED",
     rating: 1,
@@ -510,12 +514,13 @@ export const incidents: Incident[] = [
       "Courtrooms are famously stuffy. Justice itself was holding its breath out of respect for the proceedings.",
   },
   {
-    id: "apprentice-recurring-allegation",
+    kind: "incident",
+    slug: "apprentice-recurring-allegation",
     date: "2019-01-01",
     dateLabel: "2000s; claims public from 2019 onward",
     countInStats: false,
-    headline: "Former Production Staffer Makes Recurring Apprentice-Era Allegation",
-    description:
+    title: "Former Production Staffer Makes Recurring Apprentice-Era Allegation",
+    summary:
       "Noel Casler has repeatedly said he personally witnessed incidents during production of The Apprentice and Celebrity Apprentice. The allegation became public from 2019 onward, but no independently corroborated incident date or count was located; this card represents the recurring claim, not a specific event.",
     status: "UNCONFIRMED",
     rating: 1,

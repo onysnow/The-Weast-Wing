@@ -1,22 +1,28 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ExternalLink } from "lucide-react";
-import {
-  AdSlot,
-  CompactMedia,
-  IncidentMedia,
-  Modal,
-  OfficialResponse,
-  Reveal,
-  ResearchDrawer,
-  Seal,
-  ShareBar,
-  StatusBadge,
-} from "@/components/site";
+import { Seal } from "@/components/brand/seal";
+import { AdSlot } from "@/components/primitives/ad-slot";
+import { Modal } from "@/components/primitives/modal";
+import { Reveal } from "@/components/primitives/reveal";
+import { ShareBar } from "@/components/primitives/share-bar";
 
-import { IncidentPoll, IncidentSubmissionForm } from "@/components/community";
+import { IncidentSubmissionForm } from "@/components/community";
+import { IncidentCard } from "@/features/incidents/incident-card";
+import {
+  StructuredData,
+  satiricalArticleStructuredData,
+  siteStructuredData,
+} from "@/components/seo/structured-data";
 import { Button } from "@/components/ui/button";
-import { computeStats, formatDate, latestIncident, sortedIncidents } from "@/lib/incident-stats";
+import {
+  computeStats,
+  formatDate,
+  latestIncident,
+  siteYear,
+  sortedIncidents,
+} from "@/lib/incident-stats";
+import { useMotionState } from "@/lib/motion-preference";
 
 const SITE_NAME = "The Weast Wing";
 const HERO_HEADLINE = "Days Since the President Allegedly Shit Himself";
@@ -33,9 +39,17 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: DESC },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://theweastwing.com/" },
+      { property: "og:image", content: "https://theweastwing.com/og-default.png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      {
+        property: "og:image:alt",
+        content: "The Weast Wing — Days since the President allegedly shit himself",
+      },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: `${SITE_NAME} — ${HERO_HEADLINE}` },
       { name: "twitter:description", content: DESC },
+      { name: "twitter:image", content: "https://theweastwing.com/og-default.png" },
     ],
     links: [{ rel: "canonical", href: "https://theweastwing.com/" }],
   }),
@@ -48,6 +62,22 @@ function scrollToId(id: string) {
 function Index() {
   const [now, setNow] = useState(() => Date.now());
   const [modal, setModal] = useState<string | null>(null);
+  const motion = useMotionState();
+  const heroVideo = useRef<HTMLVideoElement>(null);
+
+  // The hero loop is ambient decoration, so it follows the site-wide motion
+  // switch (which itself seeds from prefers-reduced-motion).
+  useEffect(() => {
+    const video = heroVideo.current;
+    if (!video) return;
+    if (motion === "paused") {
+      video.pause();
+    } else {
+      void video.play().catch(() => {
+        /* autoplay refused — the poster frame stands in */
+      });
+    }
+  }, [motion]);
 
   useEffect(() => {
     setNow(Date.now());
@@ -82,16 +112,36 @@ function Index() {
 
   return (
     <>
+      {/* The site carries no visible satire label — the writing is the joke
+          and a sticker would spoil it — so the declaration lives here, where
+          only crawlers see it: schema.org has a real SatiricalArticle type,
+          which keeps the signal machine-readable without putting a warning
+          on the page. */}
+      <StructuredData data={siteStructuredData()} />
+      {latest && (
+        <StructuredData
+          data={satiricalArticleStructuredData({
+            headline: latest.title,
+            description: latest.summary,
+            url: `https://theweastwing.com/#incident-${latest.slug}`,
+            datePublished: latest.date,
+            image: "https://theweastwing.com/og-default.png",
+          })}
+        />
+      )}
+
       <main>
         {/* Hero — full-screen background video with the counter on top */}
         <section
           id="hero"
-          className="relative flex min-h-[100svh] scroll-mt-16 items-center justify-center overflow-hidden border-b-4 border-accent bg-primary text-primary-foreground"
+          className="on-navy relative flex min-h-[100svh] scroll-mt-20 items-center justify-center overflow-hidden border-b-4 border-accent bg-primary text-primary-foreground"
         >
           <video
+            ref={heroVideo}
             className="pointer-events-none absolute inset-0 size-full object-cover"
             src="/hero-weast.mp4"
-            autoPlay
+            poster="/hero-weast-poster.jpg"
+            autoPlay={motion === "running"}
             muted
             loop
             playsInline
@@ -104,12 +154,11 @@ function Index() {
             aria-hidden="true"
           />
 
-
           <div className="relative z-10 mx-auto w-full max-w-4xl px-4 py-12 text-center lg:max-w-6xl lg:px-10">
             <div className="mx-auto mb-5 flex max-w-xl items-center justify-center gap-3 border-b border-primary-foreground/25 pb-4 text-left lg:max-w-2xl">
               <Seal className="size-10 shrink-0 text-seal" />
               <div>
-                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent">
+                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent-on-dark">
                   Office of the President
                 </p>
                 <p className="font-display text-sm font-bold uppercase leading-tight sm:text-base">
@@ -117,9 +166,9 @@ function Index() {
                 </p>
               </div>
             </div>
-            <h1 className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-foreground/80">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-foreground/80">
               Current Reporting Period
-            </h1>
+            </p>
             <div
               className="my-2 font-display text-[26vw] font-black leading-[0.85] tabular-nums drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)] sm:text-[10rem] lg:text-[13rem]"
               aria-hidden="true"
@@ -127,9 +176,9 @@ function Index() {
               {displayedStreak}
             </div>
             <span className="sr-only">{stats.currentStreak} days</span>
-            <p className="mx-auto max-w-xl font-display text-base font-bold uppercase leading-snug tracking-wide sm:text-2xl lg:max-w-3xl lg:text-3xl">
+            <h1 className="mx-auto max-w-xl font-display text-base font-bold uppercase leading-snug tracking-wide sm:text-2xl lg:max-w-3xl lg:text-3xl">
               {HERO_HEADLINE}
-            </p>
+            </h1>
 
             <dl className="mx-auto mt-6 grid max-w-md grid-cols-2 gap-px overflow-hidden border border-primary-foreground/25 bg-primary-foreground/25 text-left backdrop-blur-sm lg:max-w-2xl">
               <div className="bg-primary/85 px-3 py-2">
@@ -158,12 +207,14 @@ function Index() {
               officially, and not particularly well.
             </p>
 
-            <button
+            <Button
+              variant="accent"
+              size="block"
               onClick={() => scrollToId("what-reset-the-clock")}
-              className="mt-6 w-full max-w-md border-2 border-accent bg-accent px-5 py-3 font-display text-sm font-bold uppercase tracking-[0.12em] text-accent-foreground transition hover:bg-accent/85"
+              className="mt-6 max-w-md"
             >
               What reset the clock? ↓
-            </button>
+            </Button>
           </div>
         </section>
 
@@ -171,53 +222,21 @@ function Index() {
           <AdSlot label="Advertisement" />
 
           {/* Featured incident */}
-          <section id="what-reset-the-clock" className="scroll-mt-16">
+          <section id="what-reset-the-clock" className="scroll-mt-20">
             <SectionHeading eyebrow="Featured Report" title="What Reset the Clock?" />
             {latest ? (
-              <article className="border border-border bg-card shadow-sm">
-                <IncidentMedia
-                  videoUrl={latest.videoUrl}
-                  imageUrl={latest.imageUrl}
-                  imageCredit={latest.imageCredit}
-                  headline={latest.headline}
-                />
-                <div className="space-y-4 p-4 sm:p-6">
-                  <div className="flex flex-wrap items-center gap-3">
-                    <StatusBadge status={latest.status} />
-                    <span className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-                      {formatDate(latest.date)}
-                      {latest.location ? ` · ${latest.location}` : ""}
-                    </span>
-                  </div>
-                  <h3 className="font-display text-2xl font-bold leading-tight">
-                    {latest.headline}
-                  </h3>
-                  <p className="leading-relaxed text-muted-foreground">{latest.description}</p>
-                  {latest.source && (
-                    <a
-                      href={latest.source.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block text-sm font-semibold text-accent underline underline-offset-4"
-                    >
-                      Source: {latest.source.label} ↗
-                    </a>
-                  )}
-
-                  <div className="border-t border-border pt-4">
-                    <OfficialResponse text={latest.defense} />
-                  </div>
-
-                  <ShareBar title={`${stats.currentStreak} days since the last alleged incident`} />
-                </div>
-              </article>
+              <IncidentCard
+                incident={latest}
+                variant="featured"
+                shareTitle={`${stats.currentStreak} days since the last alleged incident`}
+              />
             ) : (
               <p className="text-muted-foreground">No incidents on record.</p>
             )}
           </section>
 
           {/* Statistics */}
-          <section id="statistics" className="mt-12 scroll-mt-16">
+          <section id="statistics" className="mt-12 scroll-mt-20">
             <div className="mb-4 flex items-center gap-3 border-b-2 border-primary pb-2">
               <Seal className="size-10 shrink-0 text-primary" />
               <div className="flex-1">
@@ -249,78 +268,17 @@ function Index() {
           <AdSlot label="Advertisement" />
 
           {/* Incident log */}
-          <section id="incident-log" className="mt-6 scroll-mt-16">
+          <section id="incident-log" className="mt-6 scroll-mt-20">
             <SectionHeading eyebrow="Public Record" title="The Incident Log" />
             <ol className="space-y-4">
               {sortedIncidents.map((inc, i) => (
-                <li key={inc.id}>
+                <li key={inc.slug}>
                   <Reveal>
-                  <article
-                    id={`incident-${inc.id}`}
-                    className="scroll-mt-16 overflow-hidden border border-border bg-card shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-primary/35 hover:shadow-md"
-                  >
-                    {/* Card header: file number, status, date */}
-                    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 border-b border-border px-4 py-3 sm:px-5">
-                      <div className="flex min-w-0 flex-wrap items-center gap-2">
-                        <span className="border border-border bg-muted px-2 py-1 font-display text-[11px] font-bold tabular-nums tracking-wider">
-                          FILE №{String(sortedIncidents.length - i).padStart(3, "0")}
-                        </span>
-                        <StatusBadge status={inc.status} />
-                      </div>
-                      <time
-                        dateTime={inc.date}
-                        className="max-w-32 text-right text-[11px] font-semibold uppercase leading-relaxed tracking-[0.1em] text-muted-foreground sm:max-w-none sm:text-xs"
-                      >
-                        {inc.dateLabel ?? formatDate(inc.date)}
-                      </time>
-                    </div>
-
-                    {/* Full-width responsive source media */}
-                    <div className="px-4 pt-4 sm:px-5 sm:pt-5">
-                      <CompactMedia
-                        videoUrl={inc.videoUrl}
-                        imageUrl={inc.imageUrl}
-                        imageCredit={inc.imageCredit}
-                        headline={inc.headline}
-                        sourceUrl={inc.source?.url}
-                        sourceLabel={inc.source?.label}
-                      />
-                    </div>
-
-                    {/* Card body */}
-                    <div className="px-4 pb-4 pt-4 sm:px-5 sm:pb-5">
-                      <div className="min-w-0">
-                        <h3 className="font-display text-lg font-bold leading-snug">
-                          {inc.headline}
-                        </h3>
-                        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                          {inc.description}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Official response */}
-                    {inc.defense && (
-                      <div className="border-t border-border px-4 py-4 sm:px-5">
-                        <OfficialResponse text={inc.defense} />
-                      </div>
-                    )}
-
-                    {/* Public poll */}
-                    <div className="border-t border-border">
-                      <IncidentPoll incidentId={inc.id} />
-                    </div>
-
-                    {/* Expandable research drawer */}
-                    <ResearchDrawer
-                      established={inc.established}
-                      notes={inc.notes}
-                      references={inc.references}
-                      permalink={`#incident-${inc.id}`}
-                      sourceUrl={inc.source?.url}
-                      sourceLabel={inc.source?.label}
+                    <IncidentCard
+                      incident={inc}
+                      variant="log"
+                      fileNumber={sortedIncidents.length - i}
                     />
-                  </article>
                   </Reveal>
                   {i === 1 && <AdSlot label="Advertisement" />}
                 </li>
@@ -329,7 +287,7 @@ function Index() {
           </section>
 
           {/* Public submissions */}
-          <section id="submit-report" className="mt-12 scroll-mt-16">
+          <section id="submit-report" className="mt-12 scroll-mt-20">
             <SectionHeading eyebrow="Public Tip Line" title="Submit an Incident Report" />
             <p className="mb-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
               Send the editorial desk an alleged incident and a supporting link. Every submission is
@@ -360,12 +318,12 @@ function Index() {
               </p>
             </div>
             <div className="mt-3 flex flex-col gap-2 sm:mt-0 sm:flex-row">
-              <Button asChild variant="outline" className="rounded-none">
+              <Button asChild variant="outline">
                 <a href="https://kalshi.com/t/grul7kme" target="_blank" rel="noopener noreferrer">
                   Kalshi Markets <ExternalLink aria-hidden="true" />
                 </a>
               </Button>
-              <Button asChild variant="outline" className="rounded-none">
+              <Button asChild variant="outline">
                 <a href="https://kalshi.com/t/hgztgz1n" target="_blank" rel="noopener noreferrer">
                   Kalshi Perpetuals <ExternalLink aria-hidden="true" />
                 </a>
@@ -377,7 +335,7 @@ function Index() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-8 border-t-4 border-accent bg-primary text-primary-foreground">
+        <footer className="on-navy mt-8 border-t-4 border-accent bg-primary text-primary-foreground">
           <div className="mx-auto max-w-4xl space-y-4 px-4 py-10">
             <div className="flex items-center gap-3">
               <Seal className="size-10 text-seal" />
@@ -394,14 +352,20 @@ function Index() {
               read as an assertion of fact about any person.
             </p>
             <address className="border-l-2 border-accent pl-3 text-xs not-italic leading-relaxed text-primary-foreground/70">
-              <span className="block font-bold uppercase text-primary-foreground">Office address</span>
-              1600 Weast Pennsylvania Avenue<br />
+              <span className="block font-bold uppercase text-primary-foreground">
+                Office address
+              </span>
+              1600 Weast Pennsylvania Avenue
+              <br />
               Washington, DC 20500
             </address>
             <nav
               aria-label="Information and policies"
               className="flex flex-wrap gap-x-5 gap-y-2 pt-2"
             >
+              <Button asChild variant="link">
+                <Link to="/disclaimer">Disclaimer</Link>
+              </Button>
               {[
                 { label: "About", modal: "About" },
                 { label: "Contact Me", modal: "Contact" },
@@ -415,15 +379,14 @@ function Index() {
                   variant="link"
                   onClick={() => setModal(item.modal)}
                   aria-haspopup="dialog"
-                  className="h-auto rounded-none p-0 text-xs font-bold uppercase text-primary-foreground underline underline-offset-4 hover:text-primary-foreground/80"
+                  className="h-auto p-0 text-xs font-bold uppercase text-primary-foreground underline underline-offset-4 hover:text-primary-foreground/80"
                 >
                   {item.label}
                 </Button>
               ))}
             </nav>
             <p className="pt-2 text-[11px] text-primary-foreground/50">
-              © {new Date(now).getUTCFullYear()} — No rights reserved. Absolutely no authority
-              claimed.
+              © {siteYear(now)} — No rights reserved. Absolutely no authority claimed.
             </p>
           </div>
         </footer>
@@ -445,7 +408,8 @@ function Index() {
       <Modal open={modal === "Methodology"} onClose={() => setModal(null)} title="Methodology">
         <p>
           The counter is the number of whole days between the most recent logged incident date and
-          today, computed in UTC.
+          today, computed on the U.S. Eastern calendar — so it turns over at midnight in Washington,
+          not somewhere else.
         </p>
         <p>
           Streaks are the gaps between consecutive logged incidents. The "previous record" is the
@@ -480,7 +444,7 @@ function Index() {
             setModal(null);
             window.setTimeout(() => scrollToId("submit-report"), 0);
           }}
-          className="mt-2 rounded-none uppercase"
+          className="mt-2 uppercase"
         >
           Contact the editorial desk
         </Button>

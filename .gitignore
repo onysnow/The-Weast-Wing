@@ -30,3 +30,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local environment. NOTE: .env itself stays tracked — Lovable's build reads it,
+# and it holds only publishable (browser-visible) Supabase values. Real secrets
+# such as SUPABASE_SERVICE_ROLE_KEY live in the platform environment, never here.
+.env.local
+.env.*.local

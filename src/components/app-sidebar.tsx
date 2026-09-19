@@ -1,8 +1,10 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu } from "lucide-react";
+import { Menu, Pause, Play } from "lucide-react";
 import type { ReactNode } from "react";
-import { Seal } from "@/components/site";
+import { Seal } from "@/components/brand/seal";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { setMotionState, useMotionState } from "@/lib/motion-preference";
 import {
   Sidebar,
   SidebarContent,
@@ -24,31 +26,35 @@ const AGENCIES = [
   { to: "/bea", acronym: "BEA", name: "Bureau of Executive Anomalies" },
 ] as const;
 
+// These ids must match the section ids in src/routes/index.tsx.
 const POS_SECTIONS = [
   { id: "hero", label: "Counter" },
-  { id: "latest", label: "Latest report" },
+  { id: "what-reset-the-clock", label: "Latest report" },
   { id: "statistics", label: "Statistics" },
-  { id: "log", label: "Incident log" },
+  { id: "incident-log", label: "Incident log" },
   { id: "submit-report", label: "Submit report" },
 ] as const;
 
 /* ------------------------------- Sidebar -------------------------------- */
 
 function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
+  const { isMobile, setOpenMobile } = useSidebar();
+  // On mobile the sidebar is a sheet laid over the page, so jumping to a
+  // section has to close it or the sheet covers the thing you asked for.
+  const closeOnMobile = () => {
+    if (isMobile) setOpenMobile(false);
+  };
+
   return (
-    <Sidebar
-      collapsible="offcanvas"
-      side="left"
-      className="border-r-2 border-accent"
-    >
-      <SidebarHeader className="bg-primary text-primary-foreground">
+    <Sidebar collapsible="offcanvas" side="left" className="border-r-2 border-accent">
+      <SidebarHeader className="on-navy bg-primary text-primary-foreground">
         <div className="flex items-center gap-2 px-1 py-2">
           <Seal className="size-9 shrink-0 text-seal" />
           <div className="min-w-0">
             <p className="font-display text-sm font-bold uppercase leading-tight tracking-[0.04em]">
               The Weast Wing
             </p>
-            <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-accent">
+            <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-accent-on-dark">
               Agency directory
             </p>
           </div>
@@ -67,7 +73,7 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
                 return (
                   <SidebarMenuItem key={agency.acronym}>
                     <SidebarMenuButton asChild isActive={active}>
-                      <Link to={agency.to}>
+                      <Link to={agency.to} onClick={closeOnMobile}>
                         <span className="flex items-center gap-1 font-mono text-xs font-bold text-accent">
                           {agency.acronym}
                           {agency.acronym === "POS" && (
@@ -77,9 +83,7 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
                             />
                           )}
                         </span>
-                        <span className="text-xs font-semibold leading-tight">
-                          {agency.name}
-                        </span>
+                        <span className="text-xs font-semibold leading-tight">{agency.name}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -97,7 +101,9 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
                 {POS_SECTIONS.map((section) => (
                   <SidebarMenuItem key={section.id}>
                     <SidebarMenuButton asChild>
-                      <a href={`#${section.id}`}>{section.label}</a>
+                      <a href={`#${section.id}`} onClick={closeOnMobile}>
+                        {section.label}
+                      </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
@@ -105,6 +111,20 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
             </SidebarGroupContent>
           </SidebarGroup>
         )}
+        <SidebarGroup>
+          <SidebarGroupLabel>Screenings</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/quiz" onClick={closeOnMobile}>
+                    Aptitude screenings
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter>
@@ -112,8 +132,7 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
           Our mission: defend the President. Badly.
         </p>
         <p className="px-2 pt-1 text-[10px] leading-relaxed text-muted-foreground">
-          A parody site. Not an official government resource. Allegations are
-          unproven.
+          A parody site. Not an official government resource. Allegations are unproven.
         </p>
       </SidebarFooter>
     </Sidebar>
@@ -126,15 +145,68 @@ function BarsTrigger() {
   const { toggleSidebar, open, openMobile } = useSidebar();
   const isOpen = open || openMobile;
   return (
-    <button
-      type="button"
+    <Button
+      variant="bar"
+      size="icon-lg"
       onClick={toggleSidebar}
       aria-label={isOpen ? "Close navigation" : "Open navigation"}
       aria-expanded={isOpen}
-      className="flex size-11 shrink-0 items-center justify-center text-primary-foreground transition-colors hover:bg-primary-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+      className="shrink-0"
     >
-      <Menu className="size-6" aria-hidden="true" />
-    </button>
+      <Menu className="size-7" strokeWidth={2.25} aria-hidden="true" />
+    </Button>
+  );
+}
+
+/* --------------------------- Motion control ------------------------------ */
+
+const NOTICE = "A parody site. Not an official government resource. Allegations are unproven.";
+
+function MotionToggle() {
+  const motion = useMotionState();
+  const paused = motion === "paused";
+
+  return (
+    <Button
+      variant="bar"
+      onClick={() => setMotionState(paused ? "running" : "paused")}
+      aria-pressed={paused}
+      className="h-auto min-h-8 shrink-0 gap-1 self-stretch border-l border-border bg-muted px-2 text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground sm:text-[11px]"
+    >
+      {paused ? (
+        <Play className="size-3" aria-hidden="true" />
+      ) : (
+        <Pause className="size-3" aria-hidden="true" />
+      )}
+      <span>{paused ? "Play motion" : "Pause motion"}</span>
+    </Button>
+  );
+}
+
+/* ------------------------------- Ticker ---------------------------------- */
+
+function NoticeTicker() {
+  return (
+    <div className="flex items-center border-b border-border bg-muted">
+      {/* The moving copy is decorative duplication; the notice itself is
+          announced once, below, so screen readers don't hear it six times. */}
+      <div className="flex flex-1 overflow-hidden py-1.5" aria-hidden="true">
+        {[0, 1].map((i) => (
+          <div key={i} className="marquee-track">
+            {[0, 1, 2].map((j) => (
+              <span
+                key={j}
+                className="whitespace-nowrap px-6 text-[10px] uppercase tracking-[0.14em] text-muted-foreground sm:text-[11px]"
+              >
+                ⚠ {NOTICE}
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+      <p className="sr-only">{NOTICE}</p>
+      <MotionToggle />
+    </div>
   );
 }
 
@@ -152,32 +224,10 @@ export function WeastShell({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider defaultOpen={false}>
       <AppSidebar activeAgency={activeAgency} />
-      <div
-        className={cn(
-          "flex min-h-svh w-full flex-col bg-background font-sans text-foreground",
-        )}
-      >
-        <div
-          className="flex overflow-hidden border-b border-border bg-muted py-1.5"
-          role="marquee"
-          aria-label="Site notice"
-        >
-          {[0, 1].map((i) => (
-            <div key={i} className="marquee-track" aria-hidden={i === 1}>
-              {[0, 1, 2].map((j) => (
-                <span
-                  key={j}
-                  className="whitespace-nowrap px-6 text-[10px] uppercase tracking-[0.14em] text-muted-foreground sm:text-[11px]"
-                >
-                  ⚠ A parody site. Not an official government resource.
-                  Allegations are unproven.
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
+      <div className={cn("flex min-h-svh w-full flex-col bg-background font-sans text-foreground")}>
+        <NoticeTicker />
 
-        <header className="bg-primary text-primary-foreground">
+        <header className="on-navy sticky top-0 z-30 bg-primary text-primary-foreground shadow-[0_1px_0_0_var(--color-accent)]">
           <div className="flex w-full items-center gap-2 px-2 py-2.5 sm:px-4 sm:py-4 lg:px-8">
             <BarsTrigger />
             <Seal className="size-11 shrink-0 text-seal" />

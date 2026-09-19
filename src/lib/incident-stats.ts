@@ -2,10 +2,77 @@ import { incidents, type Incident } from "@/data/incidents";
 
 const DAY_MS = 86_400_000;
 
+/**
+ * The newsroom clock. Incident dates are US calendar dates, so "today" has to
+ * be the US date too — computing in UTC rolled the counter over at 7 or 8pm
+ * the previous evening for the entire audience.
+ */
+export const SITE_TIME_ZONE = "America/New_York";
+
+/**
+ * Eastern Standard Time, in milliseconds. Only used if the runtime cannot
+ * resolve named time zones at all (see below) — an hour out during daylight
+ * saving, which beats being five hours out.
+ */
+const EST_OFFSET_MS = 5 * 60 * 60 * 1000;
+
+let cachedFormatter: Intl.DateTimeFormat | null | undefined;
+
+/**
+ * A formatter for the site's zone, or null where the runtime has no zone data.
+ *
+ * Node built with small-icu, and some slim container images, throw
+ * `RangeError: Invalid time zone specified` for any named zone. Building this
+ * at module scope meant that throw happened on *import* — which would take out
+ * server rendering of the whole site, not just the counter. Built lazily and
+ * guarded instead, and memoized so the cost is paid once.
+ */
+function siteDateParts(): Intl.DateTimeFormat | null {
+  if (cachedFormatter !== undefined) return cachedFormatter;
+  try {
+    cachedFormatter = new Intl.DateTimeFormat("en-CA", {
+      timeZone: SITE_TIME_ZONE,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+  } catch {
+    console.warn(
+      `[clock] runtime cannot resolve ${SITE_TIME_ZONE}; falling back to a fixed EST offset`,
+    );
+    cachedFormatter = null;
+  }
+  return cachedFormatter;
+}
+
+/** Test seam: forget the memoized formatter. Not used by application code. */
+export function resetSiteClockForTests(): void {
+  cachedFormatter = undefined;
+}
+
 /** Parse a YYYY-MM-DD string as a UTC midnight timestamp. */
 export function parseDate(d: string): number {
   const [y, m, day] = d.split("-").map(Number);
   return Date.UTC(y ?? 1970, (m ?? 1) - 1, day ?? 1);
+}
+
+/**
+ * The calendar date in the site's time zone at `instant`, as a UTC-midnight
+ * timestamp — directly comparable with `parseDate`. Server and browser agree
+ * because both ask for the same named zone rather than their own offset.
+ */
+export function siteToday(instant: number = Date.now()): number {
+  const formatter = siteDateParts();
+  // en-CA formats as YYYY-MM-DD.
+  if (formatter) return parseDate(formatter.format(new Date(instant)));
+  // No zone data: shift by a fixed EST offset and read the UTC date off that.
+  const shifted = new Date(instant - EST_OFFSET_MS);
+  return Date.UTC(shifted.getUTCFullYear(), shifted.getUTCMonth(), shifted.getUTCDate());
+}
+
+/** The calendar year in the site's time zone. */
+export function siteYear(instant: number = Date.now()): number {
+  return new Date(siteToday(instant)).getUTCFullYear();
 }
 
 export function daysBetween(a: number, b: number): number {
@@ -53,9 +120,10 @@ function gaps(): number[] {
 
 export function computeStats(now: number = Date.now()): Stats {
   const g = gaps();
-  const currentStreak = latestIncident ? daysBetween(parseDate(latestIncident.date), now) : 0;
+  const today = siteToday(now);
+  const currentStreak = latestIncident ? daysBetween(parseDate(latestIncident.date), today) : 0;
   const previousRecord = g.length ? Math.max(...g) : 0;
-  const year = new Date(now).getUTCFullYear();
+  const year = siteYear(now);
 
   return {
     total: countedIncidents.length,
