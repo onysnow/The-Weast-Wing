@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { Seal } from "@/components/brand/seal";
+import { Button } from "@/components/ui/button";
 import { subscribeToMailingList } from "@/lib/mailing-list.functions";
 import { mailingListSignupSchema } from "@/lib/mailing-list.schemas";
 
@@ -72,14 +73,15 @@ export function EmailSignupPopup() {
       aria-labelledby="mailing-list-title"
       className="fixed bottom-4 left-4 right-4 z-50 max-w-sm animate-in border-2 border-accent bg-card p-4 shadow-2xl duration-300 ease-out fade-in-0 slide-in-from-bottom-4 sm:bottom-6 sm:left-auto sm:right-6"
     >
-      <button
-        type="button"
+      <Button
+        variant="ghost"
+        size="icon"
         onClick={dismiss}
         aria-label="Close mailing list notice"
-        className="absolute right-1 top-1 flex size-9 items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="absolute right-1 top-1 text-muted-foreground hover:text-foreground"
       >
-        <X className="size-4" aria-hidden="true" />
-      </button>
+        <X aria-hidden="true" />
+      </Button>
 
       <div className="flex items-start gap-3 pr-7">
         <Seal className="size-9 shrink-0 text-seal" />
@@ -119,7 +121,7 @@ export function EmailSignupPopup() {
             maxLength={255}
             aria-invalid={Boolean(error)}
             aria-describedby={error ? "mailing-list-error" : undefined}
-            className="w-full border border-border bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="w-full border border-input bg-background px-3 py-2 text-sm"
           />
           {error && (
             <p id="mailing-list-error" className="text-xs text-destructive">
@@ -136,13 +138,14 @@ export function EmailSignupPopup() {
               autoComplete="off"
             />
           </div>
-          <button
+          <Button
             type="submit"
+            variant="accent"
             disabled={status === "saving"}
-            className="w-full border-2 border-accent bg-accent px-4 py-2 font-display text-xs font-bold uppercase tracking-[0.12em] text-accent-foreground transition hover:bg-accent/85 disabled:opacity-60"
+            className="w-full text-xs"
           >
             {status === "saving" ? "Filing…" : "Sign me up"}
-          </button>
+          </Button>
           <p className="text-[10px] leading-relaxed text-muted-foreground">
             Parody site. We store only your email address.
           </p>

@@ -95,6 +95,16 @@
   /* --ring equals --primary, so the focus ring was invisible against navy
    * (1:1). This is the same near-white as the text there: 14.31:1. */
   --ring-on-dark: oklch(0.99 0.003 250);
+  /*
+   * Focus is a site-wide convention, not a per-component decision. Every
+   * focusable element gets the same indicator from the base rule below, and
+   * the two override utilities near the bottom of this file read the same
+   * variables. A dark surface redefines them with `on-navy`; nothing else
+   * overrides them.
+   * Defaults are for the paper surfaces: navy on near-white, 11.4:1.
+   */
+  --focus: oklch(0.28 0.09 259);
+  --focus-contrast: oklch(0.99 0.003 250);
   --destructive: oklch(0.52 0.21 27);
   --destructive-foreground: oklch(0.99 0.003 250);
   --border: oklch(0.88 0.012 252);
@@ -167,6 +177,72 @@
 
   html {
     scroll-behavior: smooth;
+  }
+
+  /*
+   * The focus convention applies to everything focusable by default, so a
+   * plain <a> in body copy is covered without opting in. Components override
+   * it only with `focus-ring-inset` or `focus-invert`.
+   */
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+}
+
+/* ---------------------------- Interaction -------------------------------
+ *
+ * The base rule above already gives every focusable element the default
+ * indicator. These exist for the cases that need something else; components
+ * do not invent their own, which is how the header trigger ended up with a
+ * ring nothing else on the site had.
+ *
+ *   on-navy          declares a surface dark, so anything inside focuses light
+ *   focus-ring       re-asserts the default where something has overridden it
+ *   focus-ring-inset same outline drawn inside, for full-bleed rows
+ *   focus-invert     for controls inside a solid bar, where an outline reads
+ *                    as a box floating over the glyph — the target fills instead
+ *   hover-wash       the matching hover for those bar-mounted controls
+ *
+ * Every indicator clears WCAG 1.4.11's 3:1 floor on either surface: navy on
+ * paper is 11.4:1, paper on navy 14.31:1.
+ */
+
+@utility on-navy {
+  --focus: var(--primary-foreground);
+  --focus-contrast: var(--primary);
+}
+
+@utility focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+}
+
+/* Same indicator, drawn inside the box. For full-bleed rows — a drawer
+ * summary, a list item — where an offset outline would be clipped by the
+ * card's own overflow. */
+@utility focus-ring-inset {
+  &:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+}
+
+@utility focus-invert {
+  &:focus-visible {
+    background-color: var(--focus);
+    color: var(--focus-contrast);
+    outline: none;
+  }
+}
+
+/* The wash a bar-mounted control gets on hover, in the surface's own ink so
+ * it works on navy and paper alike. */
+@utility hover-wash {
+  &:hover {
+    background-color: color-mix(in oklch, currentColor 12%, transparent);
   }
 }
 

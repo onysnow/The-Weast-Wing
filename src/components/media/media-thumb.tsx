@@ -69,7 +69,7 @@ export function MediaThumb({
     <button
       type="button"
       onClick={() => setExpanded(true)}
-      className="group relative aspect-video w-full overflow-hidden border border-border bg-primary/90 transition-[border-color,box-shadow] duration-200 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-on-dark focus-visible:ring-offset-2"
+      className="group relative aspect-video w-full overflow-hidden border border-border bg-primary/90 transition-[border-color,box-shadow] duration-200 hover:border-accent"
       aria-label={`Play video: ${label}`}
     >
       <img

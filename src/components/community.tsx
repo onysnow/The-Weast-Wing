@@ -77,7 +77,7 @@ export function IncidentPoll({ incidentId }: { incidentId: string }) {
           variant={choice === "nothing_happened" ? "default" : "outline"}
           disabled={pending}
           onClick={() => vote("nothing_happened")}
-          className="h-auto min-h-12 justify-between gap-3 whitespace-normal rounded-none px-3 py-2 text-left"
+          className="h-auto min-h-12 justify-between gap-3 whitespace-normal px-3 py-2 text-left"
         >
           Nothing happened
           <span className="tabular-nums opacity-75">{percent(totals.nothingHappened)}%</span>
@@ -87,7 +87,7 @@ export function IncidentPoll({ incidentId }: { incidentId: string }) {
           variant={choice === "definitely_happened" ? "destructive" : "outline"}
           disabled={pending}
           onClick={() => vote("definitely_happened")}
-          className="h-auto min-h-12 justify-between gap-3 whitespace-normal rounded-none px-3 py-2 text-left"
+          className="h-auto min-h-12 justify-between gap-3 whitespace-normal px-3 py-2 text-left"
         >
           Just a fart to def shit himself
           <span className="tabular-nums opacity-75">{percent(totals.definitelyHappened)}%</span>
@@ -204,7 +204,7 @@ export function IncidentSubmissionForm() {
         <Button
           type="submit"
           disabled={pending}
-          className="rounded-none font-bold uppercase tracking-wider"
+          className="font-bold uppercase tracking-wider"
         >
           {pending ? "Submitting…" : "Submit incident report"}
         </Button>

@@ -2,6 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, Pause, Play } from "lucide-react";
 import type { ReactNode } from "react";
 import { Seal } from "@/components/brand/seal";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { setMotionState, useMotionState } from "@/lib/motion-preference";
 import {
@@ -50,7 +51,7 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
       side="left"
       className="border-r-2 border-accent"
     >
-      <SidebarHeader className="bg-primary text-primary-foreground">
+      <SidebarHeader className="on-navy bg-primary text-primary-foreground">
         <div className="flex items-center gap-2 px-1 py-2">
           <Seal className="size-9 shrink-0 text-seal" />
           <div className="min-w-0">
@@ -136,20 +137,17 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
 function BarsTrigger() {
   const { toggleSidebar, open, openMobile } = useSidebar();
   const isOpen = open || openMobile;
-  // Keyboard focus inverts the button — paper fill, navy icon — instead of
-  // drawing a ring on top of it. The two surfaces are the ones the site
-  // already pairs everywhere, and the swap measures 14.31:1 against the navy
-  // header, well over the 3:1 WCAG 1.4.11 asks of a non-text indicator.
   return (
-    <button
-      type="button"
+    <Button
+      variant="bar"
+      size="icon-lg"
       onClick={toggleSidebar}
       aria-label={isOpen ? "Close navigation" : "Open navigation"}
       aria-expanded={isOpen}
-      className="flex size-11 shrink-0 items-center justify-center text-primary-foreground transition-colors hover:bg-primary-foreground/10 focus-visible:bg-primary-foreground focus-visible:text-primary focus-visible:outline-none"
+      className="shrink-0"
     >
       <Menu className="size-7" strokeWidth={2.25} aria-hidden="true" />
-    </button>
+    </Button>
   );
 }
 
@@ -162,11 +160,11 @@ function MotionToggle() {
   const paused = motion === "paused";
 
   return (
-    <button
-      type="button"
+    <Button
+      variant="bar"
       onClick={() => setMotionState(paused ? "running" : "paused")}
       aria-pressed={paused}
-      className="flex min-h-8 shrink-0 items-center gap-1 self-stretch border-l border-border bg-muted px-2 text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring sm:text-[11px]"
+      className="h-auto min-h-8 shrink-0 gap-1 self-stretch border-l border-border bg-muted px-2 text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground sm:text-[11px]"
     >
       {paused ? (
         <Play className="size-3" aria-hidden="true" />
@@ -174,7 +172,7 @@ function MotionToggle() {
         <Pause className="size-3" aria-hidden="true" />
       )}
       <span>{paused ? "Play motion" : "Pause motion"}</span>
-    </button>
+    </Button>
   );
 }
 
@@ -226,7 +224,7 @@ export function WeastShell({ children }: { children: ReactNode }) {
       >
         <NoticeTicker />
 
-        <header className="sticky top-0 z-30 bg-primary text-primary-foreground shadow-[0_1px_0_0_var(--color-accent)]">
+        <header className="on-navy sticky top-0 z-30 bg-primary text-primary-foreground shadow-[0_1px_0_0_var(--color-accent)]">
           <div className="flex w-full items-center gap-2 px-2 py-2.5 sm:px-4 sm:py-4 lg:px-8">
             <BarsTrigger />
             <Seal className="size-11 shrink-0 text-seal" />

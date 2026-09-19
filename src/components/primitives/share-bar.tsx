@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { Button } from "@/components/ui/button";
+
 export function ShareBar({ title, url }: { title: string; url?: string }) {
   const [copied, setCopied] = useState<string | null>(null);
   const [href, setHref] = useState(url ?? "");
@@ -17,9 +19,6 @@ export function ShareBar({ title, url }: { title: string; url?: string }) {
     { label: "Reddit", href: `https://www.reddit.com/submit?url=${enc}&title=${encT}` },
     { label: "Threads", href: `https://www.threads.net/intent/post?text=${encT}%20${enc}` },
   ];
-
-  const shareBtn =
-    "border border-border bg-card px-3 py-2 text-xs font-bold uppercase tracking-wider hover:bg-muted";
 
   const copyLink = async () => {
     try {
@@ -53,26 +52,22 @@ export function ShareBar({ title, url }: { title: string; url?: string }) {
 
   return (
     <div className="flex flex-wrap gap-2">
-      <button onClick={copyLink} className={shareBtn}>
+      <Button variant="chip" size="sm" onClick={copyLink}>
         {copied === "link" ? "Link copied" : "Copy link"}
-      </button>
+      </Button>
       {links.map((l) => (
-        <a
-          key={l.label}
-          href={l.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={shareBtn}
-        >
-          {l.label}
-        </a>
+        <Button key={l.label} variant="chip" size="sm" asChild>
+          <a href={l.href} target="_blank" rel="noopener noreferrer">
+            {l.label}
+          </a>
+        </Button>
       ))}
-      <button onClick={() => shareNative("Instagram")} className={shareBtn}>
+      <Button variant="chip" size="sm" onClick={() => shareNative("Instagram")}>
         {copied === "instagram" ? "Link copied" : "Instagram"}
-      </button>
-      <button onClick={() => shareNative("TikTok")} className={shareBtn}>
+      </Button>
+      <Button variant="chip" size="sm" onClick={() => shareNative("TikTok")}>
         {copied === "tiktok" ? "Link copied" : "TikTok"}
-      </button>
+      </Button>
     </div>
   );
 }

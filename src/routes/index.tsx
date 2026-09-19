@@ -103,7 +103,7 @@ function Index() {
         {/* Hero — full-screen background video with the counter on top */}
         <section
           id="hero"
-          className="relative flex min-h-[100svh] scroll-mt-20 items-center justify-center overflow-hidden border-b-4 border-accent bg-primary text-primary-foreground"
+          className="on-navy relative flex min-h-[100svh] scroll-mt-20 items-center justify-center overflow-hidden border-b-4 border-accent bg-primary text-primary-foreground"
         >
           <video
             ref={heroVideo}
@@ -177,12 +177,14 @@ function Index() {
               officially, and not particularly well.
             </p>
 
-            <button
+            <Button
+              variant="accent"
+              size="block"
               onClick={() => scrollToId("what-reset-the-clock")}
-              className="mt-6 w-full max-w-md border-2 border-accent bg-accent px-5 py-3 font-display text-sm font-bold uppercase tracking-[0.12em] text-accent-foreground transition hover:bg-accent/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-on-dark focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
+              className="mt-6 max-w-md"
             >
               What reset the clock? ↓
-            </button>
+            </Button>
           </div>
         </section>
 
@@ -286,12 +288,12 @@ function Index() {
               </p>
             </div>
             <div className="mt-3 flex flex-col gap-2 sm:mt-0 sm:flex-row">
-              <Button asChild variant="outline" className="rounded-none">
+              <Button asChild variant="outline">
                 <a href="https://kalshi.com/t/grul7kme" target="_blank" rel="noopener noreferrer">
                   Kalshi Markets <ExternalLink aria-hidden="true" />
                 </a>
               </Button>
-              <Button asChild variant="outline" className="rounded-none">
+              <Button asChild variant="outline">
                 <a href="https://kalshi.com/t/hgztgz1n" target="_blank" rel="noopener noreferrer">
                   Kalshi Perpetuals <ExternalLink aria-hidden="true" />
                 </a>
@@ -341,7 +343,7 @@ function Index() {
                   variant="link"
                   onClick={() => setModal(item.modal)}
                   aria-haspopup="dialog"
-                  className="h-auto rounded-none p-0 text-xs font-bold uppercase text-primary-foreground underline underline-offset-4 hover:text-primary-foreground/80"
+                  className="h-auto p-0 text-xs font-bold uppercase text-primary-foreground underline underline-offset-4 hover:text-primary-foreground/80"
                 >
                   {item.label}
                 </Button>
@@ -407,7 +409,7 @@ function Index() {
             setModal(null);
             window.setTimeout(() => scrollToId("submit-report"), 0);
           }}
-          className="mt-2 rounded-none uppercase"
+          className="mt-2 uppercase"
         >
           Contact the editorial desk
         </Button>

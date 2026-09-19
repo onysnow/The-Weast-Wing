@@ -19,7 +19,7 @@ export function ResearchDrawer({
 }) {
   return (
     <details className="group border-t border-border">
-      <summary className="flex min-h-12 cursor-pointer items-center justify-between px-4 py-3 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring sm:px-5 [&::-webkit-details-marker]:hidden">
+      <summary className="focus-ring-inset flex min-h-12 cursor-pointer items-center justify-between px-4 py-3 transition-colors hover:bg-muted sm:px-5 [&::-webkit-details-marker]:hidden">
         <span className="text-xs font-bold uppercase tracking-tight text-foreground">
           Research Dossier
         </span>
