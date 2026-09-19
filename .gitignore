@@ -31,8 +31,16 @@ dist-ssr
 *.sln
 *.sw?
 
-# Local environment. NOTE: .env itself stays tracked — Lovable's build reads it,
-# and it holds only publishable (browser-visible) Supabase values. Real secrets
-# such as SUPABASE_SERVICE_ROLE_KEY live in the platform environment, never here.
+# Local environment. NOTE: .env itself stays TRACKED — Lovable's build reads
+# it, and it holds only publishable (browser-visible) Supabase values, which
+# ship in the client bundle anyway. Real secrets — SUPABASE_SERVICE_ROLE_KEY,
+# QUIZ_ANSWER_SALT — live in the platform environment and are never committed.
+#
+# The repository is public, so the margin for error here is zero: anything
+# added to .env is published the moment it is pushed. Add new variables to
+# .env.example (placeholders only) and set the real values in the platform.
+# Untracking .env entirely is the safer end state, but only after confirming
+# Lovable has the six VITE_/SUPABASE_ values in its own environment — remove
+# it before that and the build loses its Supabase config.
 .env.local
 .env.*.local

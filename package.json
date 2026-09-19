@@ -14,7 +14,8 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "quiz:hash": "bun run scripts/hash-quiz-answers.ts"
   },
   "overrides": {
     "rolldown": "1.2.1"
