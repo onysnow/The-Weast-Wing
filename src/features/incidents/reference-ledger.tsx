@@ -7,11 +7,7 @@ import { ROLE_LABELS, getPlatformLabel } from "@/features/incidents/platform-lab
  * news sites, fact-checkers — renders with the same compact citation-row
  * treatment regardless of platform.
  */
-export function ReferenceLedger({
-  references,
-}: {
-  references?: Reference[] | undefined;
-}) {
+export function ReferenceLedger({ references }: { references?: Reference[] | undefined }) {
   if (!references || references.length === 0) return null;
 
   return (

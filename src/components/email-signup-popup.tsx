@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, m } from "motion/react";
 import { X } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { Seal } from "@/components/brand/seal";
 import { Button } from "@/components/ui/button";
+import { TRANSITION, noticeVariants } from "@/lib/motion";
 import { subscribeToMailingList } from "@/lib/mailing-list.functions";
 import { mailingListSignupSchema } from "@/lib/mailing-list.schemas";
 
@@ -64,93 +66,100 @@ export function EmailSignupPopup() {
     window.setTimeout(() => setVisible(false), 2600);
   };
 
-  if (!visible) return null;
-
   return (
-    <div
-      role="dialog"
-      aria-modal="false"
-      aria-labelledby="mailing-list-title"
-      className="fixed bottom-4 left-4 right-4 z-50 max-w-sm animate-in border-2 border-accent bg-card p-4 shadow-2xl duration-300 ease-out fade-in-0 slide-in-from-bottom-4 sm:bottom-6 sm:left-auto sm:right-6"
-    >
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={dismiss}
-        aria-label="Close mailing list notice"
-        className="absolute right-1 top-1 text-muted-foreground hover:text-foreground"
-      >
-        <X aria-hidden="true" />
-      </Button>
-
-      <div className="flex items-start gap-3 pr-7">
-        <Seal className="size-9 shrink-0 text-seal" />
-        <div>
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent">
-            Official Notice
-          </p>
-          <h2
-            id="mailing-list-title"
-            className="font-display text-sm font-bold uppercase leading-tight"
-          >
-            Join the Mailing List
-          </h2>
-        </div>
-      </div>
-
-      {status === "done" ? (
-        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-          Enrollment recorded. You will be notified the moment the Weast Wing has
-          another statement it cannot substantiate.
-        </p>
-      ) : (
-        <form onSubmit={submit} className="mt-3 space-y-2" noValidate>
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            Receive official updates, incident bulletins, and unconvincing
-            defenses of the President.
-          </p>
-          <label htmlFor="mailing-list-email" className="sr-only">
-            Email address
-          </label>
-          <input
-            id="mailing-list-email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="name@example.com"
-            maxLength={255}
-            aria-invalid={Boolean(error)}
-            aria-describedby={error ? "mailing-list-error" : undefined}
-            className="w-full border border-input bg-background px-3 py-2 text-sm"
-          />
-          {error && (
-            <p id="mailing-list-error" className="text-xs text-destructive">
-              {error}
-            </p>
-          )}
-          <div className="hidden" aria-hidden="true">
-            <label htmlFor="mailing-list-website">Website</label>
-            <input
-              ref={honeypot}
-              id="mailing-list-website"
-              name="website"
-              tabIndex={-1}
-              autoComplete="off"
-            />
-          </div>
+    <AnimatePresence>
+      {visible && (
+        <m.div
+          role="dialog"
+          aria-modal="false"
+          aria-labelledby="mailing-list-title"
+          variants={noticeVariants}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          transition={TRANSITION.base}
+          className="fixed bottom-4 left-4 right-4 z-50 max-w-sm border-2 border-accent bg-card p-4 shadow-2xl sm:bottom-6 sm:left-auto sm:right-6"
+        >
           <Button
-            type="submit"
-            variant="accent"
-            disabled={status === "saving"}
-            className="w-full text-xs"
+            variant="ghost"
+            size="icon"
+            onClick={dismiss}
+            aria-label="Close mailing list notice"
+            className="absolute right-1 top-1 text-muted-foreground hover:text-foreground"
           >
-            {status === "saving" ? "Filing…" : "Sign me up"}
+            <X aria-hidden="true" />
           </Button>
-          <p className="text-[10px] leading-relaxed text-muted-foreground">
-            Parody site. We store only your email address.
-          </p>
-        </form>
+
+          <div className="flex items-start gap-3 pr-7">
+            <Seal className="size-9 shrink-0 text-seal" />
+            <div>
+              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent">
+                Official Notice
+              </p>
+              <h2
+                id="mailing-list-title"
+                className="font-display text-sm font-bold uppercase leading-tight"
+              >
+                Join the Mailing List
+              </h2>
+            </div>
+          </div>
+
+          {status === "done" ? (
+            <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+              Enrollment recorded. You will be notified the moment the Weast Wing has another
+              statement it cannot substantiate.
+            </p>
+          ) : (
+            <form onSubmit={submit} className="mt-3 space-y-2" noValidate>
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Receive official updates, incident bulletins, and unconvincing defenses of the
+                President.
+              </p>
+              <label htmlFor="mailing-list-email" className="sr-only">
+                Email address
+              </label>
+              <input
+                id="mailing-list-email"
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="name@example.com"
+                maxLength={255}
+                aria-invalid={Boolean(error)}
+                aria-describedby={error ? "mailing-list-error" : undefined}
+                className="w-full border border-input bg-background px-3 py-2 text-sm"
+              />
+              {error && (
+                <p id="mailing-list-error" className="text-xs text-destructive">
+                  {error}
+                </p>
+              )}
+              <div className="hidden" aria-hidden="true">
+                <label htmlFor="mailing-list-website">Website</label>
+                <input
+                  ref={honeypot}
+                  id="mailing-list-website"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+              <Button
+                type="submit"
+                variant="accent"
+                disabled={status === "saving"}
+                className="w-full text-xs"
+              >
+                {status === "saving" ? "Filing…" : "Sign me up"}
+              </Button>
+              <p className="text-[10px] leading-relaxed text-muted-foreground">
+                Parody site. We store only your email address.
+              </p>
+            </form>
+          )}
+        </m.div>
       )}
-    </div>
+    </AnimatePresence>
   );
 }

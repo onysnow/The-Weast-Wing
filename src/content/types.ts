@@ -12,12 +12,7 @@
 export type ContentKind = "incident" | "article";
 
 export type ReferenceRole =
-  | "primary"
-  | "allegation"
-  | "fact-check"
-  | "transcript"
-  | "news"
-  | "commentary";
+  "primary" | "allegation" | "fact-check" | "transcript" | "news" | "commentary";
 
 export type Reference = {
   label: string;

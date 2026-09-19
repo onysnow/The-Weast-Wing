@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { WeastShell } from "@/components/app-sidebar";
 import { EmailSignupPopup } from "@/components/email-signup-popup";
+import { SiteMotionConfig } from "@/components/motion-provider";
 import { Button } from "@/components/ui/button";
 
 function NotFoundComponent() {
@@ -116,11 +117,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <WeastShell>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-        <EmailSignupPopup />
-      </WeastShell>
+      <SiteMotionConfig>
+        <WeastShell>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+          <EmailSignupPopup />
+        </WeastShell>
+      </SiteMotionConfig>
     </QueryClientProvider>
   );
 }

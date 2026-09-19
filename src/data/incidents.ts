@@ -250,7 +250,8 @@ export const incidents: Incident[] = [
     ],
     established:
       "The event and viral hot-mic clip are real. The audio appears to contain an unfinished phrase interpreted online as 'I could use a sh—'; it does not by itself establish an accident occurred.",
-    notes: "Review the original White House video and compare timing against the Acyn clip before using.",
+    notes:
+      "Review the original White House video and compare timing against the Acyn clip before using.",
     defense:
       "The President was clearly about to say “ship” — as in shipping American jobs back home. The feed cut for unrelated, routine, completely normal reasons.",
   },
@@ -362,7 +363,8 @@ export const incidents: Incident[] = [
     established:
       "A real ceremony and real reactions exist on video. The claim that the reactions were caused by Trump soiling himself is contested.",
     notes: "Kept specifically because you asked to review contested material yourself.",
-    defense: "The attendee was simply overcome by the arts. It happens at the Kennedy Center constantly.",
+    defense:
+      "The attendee was simply overcome by the arts. It happens at the Kennedy Center constantly.",
   },
   {
     kind: "incident",
@@ -435,7 +437,8 @@ export const incidents: Incident[] = [
     established:
       "The appearance is fully documented. The bodily-function interpretation is not established by the event record.",
     notes: "Locate and record the exact timestamp after personally reviewing the full video.",
-    defense: "That was not a bodily noise. That was the sound of the American economy roaring back.",
+    defense:
+      "That was not a bodily noise. That was the sound of the American economy roaring back.",
   },
   {
     kind: "incident",
@@ -469,8 +472,7 @@ export const incidents: Incident[] = [
     established:
       "The debate and sound are authentic. The source of the noise and whether it represented anything beyond flatulence/noise are not established.",
     notes: "Review the full-event footage rather than relying on short reposts.",
-    defense:
-      "The unidentified noise has since been identified: patriotism. The matter is closed.",
+    defense: "The unidentified noise has since been identified: patriotism. The matter is closed.",
   },
   {
     kind: "incident",

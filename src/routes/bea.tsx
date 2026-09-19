@@ -39,9 +39,9 @@ function BEAPage() {
                 Bureau of Executive Anomalies
               </h1>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-primary-foreground/75 sm:text-base">
-                A separate Weast Wing bureau chartered to explain away matters
-                outside the jurisdiction of presidential incident statistics.
-                Explanations are issued with total confidence and reviewed by no one.
+                A separate Weast Wing bureau chartered to explain away matters outside the
+                jurisdiction of presidential incident statistics. Explanations are issued with total
+                confidence and reviewed by no one.
               </p>
             </div>
           </div>
@@ -57,9 +57,8 @@ function BEAPage() {
             </h2>
           </div>
           <p className="max-w-2xl border-l-4 border-accent bg-muted p-5 text-sm leading-relaxed text-muted-foreground">
-            BEA records will appear here when formally catalogued. POS incident
-            counts and streaks remain under the Presidential Office of
-            Shitistics and are not BEA statistics.
+            BEA records will appear here when formally catalogued. POS incident counts and streaks
+            remain under the Presidential Office of Shitistics and are not BEA statistics.
           </p>
         </section>
       </main>

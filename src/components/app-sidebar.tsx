@@ -46,11 +46,7 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
   };
 
   return (
-    <Sidebar
-      collapsible="offcanvas"
-      side="left"
-      className="border-r-2 border-accent"
-    >
+    <Sidebar collapsible="offcanvas" side="left" className="border-r-2 border-accent">
       <SidebarHeader className="on-navy bg-primary text-primary-foreground">
         <div className="flex items-center gap-2 px-1 py-2">
           <Seal className="size-9 shrink-0 text-seal" />
@@ -87,9 +83,7 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
                             />
                           )}
                         </span>
-                        <span className="text-xs font-semibold leading-tight">
-                          {agency.name}
-                        </span>
+                        <span className="text-xs font-semibold leading-tight">{agency.name}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -124,8 +118,7 @@ function AppSidebar({ activeAgency }: { activeAgency: "POS" | "BEA" }) {
           Our mission: defend the President. Badly.
         </p>
         <p className="px-2 pt-1 text-[10px] leading-relaxed text-muted-foreground">
-          A parody site. Not an official government resource. Allegations are
-          unproven.
+          A parody site. Not an official government resource. Allegations are unproven.
         </p>
       </SidebarFooter>
     </Sidebar>
@@ -217,11 +210,7 @@ export function WeastShell({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider defaultOpen={false}>
       <AppSidebar activeAgency={activeAgency} />
-      <div
-        className={cn(
-          "flex min-h-svh w-full flex-col bg-background font-sans text-foreground",
-        )}
-      >
+      <div className={cn("flex min-h-svh w-full flex-col bg-background font-sans text-foreground")}>
         <NoticeTicker />
 
         <header className="on-navy sticky top-0 z-30 bg-primary text-primary-foreground shadow-[0_1px_0_0_var(--color-accent)]">

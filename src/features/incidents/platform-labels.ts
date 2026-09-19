@@ -5,7 +5,10 @@ const PLATFORM_MAP: Array<{ test: (h: string) => boolean; label: string }> = [
   { test: (h) => h.includes("threads.net"), label: "Threads" },
   { test: (h) => h.includes("instagram.com"), label: "Instagram" },
   { test: (h) => h.includes("tiktok.com"), label: "TikTok" },
-  { test: (h) => h.includes("youtube.com") || h.includes("youtube-nocookie.com"), label: "YouTube" },
+  {
+    test: (h) => h.includes("youtube.com") || h.includes("youtube-nocookie.com"),
+    label: "YouTube",
+  },
   { test: (h) => h.includes("reddit.com"), label: "Reddit" },
   { test: (h) => h.includes("snopes.com"), label: "Snopes" },
   { test: (h) => h.includes("whitehouse.gov"), label: "WH.gov" },

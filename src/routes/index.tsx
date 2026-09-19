@@ -123,7 +123,6 @@ function Index() {
             aria-hidden="true"
           />
 
-
           <div className="relative z-10 mx-auto w-full max-w-4xl px-4 py-12 text-center lg:max-w-6xl lg:px-10">
             <div className="mx-auto mb-5 flex max-w-xl items-center justify-center gap-3 border-b border-primary-foreground/25 pb-4 text-left lg:max-w-2xl">
               <Seal className="size-10 shrink-0 text-seal" />
@@ -322,8 +321,11 @@ function Index() {
               read as an assertion of fact about any person.
             </p>
             <address className="border-l-2 border-accent pl-3 text-xs not-italic leading-relaxed text-primary-foreground/70">
-              <span className="block font-bold uppercase text-primary-foreground">Office address</span>
-              1600 Weast Pennsylvania Avenue<br />
+              <span className="block font-bold uppercase text-primary-foreground">
+                Office address
+              </span>
+              1600 Weast Pennsylvania Avenue
+              <br />
               Washington, DC 20500
             </address>
             <nav
@@ -350,8 +352,7 @@ function Index() {
               ))}
             </nav>
             <p className="pt-2 text-[11px] text-primary-foreground/50">
-              © {siteYear(now)} — No rights reserved. Absolutely no authority
-              claimed.
+              © {siteYear(now)} — No rights reserved. Absolutely no authority claimed.
             </p>
           </div>
         </footer>
@@ -373,8 +374,8 @@ function Index() {
       <Modal open={modal === "Methodology"} onClose={() => setModal(null)} title="Methodology">
         <p>
           The counter is the number of whole days between the most recent logged incident date and
-          today, computed on the U.S. Eastern calendar — so it turns over at midnight in
-          Washington, not somewhere else.
+          today, computed on the U.S. Eastern calendar — so it turns over at midnight in Washington,
+          not somewhere else.
         </p>
         <p>
           Streaks are the gaps between consecutive logged incidents. The "previous record" is the

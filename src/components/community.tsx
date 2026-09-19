@@ -1,4 +1,5 @@
 import { useServerFn } from "@tanstack/react-start";
+import { m } from "motion/react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +11,7 @@ import {
   submitIncidentReport,
 } from "@/lib/incident-community.functions";
 import { incidentSubmissionSchema, type VoteChoice } from "@/lib/incident-community.schemas";
+import { TRANSITION } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 type Totals = { nothingHappened: number; definitelyHappened: number };
@@ -24,6 +26,56 @@ function getVoterToken() {
 }
 
 let allPollsPromise: Promise<Record<string, Totals>> | null = null;
+
+/**
+ * One poll answer.
+ *
+ * The share was already shown as a number; the bar behind it is the same
+ * figure at a glance, and it grows from nothing when the totals land so the
+ * reader sees their own vote move it. Rendered behind the label rather than
+ * beside it because the option is already a full-width target on phones and a
+ * separate track would cost a second row.
+ */
+function PollOption({
+  label,
+  percent,
+  selected,
+  selectedVariant,
+  disabled,
+  onSelect,
+}: {
+  label: string;
+  percent: number;
+  selected: boolean;
+  selectedVariant: "default" | "destructive";
+  disabled: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <Button
+      type="button"
+      variant={selected ? selectedVariant : "outline"}
+      disabled={disabled}
+      onClick={onSelect}
+      className="relative h-auto min-h-12 justify-between gap-3 overflow-hidden whitespace-normal px-3 py-2 text-left"
+    >
+      <m.span
+        aria-hidden="true"
+        className={cn(
+          "absolute inset-y-0 left-0",
+          // On an unselected option the bar is the site's muted wash; on the
+          // filled one it has to be the button's own ink, lightened.
+          selected ? "bg-primary-foreground/20" : "bg-muted",
+        )}
+        initial={{ width: 0 }}
+        animate={{ width: `${percent}%` }}
+        transition={TRANSITION.slow}
+      />
+      <span className="relative">{label}</span>
+      <span className="relative tabular-nums opacity-75">{percent}%</span>
+    </Button>
+  );
+}
 
 export function IncidentPoll({ incidentId }: { incidentId: string }) {
   const getAllPolls = useServerFn(getAllIncidentPolls);
@@ -72,26 +124,22 @@ export function IncidentPoll({ incidentId }: { incidentId: string }) {
       </p>
       <p className="mt-1 font-display text-base font-bold">What do you think happened?</p>
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
-        <Button
-          type="button"
-          variant={choice === "nothing_happened" ? "default" : "outline"}
+        <PollOption
+          label="Nothing happened"
+          percent={percent(totals.nothingHappened)}
+          selected={choice === "nothing_happened"}
+          selectedVariant="default"
           disabled={pending}
-          onClick={() => vote("nothing_happened")}
-          className="h-auto min-h-12 justify-between gap-3 whitespace-normal px-3 py-2 text-left"
-        >
-          Nothing happened
-          <span className="tabular-nums opacity-75">{percent(totals.nothingHappened)}%</span>
-        </Button>
-        <Button
-          type="button"
-          variant={choice === "definitely_happened" ? "destructive" : "outline"}
+          onSelect={() => vote("nothing_happened")}
+        />
+        <PollOption
+          label="Just a fart to def shit himself"
+          percent={percent(totals.definitelyHappened)}
+          selected={choice === "definitely_happened"}
+          selectedVariant="destructive"
           disabled={pending}
-          onClick={() => vote("definitely_happened")}
-          className="h-auto min-h-12 justify-between gap-3 whitespace-normal px-3 py-2 text-left"
-        >
-          Just a fart to def shit himself
-          <span className="tabular-nums opacity-75">{percent(totals.definitelyHappened)}%</span>
-        </Button>
+          onSelect={() => vote("definitely_happened")}
+        />
       </div>
       <div className="mt-2 grid gap-1 text-[11px] text-muted-foreground sm:grid-cols-[auto_1fr] sm:gap-4">
         <span>{total.toLocaleString()} public votes</span>
@@ -201,11 +249,7 @@ export function IncidentSubmissionForm() {
         are permitted to share. This form is for satirical commentary, not emergency reports.
       </p>
       <div className="mt-4 flex flex-wrap items-center gap-3">
-        <Button
-          type="submit"
-          disabled={pending}
-          className="font-bold uppercase tracking-wider"
-        >
+        <Button type="submit" disabled={pending} className="font-bold uppercase tracking-wider">
           {pending ? "Submitting…" : "Submit incident report"}
         </Button>
         <p
