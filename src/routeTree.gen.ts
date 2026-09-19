@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BeaRouteImport } from './routes/bea'
+import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,40 @@ const BeaRoute = BeaRouteImport.update({
   path: '/bea',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DisclaimerRoute = DisclaimerRouteImport.update({
+  id: '/disclaimer',
+  path: '/disclaimer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bea': typeof BeaRoute
+  '/disclaimer': typeof DisclaimerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bea': typeof BeaRoute
+  '/disclaimer': typeof DisclaimerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/bea': typeof BeaRoute
+  '/disclaimer': typeof DisclaimerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bea'
+  fullPaths: '/' | '/bea' | '/disclaimer'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bea'
-  id: '__root__' | '/' | '/bea'
+  to: '/' | '/bea' | '/disclaimer'
+  id: '__root__' | '/' | '/bea' | '/disclaimer'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BeaRoute: typeof BeaRoute
+  DisclaimerRoute: typeof DisclaimerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BeaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/disclaimer': {
+      id: '/disclaimer'
+      path: '/disclaimer'
+      fullPath: '/disclaimer'
+      preLoaderRoute: typeof DisclaimerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BeaRoute: BeaRoute,
+  DisclaimerRoute: DisclaimerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -2,6 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, Pause, Play } from "lucide-react";
 import type { ReactNode } from "react";
 import { Seal } from "@/components/brand/seal";
+import { SatireChip } from "@/components/brand/satire-chip";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { setMotionState, useMotionState } from "@/lib/motion-preference";
@@ -220,6 +221,12 @@ export function WeastShell({ children }: { children: ReactNode }) {
             <p className="font-display text-lg font-bold uppercase leading-tight tracking-[0.06em] sm:text-xl">
               The Weast Wing
             </p>
+            {/* The header is sticky, so this is the one satire marker that is
+                on screen at every scroll position and in every screenshot of
+                the page. It links to the page that explains itself. */}
+            <Link to="/disclaimer" className="ml-auto" aria-label="Satire — read the disclaimer">
+              <SatireChip tone="dark" />
+            </Link>
           </div>
         </header>
 

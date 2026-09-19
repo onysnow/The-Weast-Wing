@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { Seal } from "@/components/brand/seal";
@@ -9,6 +9,11 @@ import { ShareBar } from "@/components/primitives/share-bar";
 
 import { IncidentSubmissionForm } from "@/components/community";
 import { IncidentCard } from "@/features/incidents/incident-card";
+import {
+  StructuredData,
+  satiricalArticleStructuredData,
+  siteStructuredData,
+} from "@/components/seo/structured-data";
 import { Button } from "@/components/ui/button";
 import {
   computeStats,
@@ -34,9 +39,14 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: DESC },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://theweastwing.com/" },
+      { property: "og:image", content: "https://theweastwing.com/og-default.png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "The Weast Wing, marked SATIRE" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: `${SITE_NAME} — ${HERO_HEADLINE}` },
       { name: "twitter:description", content: DESC },
+      { name: "twitter:image", content: "https://theweastwing.com/og-default.png" },
     ],
     links: [{ rel: "canonical", href: "https://theweastwing.com/" }],
   }),
@@ -99,6 +109,22 @@ function Index() {
 
   return (
     <>
+      {/* Declared as satire in the markup as well as on the page: schema.org
+          has a real SatiricalArticle type, and a crawler should not have to
+          infer it from the prose. */}
+      <StructuredData data={siteStructuredData()} />
+      {latest && (
+        <StructuredData
+          data={satiricalArticleStructuredData({
+            headline: latest.title,
+            description: latest.summary,
+            url: `https://theweastwing.com/#incident-${latest.slug}`,
+            datePublished: latest.date,
+            image: "https://theweastwing.com/og-default.png",
+          })}
+        />
+      )}
+
       <main>
         {/* Hero — full-screen background video with the counter on top */}
         <section
@@ -304,7 +330,7 @@ function Index() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-8 border-t-4 border-accent bg-primary text-primary-foreground">
+        <footer className="on-navy mt-8 border-t-4 border-accent bg-primary text-primary-foreground">
           <div className="mx-auto max-w-4xl space-y-4 px-4 py-10">
             <div className="flex items-center gap-3">
               <Seal className="size-10 text-seal" />
@@ -332,6 +358,9 @@ function Index() {
               aria-label="Information and policies"
               className="flex flex-wrap gap-x-5 gap-y-2 pt-2"
             >
+              <Button asChild variant="link">
+                <Link to="/disclaimer">Disclaimer</Link>
+              </Button>
               {[
                 { label: "About", modal: "About" },
                 { label: "Contact Me", modal: "Contact" },
