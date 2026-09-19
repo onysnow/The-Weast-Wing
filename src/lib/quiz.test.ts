@@ -15,6 +15,7 @@ import {
   tallyWeights,
   visitedQuestions,
 } from "@/lib/quiz";
+import { answerHash } from "@/lib/quiz-answers.server";
 
 /** A small scored quiz with a branch, so the tests don't depend on content. */
 const scored: QuizDefinition = {
@@ -27,11 +28,11 @@ const scored: QuizDefinition = {
       id: "one",
       prompt: "?",
       options: [
-        { id: "a", label: "A", correct: true, weights: { x: 2 } },
+        { id: "a", label: "A", correctHash: "hash:one:a", weights: { x: 2 } },
         { id: "b", label: "B", next: "three" },
       ],
     },
-    { id: "two", prompt: "?", options: [{ id: "a", label: "A", correct: true }] },
+    { id: "two", prompt: "?", options: [{ id: "a", label: "A", correctHash: "hash:two:a" }] },
     { id: "three", prompt: "?", options: [{ id: "a", label: "A" }] },
   ],
   outcomes: [
@@ -63,7 +64,7 @@ describe("publicQuiz", () => {
 
   it("does not mutate the authored quiz", () => {
     publicQuiz(scored);
-    expect(scored.questions[0]?.options[0]?.correct).toBe(true);
+    expect(scored.questions[0]?.options[0]?.correctHash).toBe("hash:one:a");
   });
 });
 
@@ -172,12 +173,28 @@ describe("scoring", () => {
     expect(outcome?.id).toBe("low");
   });
 
-  it("grades against the authored answers", () => {
-    expect(gradeAnswers(scored, { one: "a", two: "a" })).toEqual({
+  it("grades against the injected check, not against the option", () => {
+    // Stands in for the salted-hash check the server injects.
+    const isCorrect = (question: { id: string }, optionId: string) =>
+      `hash:${question.id}:${optionId}` ===
+      scored.questions.find((q) => q.id === question.id)?.options.find((o) => o.id === optionId)
+        ?.correctHash;
+
+    expect(gradeAnswers(scored, { one: "a", two: "a" }, isCorrect)).toEqual({
       correctCount: 2,
       answered: 2,
     });
-    expect(gradeAnswers(scored, { one: "b" })).toEqual({ correctCount: 0, answered: 1 });
+    expect(gradeAnswers(scored, { one: "b" }, isCorrect)).toEqual({
+      correctCount: 0,
+      answered: 1,
+    });
+  });
+
+  it("counts nothing correct when the check always refuses", () => {
+    expect(gradeAnswers(scored, { one: "a", two: "a" }, () => false)).toEqual({
+      correctCount: 0,
+      answered: 2,
+    });
   });
 
   it("picks the highest band the score reaches", () => {
@@ -238,7 +255,14 @@ describe("published quizzes", () => {
     }
 
     for (const band of quiz.bands ?? []) expect(outcomeIds).toContain(band.outcomeId);
-    if (quiz.strategy === "scored") expect(quiz.bands?.length).toBeGreaterThan(0);
+    if (quiz.strategy === "scored") {
+      expect(quiz.bands?.length).toBeGreaterThan(0);
+      // Every scored question needs exactly one hashed answer. A published
+      // scored quiz with no hash would grade everyone zero.
+      for (const question of quiz.questions) {
+        expect(question.options.filter((o) => o.correctHash)).toHaveLength(1);
+      }
+    }
   });
 
   it("every outcome is reachable — no dead result copy", () => {
@@ -268,5 +292,30 @@ describe("published quizzes", () => {
       "q6",
       "q7",
     ]);
+  });
+});
+
+describe("the answer key on a public repository", () => {
+  it("hashes differently per quiz, question and option", () => {
+    const salt = "test-salt";
+    const base = answerHash(salt, "q", "one", "a");
+    expect(answerHash(salt, "other", "one", "a")).not.toBe(base);
+    expect(answerHash(salt, "q", "two", "a")).not.toBe(base);
+    expect(answerHash(salt, "q", "one", "b")).not.toBe(base);
+    expect(answerHash("other-salt", "q", "one", "a")).not.toBe(base);
+    // Same inputs, same hash — grading depends on it.
+    expect(answerHash(salt, "q", "one", "a")).toBe(base);
+  });
+
+  it("cannot be forged by splitting the delimiters", () => {
+    const salt = "s";
+    expect(answerHash(salt, "ab", "c", "d")).not.toBe(answerHash(salt, "a", "bc", "d"));
+  });
+
+  it("no published quiz stores a plaintext answer", () => {
+    // The whole point of the change: `correct: true` in a content file is
+    // the answer key on GitHub.
+    const serialized = JSON.stringify(quizList());
+    expect(serialized).not.toMatch(/"correct"\s*:/);
   });
 });

@@ -16,18 +16,22 @@ import type {
 /**
  * Strips everything the browser must not see.
  *
- * Only `correct` today, but this is the single choke point: a future field
- * that leaks an answer gets deleted here and nowhere else. The test asserts
- * the *absence* of the key anywhere in the serialized output rather than
- * checking the fields it knows about, so a new leak fails without anyone
- * remembering to update the test.
+ * The single choke point: a future field that leaks an answer gets deleted
+ * here and nowhere else. The test asserts the *absence* of "correct"
+ * anywhere in the serialized output rather than checking the fields it knows
+ * about, so a new leak fails without anyone remembering to update the test.
+ *
+ * Note what this does and does not buy on a public repository. It keeps the
+ * answer out of the page source, which stops view-source; it cannot keep
+ * anything out of the content file, which is why the answer is stored as a
+ * salted hash rather than a boolean.
  */
 export function publicQuiz(quiz: QuizDefinition): PublicQuiz {
   return {
     ...quiz,
     questions: quiz.questions.map((question) => ({
       ...question,
-      options: question.options.map(({ correct: _correct, ...option }) => option),
+      options: question.options.map(({ correctHash: _hash, ...option }) => option),
     })),
   };
 }
@@ -207,10 +211,18 @@ export function bandOutcome(
   return quiz.outcomes.find((o) => o.id === band?.outcomeId) ?? null;
 }
 
-/** Counts correct answers. Requires the authored quiz, so: server only. */
+/**
+ * Counts correct answers.
+ *
+ * `isCorrect` is injected rather than read from the option, because deciding
+ * whether an answer is right now needs a secret salt and a hash — and this
+ * module stays pure, dependency-free and testable without either. The server
+ * passes the real check; a test passes a fake one.
+ */
 export function gradeAnswers(
   quiz: Pick<QuizDefinition, "questions">,
   answers: Record<string, string>,
+  isCorrect: (question: QuizDefinition["questions"][number], optionId: string) => boolean,
 ): { correctCount: number; answered: number } {
   let correctCount = 0;
   let answered = 0;
@@ -218,7 +230,7 @@ export function gradeAnswers(
     const chosen = answers[question.id];
     if (!chosen) continue;
     answered += 1;
-    if (question.options.find((o) => o.id === chosen)?.correct) correctCount += 1;
+    if (isCorrect(question, chosen)) correctCount += 1;
   }
   return { correctCount, answered };
 }

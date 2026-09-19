@@ -33,10 +33,19 @@ export type QuizOption = {
    */
   weights?: Record<string, number>;
   /**
-   * Marks the right answer. NEVER served to the browser — `publicQuiz()`
-   * strips it, and the server grades. See the ADR.
+   * The right answer, as a salted hash rather than a boolean.
+   *
+   * A boolean was fine while the repository was private; now that it is
+   * public, `correct: true` in a content file is the answer key published on
+   * GitHub, and stripping it before serving buys nothing. The hash is
+   * `sha256(QUIZ_ANSWER_SALT | slug | questionId | optionId)`, the salt is a
+   * server environment variable that is not in the repository, and grading
+   * recomputes it. Generate with `bun run quiz:hash`.
+   *
+   * Still stripped before serving — the hash is not a secret worth handing
+   * out either. See docs/adr/0003-quiz-engine.md.
    */
-  correct?: boolean;
+  correctHash?: string;
   /**
    * Jump to this question id instead of falling through to the next one in
    * order. This is the whole of branching.
@@ -77,7 +86,7 @@ export type QuizDefinition = {
  * A quiz as the browser is allowed to see it: identical, minus anything that
  * would let a reader skip the thinking.
  */
-export type PublicQuizOption = Omit<QuizOption, "correct">;
+export type PublicQuizOption = Omit<QuizOption, "correctHash">;
 export type PublicQuizQuestion = Omit<QuizQuestion, "options"> & {
   options: PublicQuizOption[];
 };

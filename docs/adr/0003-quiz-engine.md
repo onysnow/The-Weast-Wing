@@ -30,11 +30,11 @@ differ only in what an option carries and how the end is computed:
 | Shape       | Option carries      | End state              |
 | ----------- | ------------------- | ---------------------- |
 | personality | `weights` per outcome | heaviest outcome       |
-| scored      | `correct`           | count of correct       |
+| scored      | `correctHash`       | count of correct       |
 | branching   | `next` question id  | whichever outcome it lands on |
 
 These are not exclusive. A branching quiz can also weight outcomes; a scored
-quiz can branch. So `next`, `weights` and `correct` all live on the option
+quiz can branch. So `next`, `weights` and `correctHash` all live on the option
 type as optional fields, and the strategy is named once at the quiz level to
 say how the **result** is computed — not to gate which fields are allowed.
 A fourth shape adds a strategy, not a renderer.
@@ -43,25 +43,48 @@ Traversal is therefore always the same function: take the current question,
 take the chosen option, go to `option.next` if it has one, otherwise the next
 question in order. A flat quiz is a branching quiz where no option branches.
 
-### Correct answers never reach the browser
+### Correct answers never reach the browser — or the repository
 
-For a scored quiz, shipping `correct: true` to the client means the answers
-are in the page source, and "view source" is a faster way to win than
-thinking. So the authored quiz and the public quiz are two different
-types, and one derives from the other:
+**Amended 19 September 2026, when the repository became public.** The
+original design stored `correct: true` on the winning option and relied on
+stripping it before serving. That was sound while the repository was
+private and worthless the moment it was not: the content file *is* the
+answer key, published on GitHub, and no amount of server-side stripping
+changes that. Stripping still earns its place — it stops view-source — but
+it was doing a job it could not finish.
+
+So a scored quiz now stores `correctHash`: `sha256(salt | slug | questionId
+| optionId)`, where the salt is a server environment variable
+(`QUIZ_ANSWER_SALT`) that is not in the repository. Grading recomputes the
+hash and compares. `bun run quiz:hash` generates them.
+
+This is proportionate, not a vault. There are four options per question, so
+if the salt leaks the answers fall instantly. The bar being cleared is
+"harder than reading the repository", which a boolean did not clear. If a
+quiz ever matters more than that, the answers belong in a Supabase row.
+
+`gradeAnswers` takes the check as an argument rather than reading the
+option, which keeps src/lib/quiz.ts free of both crypto and environment
+access and testable without either. The checker fails closed: no salt
+configured means grading throws, rather than silently marking every answer
+wrong and looking like a quiz everyone fails.
+
+The authored quiz and the public quiz remain two different types, one
+derived from the other:
 
 ```
-QuizDefinition  (authored, has `correct`)
+QuizDefinition  (authored, has `correctHash`)
       │  publicQuiz()  — strips it
       ▼
 PublicQuiz      (what the route serves)
 ```
 
-Grading for a scored quiz happens in a server function, which reads the
-authored definition on the server, where `correct` still exists. The
-stripping is a pure function with a test asserting no `correct` key survives
-anywhere in the output, because this is exactly the kind of thing that
-silently regresses when someone adds a field.
+Grading happens in a server function, which reads the authored definition
+where the hash still exists. The stripping is a pure function with a test
+asserting no "correct" key survives anywhere in the output, because this is
+exactly the kind of thing that silently regresses when someone adds a
+field. A second test asserts no published quiz contains a plaintext
+`correct` at all.
 
 Personality quizzes have no secret — the weights are the joke as much as the
 mechanism — so they grade on the client and cost no round trip.
